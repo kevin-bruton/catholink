@@ -1,0 +1,12 @@
+version: "3"
+services:
+  api:
+    build: ./api
+    working_dir: /api
+    command: npm i && npm i -D nodemon && nodemon server.js
+    container_name: catholink-api-container
+    volumes:
+      - ./api:/api
+    ports:
+      - "3000:3000"
+

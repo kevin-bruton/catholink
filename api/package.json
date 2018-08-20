@@ -1,0 +1,21 @@
+{
+  "name": "catholink",
+  "version": "1.0.0",
+  "description": "Catholic Social Media",
+  "repository": {
+    "private": "true"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kevin Bruton",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.3",
+    "standard": "^11.0.1"
+  }
+}
