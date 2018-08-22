@@ -3,7 +3,6 @@ import styles from './App.scss';
 import { Link, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
-console.log(styles);
 
 class App extends Component {
   render() {
