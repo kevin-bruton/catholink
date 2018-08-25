@@ -1,9 +1,7 @@
 import { combineReducers } from 'redux';
 
-// import tweets from "./tweetsReducer"
-// import user from "./userReducer"
+import loggedIn from './logged-in.js';
 
 export default combineReducers({
-  // tweets,
-  // user,
+  loggedIn
 });
