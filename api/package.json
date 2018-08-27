@@ -7,14 +7,25 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-db": "mongod --dbpath=./db-data",
+    "lint": "node ./node_modules/eslint/bin/eslint ."
   },
   "author": "Kevin Bruton",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.3"
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "mongodb": "^3.1.4",
+    "passport": "^0.4.0"
   },
   "devDependencies": {
+    "eslint": "^5.4.0",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.0",
+    "eslint-plugin-standard": "^3.1.0",
     "nodemon": "^1.18.3",
     "standard": "^11.0.1"
   }
