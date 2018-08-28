@@ -2,17 +2,21 @@ const express = require('express')
 const bodyParser = require('body-parser')
 // const passport = require('passport')
 const dbConfig = require('./config/db')
+// const apiRouter = require('./routers/api')
+const frontRouter = require('./routers/front')
+// const authRouter = require('./router/auth')
 
 const app = express()
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-app.get('/', function (req, res) {
-  res.send('hello')
-});
+// routers
+// app.post('/auth', authRouter)
+// app.use('/api', apiRouter)
+app.use('/', frontRouter)
 
-(async () => {
+;(async () => {
   const mongoConnection = await dbConfig.connect()
   const collections = await dbConfig.init(mongoConnection)
   collections.map(collection => {

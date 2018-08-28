@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const links = require('./links-config')
+const links = require('./route-alias-config')
 
 const rootDir = path.join(__dirname, '..')
 const nodeDir = path.join(rootDir, '/node_modules')
@@ -14,7 +14,6 @@ function createLink (link, target) {
     try {
       fs.symlinkSync(target, link, 'junction')
     } catch (err) {
-      // err.code !== 'EEXIST' && console.log(err)
       console.log(err)
     }
   }

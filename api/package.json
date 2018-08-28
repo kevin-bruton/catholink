@@ -9,13 +9,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-db": "mongod --dbpath=./db-data",
-    "lint": "node ./node_modules/eslint/bin/eslint ."
+    "lint": "node ./node_modules/eslint/bin/eslint .",
+    "start": "node server"
   },
   "author": "Kevin Bruton",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
+    "express-request-language": "^1.1.15",
     "mongodb": "^3.1.4",
     "passport": "^0.4.0"
   },
