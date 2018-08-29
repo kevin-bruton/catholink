@@ -14,7 +14,7 @@ function createLink (link, target) {
     try {
       fs.symlinkSync(target, link, 'junction')
     } catch (err) {
-      console.log(err)
+      err.code !== 'EEXIST' && console.log(err)
     }
   }
 }
