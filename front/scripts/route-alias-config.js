@@ -1,5 +1,5 @@
 module.exports = [
-  { name: '@src', target: 'src' },
+  { name: '~', target: 'src' },
   { name: '@actions', target: 'src/actions' },
   { name: '@components', target: 'src/components' },
   { name: '@containers', target: 'src/containers' },
