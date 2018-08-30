@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import styles from './App.scss'
-import { NavLink, Link, Route } from 'react-router-dom'
-import Home from '../content-pages/home'
-import About from '../content-pages/about'
+import { NavLink, Link, Route, Switch } from 'react-router-dom'
+import Home from '@content-pages/home'
+import About from '@content-pages/about'
 import { literals } from './literals'
 
 class App extends Component {
@@ -22,8 +22,10 @@ class App extends Component {
             </aside>
           </div>
           <div className='column'>
-            <Route exact path='/' component={Home} />
-            <Route path='/about' component={About} />
+            <Switch>
+              <Route exact path='/' component={Home} />
+              <Route path='/about' component={About} />
+            </Switch>
           </div>
         </div>
       </div>
