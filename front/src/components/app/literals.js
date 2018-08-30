@@ -1,10 +1,12 @@
-const en = {}
-const es = {}
+import { getLangLiterals } from '@helpers/get-lang-literals'
 
-en.home = 'Home'
-es.home = 'Inicio'
-
-en.about = 'About'
-es.about = 'Información'
-
-export { en, es }
+export const literals = getLangLiterals({
+  home: {
+    en: 'Home',
+    es: 'Inicio'
+  },
+  about: {
+    en: 'About',
+    es: 'Información'
+  }
+})

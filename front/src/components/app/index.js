@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import styles from './App.scss'
-import { Link, Route } from 'react-router-dom'
+import { NavLink, Link, Route } from 'react-router-dom'
 import Home from '../content-pages/home'
 import About from '../content-pages/about'
-import { usersLanguage } from '@helpers/get-users-language'
-
-const literals = require('./literals')[usersLanguage]
+import { literals } from './literals'
 
 class App extends Component {
   render () {
@@ -18,8 +16,8 @@ class App extends Component {
           <div className='column is-narrow'>
             <aside className='menu'>
               <ul className='menu-list'>
-                <li><Link className={window.location.pathname === '/' ? 'is-active' : null} to='/'>{literals.home}</Link></li>
-                <li><Link className={window.location.pathname === '/about' ? 'is-active' : null}to='/about'>{literals.about}</Link></li>
+                <li><NavLink activeClassName='is-active' exact to='/'>{literals.home}</NavLink></li>
+                <li><NavLink activeClassName='is-active' to='/about'>{literals.about}</NavLink></li>
               </ul>
             </aside>
           </div>
