@@ -9,6 +9,8 @@ createLink(path.join(nodeDir, '~'), rootDir)
 
 links.map(link => createLink(path.join(nodeDir, link.name), path.join(rootDir, link.target)))
 
+console.log('Route aliases updated!\n')
+
 function createLink (link, target) {
   if (!fs.existsSync(link)) {
     try {
