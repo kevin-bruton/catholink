@@ -56,7 +56,8 @@
     "start": "node scripts/route-aliases && node scripts/start.js",
     "build": "node scripts/route-aliases && node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "make-links": "node scripts/links"
+    "make-links": "node scripts/links",
+    "postinstall": "node scripts/route-aliases"
   },
   "jest": {
     "collectCoverageFrom": [

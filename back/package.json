@@ -10,7 +10,8 @@
     "test": "mocha",
     "start-db": "mongod --dbpath=./db-data",
     "lint": "node ./node_modules/eslint/bin/eslint .",
-    "start": "node scripts/route-aliases && node server"
+    "start": "node scripts/route-aliases && node server",
+    "postinstall": "node scripts/route-aliases"
   },
   "author": "Kevin Bruton",
   "license": "ISC",
