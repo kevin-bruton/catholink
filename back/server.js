@@ -1,7 +1,5 @@
 const express = require('express')
-const passport = require('passport')
 const bodyParser = require('body-parser')
-require('./passport')
 const db = require('./db')
 const apiRouter = require('./routes/api')
 const frontRouter = require('./routes/front')
@@ -14,7 +12,7 @@ app.use(bodyParser.json())
 
 // routers
 app.use('/auth', authRouter)
-app.use('/api', passport.authenticate('jwt', {session: false}), apiRouter)
+app.use('/api', apiRouter)
 app.use('/', frontRouter)
 
 ;(async () => {

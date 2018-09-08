@@ -1,3 +1,5 @@
-const secret = '5E65-6546-6f55-78i6'
+const privateKey = 'MIGsAgEAAiEApw01B3MfeGAquKb08Ypvh1SrMslAvdLLm3eELAoXIU0CAwEAAQIgL14QVk9vcfuawYcd10uQudAuk/qhUi4FXMKLJyXsaiECEQD9oyTILX7ke1qXi43QtiMVAhEAqJuUe6LrLoQficaWd5jzWQIRAIJUrrXeCvJFIIv2veydavECEQCPSYB7Pa4eHtxqiuDujIYpAhEAtstHh7w3xYVCrIuOsfgltA=='
 
-module.exports = secret
+const publicKey = 'MDwwDQYJKoZIhvcNAQEBBQADKwAwKAIhAKcNNQdzH3hgKrim9PGKb4dUqzLJQL3Sy5t3hCwKFyFNAgMBAAE='
+
+module.exports = { privateKey, publicKey }

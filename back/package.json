@@ -10,7 +10,7 @@
     "test": "mocha",
     "start-db": "mongod --dbpath=./db-data",
     "lint": "node ./node_modules/eslint/bin/eslint .",
-    "start": "node scripts/route-aliases && node server",
+    "start": "node server",
     "postinstall": "node scripts/route-aliases"
   },
   "author": "Kevin Bruton",
@@ -23,7 +23,6 @@
     "express-request-language": "^1.1.15",
     "jsonwebtoken": "^8.3.0",
     "mongodb": "^3.1.4",
-    "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0"
   },
