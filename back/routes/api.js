@@ -1,16 +1,15 @@
 const jwt = require('jsonwebtoken')
-const jwtSecret = require('@auth/jwt-secret')
+const privateKey = require('@auth/jwt-secret').privateKey
 const express = require('express')
 const router = express.Router()
 
 router.use(authorizeApi)
 
-/* GET users listing. */
 router.get('/', (req, res, next) => {
-  res.send('API version: 1.0')
+  console.log('Root api route')
+  res.json({ apiVersion: '1.0' })
 })
 
-/* GET user profile. */
 router.get('/user', (req, res, next) => {
   res.send()
 })
@@ -23,12 +22,16 @@ async function authorizeApi (req, res, next) {
     const token = bearer.slice('Bearer '.length)
     if (token) {
       try {
-        jwt.verify(token, jwtSecret)
-        next()
+        jwt.verify(token, privateKey)
+        console.log('authorizeApi: Token verified\n')
+        return next()
       } catch (err) {
-        res.status(401).send({ error: 'Unauthorized' })
+        console.log('authorizeApi: Token not verified\n')
+        return res.status(401).send({ error: 'Unauthorized' })
       }
     }
+    console.log('authorizeApi: No token\n')
   }
-  res.status(401).send({ error: 'Unauthorized' })
+  console.log('authorizeApi: No bearer\n')
+  return res.status(401).send({ error: 'Unauthorized' })
 }

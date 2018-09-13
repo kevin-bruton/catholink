@@ -7,7 +7,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/tests.js",
+    "test": "mocha test/api.test.js",
     "start-db": "mongod --dbpath=./db-data",
     "lint": "node ./node_modules/eslint/bin/eslint .",
     "start": "node server",

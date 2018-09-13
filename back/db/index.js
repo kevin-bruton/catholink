@@ -20,7 +20,7 @@ const db = (function () {
     try {
       resp = await _dbConnection.collection(colName)[funcName](...params)
     } catch (err) {
-      console.log(`CAUGHT A DB ERROR WHILE EXECUTING "${funcName}" on the "${colName}" collection:\n${err}`)
+      console.log(`CAUGHT A DB ERROR WHILE EXECUTING "${funcName}" on the "${colName}" collection:\n${err}\n${err.stack}`)
       _mongoConnection.close()
       process.exit()
     }
