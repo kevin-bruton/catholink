@@ -40,7 +40,7 @@ const db = (function () {
       const initialUsers = [
         {
           _id: 1,
-          email: 'kevin',
+          username: 'kevin',
           password: 'lucasdanielguapitos'
         }
       ]

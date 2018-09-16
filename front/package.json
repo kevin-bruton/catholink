@@ -53,8 +53,8 @@
     "whatwg-fetch": "2.0.3"
   },
   "scripts": {
-    "start": "node scripts/route-aliases && node scripts/start.js",
-    "build": "node scripts/route-aliases && node scripts/build.js",
+    "start": "node scripts/start.js",
+    "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "make-links": "node scripts/links",
     "postinstall": "node scripts/route-aliases"

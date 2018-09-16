@@ -1,7 +1,11 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 
-import loggedIn from './logged-in.js';
+import { auth } from './auth'
+import { users } from './users'
+import { alerts } from './alerts'
 
-export default combineReducers({
-  loggedIn
-});
+export const reducer = combineReducers({
+  auth,
+  users,
+  alerts
+})

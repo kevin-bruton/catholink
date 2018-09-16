@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
-import Login from '@components/login'
 import { withRouter } from 'react-router-dom'
+import { App as AppComp } from '@components'
 
 const mapStateToProps = state => {
   return {
@@ -8,8 +8,7 @@ const mapStateToProps = state => {
   }
 }
 
-const LoginTester = connect(
-  mapStateToProps
-)(Login)
-
-export default withRouter(LoginTester)
+export const App = withRouter(
+  connect(
+    mapStateToProps
+  )(AppComp))
