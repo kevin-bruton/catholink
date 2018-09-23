@@ -22,9 +22,10 @@ function login (username, password) {
       if (user.token) {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         window.localStorage.setItem('user', JSON.stringify(user))
+        return user
+      } else {
+        return Promise.reject(new Error('Login failure'))
       }
-
-      return user
     })
 }
 
@@ -49,7 +50,6 @@ function handleResponse (response) {
       if (response.status === 401) {
         // auto logout if 401 response returned from api
         logout()
-        window.location.reload(true)
       }
 
       const error = (data && data.message) || response.statusText

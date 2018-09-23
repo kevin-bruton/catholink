@@ -1,15 +1,12 @@
 import { userConst } from '@constants'
 import { userService } from '@services'
 import { alertActions } from './alerts'
-import { createBrowserHistory } from 'history'
 
 export const userActions = {
   login,
   logout,
   getAll
 }
-
-const history = createBrowserHistory()
 
 function login (username, password) {
   return dispatch => {
@@ -19,8 +16,6 @@ function login (username, password) {
       .then(
         user => {
           dispatch(success(user))
-          history.push('/')
-          window.location.assign('/')
         },
         error => {
           dispatch(failure(error))
