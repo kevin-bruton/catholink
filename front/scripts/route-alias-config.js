@@ -7,4 +7,5 @@ module.exports = [
   { name: '@helpers', target: 'src/helpers' },
   { name: '@reducers', target: 'src/reducers' },
   { name: '@services', target: 'src/services' },
+  { name: '@state', target: 'src/state' }
 ]
