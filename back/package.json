@@ -11,7 +11,8 @@
     "start-db": "mongod --dbpath=./db-data",
     "lint": "node ./node_modules/eslint/bin/eslint .",
     "start": "node server",
-    "postinstall": "node scripts/route-aliases"
+    "postinstall": "node scripts/route-aliases",
+    "aliases": "node scripts/route-aliases"
   },
   "author": "Kevin Bruton",
   "license": "ISC",

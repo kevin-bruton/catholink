@@ -57,7 +57,8 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "make-links": "node scripts/links",
-    "postinstall": "node scripts/route-aliases"
+    "postinstall": "node scripts/route-aliases",
+    "aliases": "node scripts/route-aliases"
   },
   "jest": {
     "collectCoverageFrom": [
