@@ -1,4 +1,4 @@
-import { usersLanguage } from '@helpers/get-users-language'
+import { usersLanguage } from '@helpers/usersLanguage'
 
 export const getLangLiterals = literals => {
   const langLiterals = {}
