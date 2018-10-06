@@ -1,5 +1,6 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
+import crypto from 'crypto-js'
 
 import { userService } from '@services'
 import { spinner } from './spinner'
@@ -35,6 +36,7 @@ export class LoginPage extends React.Component {
   }
 
   login (username, password) {
+    password = crypto.AES.encrypt(password, username).toString()
     userService.login(username, password)
       .then(
         user => {
