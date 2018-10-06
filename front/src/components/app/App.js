@@ -3,7 +3,7 @@ import styles from './App.scss'
 import { NavLink, Link, Route, Switch } from 'react-router-dom'
 import {Home, Login, About} from '@components'
 import { PrivateRoute } from '@containers'
-import { literals } from '@components/App/literals'
+import { literals } from './literals'
 
 export class App extends Component {
   render () {

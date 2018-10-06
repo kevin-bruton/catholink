@@ -1,7 +1,6 @@
 import React from 'react'
 import { post } from '@services'
 import { usersLanguage } from '@helpers/usersLanguage'
-import * as appState from '@state'
 
 export class Home extends React.Component {
   constructor (props) {
@@ -13,12 +12,9 @@ export class Home extends React.Component {
   }
   async componentDidMount () {
     const todaysDate = (new Date()).toLocaleString('en-AU').slice(0, 10).split('/').reverse().join('-')
-    let gospel = appState.getGospel()
-    if (!gospel.title || !gospel.text) {
-      gospel = await post('gospel', { lang: usersLanguage, date: todaysDate })
+    if (!this.state.gospel.title || !this.state.gospel.text) {
+      this.setState({ gospel: await post('gospel', { lang: usersLanguage, date: todaysDate }) })
     }
-    appState.setGospel(gospel)
-    this.setState({ gospel })
   }
   render () {
     return (
