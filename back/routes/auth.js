@@ -3,14 +3,17 @@ const router = express.Router()
 const jwt = require('jsonwebtoken')
 const jwtSecret = require('@auth/jwt-secret').privateKey
 const db = require('@db')
-const crypto = require('crypto-js')
+// const bcrypt = require('bcrypt')
 
 router.post('/', async (req, res, next) => {
-  const decryptedPasswd = crypto.AES.decrypt(req.body.password, req.body.username).toString(crypto.enc.Utf8)
-  console.log(`Authenticating user with username: ${req.body.username};\npassword: ${req.body.password};\ndecrypted: ${decryptedPasswd}`)
+  const clearPassword = req.body.password
+  // const saltRounds = 10
+  // const correctPassword = await bcrypt.compare(clearPassword, saltRounds)
+  // const hashedPassword = await bcrypt.hash(clearPassword, 10)
+  console.log(`Authenticating user with username: ${req.body.username};\npassword: ${req.body.password}`)
   let found
   try {
-    const cursor = await db.users.find({ username: req.body.username, password: decryptedPasswd })
+    const cursor = await db.users.find({ username: req.body.username, password: clearPassword })
     found = await cursor.toArray()
     console.log(found)
   } catch (err) {
@@ -18,7 +21,7 @@ router.post('/', async (req, res, next) => {
     return res.json({ error: 'Server error' })
   }
   if (found.length) {
-    if (req.body.username === found[0].username && decryptedPasswd === found[0].password) {
+    if (req.body.username === found[0].username && clearPassword === found[0].password) {
       console.log(' -> Authenticated!\n')
       return res.json({user: found[0].username, token: jwt.sign(found[0], jwtSecret)})
     }

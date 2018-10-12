@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { headers } from './headers'
+import backendHost from './backendHost'
 
 export {
   get,
@@ -7,9 +8,8 @@ export {
   auth
 }
 
-const baseUrl = 'http://localhost:5000'
-const apiUrl = `${baseUrl}/api`
-const authUrl = `${baseUrl}/auth`
+const apiUrl = `${backendHost}/api`
+const authUrl = `${backendHost}/auth`
 
 async function get (endpoint) {
   return call('get', `${apiUrl}/${endpoint}`)
