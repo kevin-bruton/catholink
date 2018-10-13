@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { headers } from './headers'
-import backendHost from './backendHost'
+import {backendHost} from './config'
 
 export {
   get,
@@ -27,7 +27,6 @@ async function call (method, url, data) {
   try {
     const resp = await axios({ method, url, headers, data })
     if (resp.status !== 200) {
-      (resp.status === 401) && logout()
       const error = data || resp.statusText
       return Promise.reject(error)
     }
@@ -35,8 +34,4 @@ async function call (method, url, data) {
   } catch (err) {
     return Promise.reject(err)
   }
-}
-
-function logout () {
-  window.localStorage.removeItem('user')
 }

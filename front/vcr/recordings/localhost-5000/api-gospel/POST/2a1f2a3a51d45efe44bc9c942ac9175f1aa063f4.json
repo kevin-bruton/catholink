@@ -3,11 +3,11 @@
     "method": "POST",
     "headers": {
       "Content-Type": "application/json; charset=UTF-8",
-      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YjllYjA3MmIwNTYxYzU2NjRhZDlkYzUiLCJ1c2VybmFtZSI6ImtldmluIiwicGFzc3dvcmQiOiJrZXZpbiIsImlhdCI6MTUzOTMzMjk3NX0.P44ujXhHjRNUQfOrto_vyleHEoHWC3fw5u7wI9HrstE"
+      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YjllYjA3MmIwNTYxYzU2NjRhZDlkYzUiLCJ1c2VybmFtZSI6ImtldmluIiwicGFzc3dvcmQiOiJrZXZpbiIsImlhdCI6MTUzOTM1OTI5NH0.qcdo943zV56XT_KRKc8Y2oWawExFpgptuTfE1xYiWFc"
     },
     "data": {
       "lang": "en",
-      "date": "2018-10-12"
+      "date": "2018-10-13"
     },
     "url": "http://localhost:5000/api/gospel"
   },

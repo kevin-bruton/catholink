@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The About Component Snapshot matches 1`] = `
+<div>
+  <h2>
+    About Page
+  </h2>
+  <a
+    className="button is-link"
+  >
+    Link
+  </a>
+</div>
+`;

@@ -17,7 +17,8 @@ module.exports = config => {
     if (config.mode === mode.RECORD) {
       console.log('  In recording mode. Making the request to remote...')
       const responseData = await makeRequestAndSave(filepath, requestData)
-      res.send(responseData)
+      if (responseData.status !== 200) res.status(responseData.status).send(responseData.statusText)
+      else res.status(responseData.status).send(responseData.data)
     } else {
       const recordingExists = fs.existsSync(filepath)
       if (recordingExists) {
@@ -31,7 +32,8 @@ module.exports = config => {
       } else if (config.mode === mode.CACHE) {
         console.log('  Recording not found. In cache mode. Making the request to remote...')
         const responseData = await makeRequestAndSave(filepath, requestData)
-        res.send(responseData)
+        if (responseData.status !== 200) res.status(responseData.status).send(responseData.statusText)
+        else res.status(responseData.status).send(responseData.data)
       }
     }
     next()
@@ -42,7 +44,7 @@ async function makeRequestAndSave (filepath, requestData) {
   const response = await request(requestData)
   const resp = { status: response.status, statusText: response.statusText, data: response.data }
   save(filepath, requestData, resp)
-  return response.data
+  return resp
 }
 
 function getRequestHeaders (req) {
@@ -70,5 +72,14 @@ function save (filepath, requestData, response) {
 function getRecordingFilePath (configDir, remoteUrl, originalUrl, requestData) {
   originalUrl.startsWith('/') && (originalUrl = originalUrl.substring(1))
   const dir = path.join(__dirname, configDir, remoteUrl.replace('http://', '').replace('/', '-').replace(':', '-'), originalUrl.replace('/', '-'), requestData.method)
-  return path.join(dir, hash(requestData.data) + '.json')
+  return path.join(dir, hashOnData(requestData.data) + '.json')
+}
+
+function hashOnData (data) {
+  if (data.date) { // Don't fetch again if the only difference is the date
+    const newData = Object.assign({}, data)
+    delete newData.date
+    return hash(newData)
+  }
+  return hash(data)
 }
