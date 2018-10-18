@@ -63,7 +63,8 @@
     "make-links": "node scripts/links",
     "postinstall": "node scripts/route-aliases",
     "aliases": "node scripts/route-aliases",
-    "start-vcr": "node vcr"
+    "vcr": "node vcr",
+    "chrome-debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --env=jsdom"
   },
   "jest": {
     "collectCoverage": false,
@@ -99,7 +100,7 @@
       "node",
       "mjs"
     ],
-    "setupTestFrameworkScriptFile": "<rootDir>/src/helpers/localStorageMock.js"
+    "setupTestFrameworkScriptFile": "<rootDir>/src/helpers/testSetup.js"
   },
   "babel": {
     "presets": [

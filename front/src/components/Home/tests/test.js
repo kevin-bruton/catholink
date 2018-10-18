@@ -1,4 +1,4 @@
-/* global describe it expect */
+/* global describe it expect jest */
 import React from 'react'
 import { Home } from '@components/Home'
 import { shallow } from 'enzyme'
@@ -21,7 +21,7 @@ describe('The Home Component', () => {
 
   it('Gets the gospel', () => {
     const getGospelSpy = jest.spyOn(Home.prototype, 'getGospel')
-    const wrapper = shallow(<Home />)
+    shallow(<Home />)
     expect(getGospelSpy).toHaveBeenCalled()
     getGospelSpy.mockRestore()
   })

@@ -22,7 +22,7 @@ export class Home extends React.Component {
   componentWillUnmount () {
     this._isMounted = false
   }
-  async getGospel() {
+  async getGospel () {
     const todaysDate = (new Date()).toLocaleString('en-AU').slice(0, 10).split('/').reverse().join('-')
     let gospel = {}
     try {
