@@ -1,19 +1,11 @@
 /* global describe it expect */
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { About } from '@components/About'
-import renderer from 'react-test-renderer'
+import {shallow} from 'enzyme'
+import {About} from '@components/About'
 
 describe('The About Component', () => {
-  it('renders without crashing', () => {
-    const div = document.createElement('div')
-    ReactDOM.render(<About />, div)
-    ReactDOM.unmountComponentAtNode(div)
-  })
-
-  it('Snapshot matches', () => {
-    const component = renderer.create(<About />)
-    let tree = component.toJSON()
-    expect(tree).toMatchSnapshot()
+  it('Renders the page title', () => {
+    const wrapper = shallow(<About />)
+    expect(wrapper.find('#pageTitle')).toHaveLength(1)
   })
 })

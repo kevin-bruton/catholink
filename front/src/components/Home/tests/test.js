@@ -1,19 +1,28 @@
 /* global describe it expect */
 import React from 'react'
-import ReactDOM from 'react-dom'
 import { Home } from '@components/Home'
-import renderer from 'react-test-renderer'
+import { shallow } from 'enzyme'
 
 describe('The Home Component', () => {
-  it('renders without crashing', () => {
-    const div = document.createElement('div')
-    ReactDOM.render(<Home />, div)
-    ReactDOM.unmountComponentAtNode(div)
+  it('Renders the date', () => {
+    const wrapper = shallow(<Home />)
+    expect(wrapper.find('#date')).toHaveLength(1)
   })
 
-  it('Snapshot matches', () => {
-    const component = renderer.create(<Home />)
-    let tree = component.toJSON()
-    expect(tree).toMatchSnapshot()
+  it('Renders the gospel title', () => {
+    const wrapper = shallow(<Home />)
+    expect(wrapper.find('#gospelTitle')).toHaveLength(1)
+  })
+
+  it('Renders the gospel text', () => {
+    const wrapper = shallow(<Home />)
+    expect(wrapper.find('#gospelText')).toHaveLength(1)
+  })
+
+  it('Gets the gospel', () => {
+    const getGospelSpy = jest.spyOn(Home.prototype, 'getGospel')
+    const wrapper = shallow(<Home />)
+    expect(getGospelSpy).toHaveBeenCalled()
+    getGospelSpy.mockRestore()
   })
 })

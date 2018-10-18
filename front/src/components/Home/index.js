@@ -14,28 +14,32 @@ export class Home extends React.Component {
   }
   async componentDidMount () {
     this._isMounted = true
-    const todaysDate = (new Date()).toLocaleString('en-AU').slice(0, 10).split('/').reverse().join('-')
     if (!this.state.gospel.title || !this.state.gospel.text) {
-      let gospel = {}
-      try {
-        gospel = await post('gospel', { lang: usersLanguage, date: todaysDate })
-      } catch (err) {
-        gospel.title = literals.noGospel
-        gospel.text = literals.noGospel
-      }
+      const gospel = this.getGospel()
       this._isMounted && this.setState({ gospel })
     }
   }
   componentWillUnmount () {
     this._isMounted = false
   }
+  async getGospel() {
+    const todaysDate = (new Date()).toLocaleString('en-AU').slice(0, 10).split('/').reverse().join('-')
+    let gospel = {}
+    try {
+      gospel = await post('gospel', { lang: usersLanguage, date: todaysDate })
+    } catch (err) {
+      gospel.title = literals.noGospel
+      gospel.text = literals.noGospel
+    }
+    return gospel
+  }
   render () {
     return (
       <div>
         <h1>Home Page</h1>
-        <h1>{this.state.day}</h1>
-        <h1>{this.state.gospel.title}</h1>
-        <small>{this.state.gospel.text}</small>
+        <h1 id='date'>{this.state.day}</h1>
+        <h1 id='gospelTitle'>{this.state.gospel.title}</h1>
+        <small id='gospelText'>{this.state.gospel.text}</small>
       </div>
     )
   }
