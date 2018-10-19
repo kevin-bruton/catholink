@@ -75,7 +75,7 @@
       "<rootDir>/config/polyfills.js"
     ],
     "testMatch": [
-      "<rootDir>/src/**/tests/**/*.{js,jsx,mjs}",
+      "<rootDir>/src/**/*test.{js,jsx,mjs}",
       "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs}"
     ],
     "testEnvironment": "node",
