@@ -25,16 +25,16 @@ export class Login extends React.Component {
   }
 
   handleSubmit (e) {
-    e.preventDefault()
+    e && e.preventDefault()
 
-    this.setState({ login: status.login.REQUESTED })
     const { username, password } = this.state
     if (username && password) {
-      this.login(username, password)
+      this.setState({ login: status.login.REQUESTED })
+      this.loginRequest(username, password)
     }
   }
 
-  login (username, password) {
+  loginRequest (username, password) {
     userService.login(username, password)
       .then(
         user => {
@@ -49,7 +49,6 @@ export class Login extends React.Component {
   }
 
   loginUpdated (newLoginState) {
-    console.log(newLoginState)
     newLoginState === status.login.LOGOUT && userService.logout()
     this.setState({ login: newLoginState })
   }
@@ -84,6 +83,7 @@ export class Login extends React.Component {
             {(login === status.login.REQUESTED) &&
               <img alt='' src={spinner} />
             }
+            {(login === status.login.FAILED) && <p>Login failed</p>}
           </div>
         </form>
       </div>
