@@ -20,4 +20,9 @@ var localStorageMock = (() => {
     }
   }
 })()
-Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+
+global.window = global.window || {}
+global.document = global.document || {}
+
+Object.defineProperty(global.window, 'localStorage', { value: localStorageMock })
+
