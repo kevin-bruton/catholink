@@ -10,17 +10,13 @@ export class Home extends React.Component {
       gospel: {},
       day: ''
     }
-    this._isMounted = false
   }
   async componentDidMount () {
     this._isMounted = true
     if (!this.state.gospel.title || !this.state.gospel.text) {
       const gospel = this.getGospel()
-      this._isMounted && this.setState({ gospel })
+      this.setState({ gospel })
     }
-  }
-  componentWillUnmount () {
-    this._isMounted = false
   }
   async getGospel () {
     const todaysDate = (new Date()).toLocaleString('en-AU').slice(0, 10).split('/').reverse().join('-')
