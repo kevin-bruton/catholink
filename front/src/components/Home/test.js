@@ -2,7 +2,7 @@
 import React from 'react'
 import { Home } from '@components/Home'
 import { shallow } from 'enzyme'
-import { post } from '@services'
+import * as services from '@services/request'
 
 describe('The Home Component', () => {
   it('Renders the date, gospel title and gospel text elements', () => {
@@ -19,9 +19,12 @@ describe('The Home Component', () => {
     getGospelSpy.mockRestore()
   })
 
-  it.skip('Makes post call to get gospel', async () => {
+  it('Makes post call to get gospel', async () => {
+    const mockedPost = jest.spyOn(services, 'post')
+    mockedPost.mockImplementation(() => console.log('mock implemented'))
     const component = shallow(<Home />)
-    post = jest.fn().mockImplementation(() => Promise.resolve({ username: 'kevin' }))
-    expect(await post).toBeCalled()
+    expect.assertions(1);
+    expect(mockedPost).toBeCalled()
+    mockedPost.mockRestore()
   })
 })
