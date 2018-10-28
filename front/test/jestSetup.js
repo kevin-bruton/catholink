@@ -1,8 +1,8 @@
-const { spawn } = require('child_process')
+const { spawnSync } = require('child_process')
 const vcrProcess = require('./vcrProcess')
 
-module.exports = async (config) => {
-    console.log('\nStarting VCR...')
-    const process = spawn('node', ['../vcr'])
-    vcrProcess.set(process)
+module.exports = (config) => {
+  console.log('\nStarting VCR...')
+  const process = spawnSync('node', ['../vcr'])
+  vcrProcess.set(process)
 }

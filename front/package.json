@@ -102,9 +102,7 @@
       "node",
       "mjs"
     ],
-    "setupTestFrameworkScriptFile": "<rootDir>/test/testSetup.js",
-    "globalSetup": "<rootDir>/test/jestSetup.js",
-    "globalTeardown": "<rootDir>/test/jestTeardown.js"
+    "setupTestFrameworkScriptFile": "<rootDir>/test/testSetup.js"
   },
   "babel": {
     "presets": [

@@ -12,8 +12,10 @@ module.exports = config => {
       data: req.body,
       url: config.remoteUrl + req.originalUrl
     }
+
     console.log('Request received for', requestData.url, 'via', requestData.method)
     const filepath = getRecordingFilePath(config.dir, config.remoteUrl, req.originalUrl, requestData)
+
     if (config.mode === mode.RECORD) {
       console.log('  In recording mode. Making the request to remote...')
       const responseData = await makeRequestAndSave(filepath, requestData)
@@ -22,15 +24,15 @@ module.exports = config => {
     } else {
       const recordingExists = fs.existsSync(filepath)
       if (recordingExists) {
-        console.log('  Recording found. Not in recording mode. Sending recording back...')
+        console.log(`  ${config.mode} MODE; HIT`)
         const recording = JSON.parse(fs.readFileSync(filepath))
         if (recording.response.status !== 200) res.status(recording.response.status).send(recording.response.statusText)
         else res.status(recording.response.status).send(recording.response.data)
       } else if (config.mode === mode.PLAYBACK) {
-        console.log('  Recording not found. In playback mode. Sending back a 404...')
+        console.log(`  ${config.mode} MODE; NO HIT. RETURNING 404...`)
         res.sendStatus(404)
       } else if (config.mode === mode.CACHE) {
-        console.log('  Recording not found. In cache mode. Making the request to remote...')
+        console.log(`  ${config.mode} MODE; NO HIT. REQUESTING...`)
         const responseData = await makeRequestAndSave(filepath, requestData)
         if (responseData.status !== 200) res.status(responseData.status).send(responseData.statusText)
         else res.status(responseData.status).send(responseData.data)
