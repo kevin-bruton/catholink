@@ -28,24 +28,21 @@ export class Login extends React.Component {
     e && e.preventDefault()
 
     const { username, password } = this.state
+    this.setState({ login: status.login.REQUESTED })
     if (username && password) {
-      this.setState({ login: status.login.REQUESTED })
       this.loginRequest(username, password)
     }
   }
 
-  loginRequest (username, password) {
-    userService.login(username, password)
-      .then(
-        user => {
-          status.update(status.type.LOGIN, status.login.SUCCESSFUL)
-          this.setState({ login: status.login.SUCCESSFUL })
-        },
-        error => {
-          status.update(status.type.LOGIN, status.login.FAILED, error)
-          this.setState({ login: status.login.FAILED })
-        }
-      )
+  async loginRequest (username, password) {
+    try {
+      await userService.login(username, password)
+      status.update(status.type.LOGIN, status.login.SUCCESSFUL)
+      this.setState({ login: status.login.SUCCESSFUL })
+    } catch (err) {
+      status.update(status.type.LOGIN, status.login.FAILED, err)
+      this.setState({ login: status.login.FAILED })
+    }
   }
 
   loginUpdated (newLoginState) {
@@ -67,14 +64,14 @@ export class Login extends React.Component {
             <label htmlFor='username'>{literals.username}</label>
             <input type='text' className='form-control' name='username' value={username} onChange={this.handleChange} />
             {login === status.login.REQUESTED && !username &&
-            <div className='help-block'>{literals.usernameRequired}</div>
+            <div id='usernameReqMess' className='help-block'>{literals.usernameRequired}</div>
             }
           </div>
           <div className={'form-group' + (login === status.login.REQUESTED && !password ? ' has-error' : '')}>
             <label htmlFor='password'>{literals.password}</label>
             <input type='password' className='form-control' name='password' value={password} onChange={this.handleChange} />
             {login === status.login.REQUESTED && !password &&
-              <div className='help-block'>{literals.passwordRequired}</div>
+              <div id='passReqMess' className='help-block'>{literals.passwordRequired}</div>
             }
             {(login === status.login.FAILED) && <div>{literals.incorrectCredentials}</div>}
           </div>
