@@ -1,7 +1,8 @@
 export const type = {
   LOGIN: 'LOGIN',
   ALERT: 'ALERT',
-  USER: 'USER'
+  USER: 'USER',
+  GOSPEL: 'GOSPEL'
 }
 
 export const alert = {
