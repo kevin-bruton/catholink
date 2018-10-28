@@ -3,6 +3,7 @@ import React from 'react'
 import { Home } from '@components/Home'
 import { shallow } from 'enzyme'
 import * as services from '@services/request'
+import * as status from '@status/manager'
 
 describe('The Home Component', () => {
   it('Renders the date, gospel title and gospel text elements', () => {
@@ -19,12 +20,41 @@ describe('The Home Component', () => {
     getGospelSpy.mockRestore()
   })
 
-  it('Makes post call to get gospel', async () => {
+  it('Makes post call to get gospel when mounted and gospel is undefined', () => {
     const mockedPost = jest.spyOn(services, 'post')
-    mockedPost.mockImplementation(() => console.log('mock implemented'))
-    const component = shallow(<Home />)
-    expect.assertions(1);
+      .mockImplementation(() => {})
+    jest.spyOn(status, 'getState')
+      .mockImplementation(() => undefined)
+    shallow(<Home />)
+    expect.assertions(1)
     expect(mockedPost).toBeCalled()
     mockedPost.mockRestore()
+  })
+
+  it(`Doesn't make post call to get gospel when mounted and gospel is defined`, () => {
+    const mockedPost = jest.spyOn(services, 'post')
+      .mockImplementation(() => {})
+    jest.spyOn(status, 'getState')
+      .mockImplementation(() => ({ title: 'title', text: 'text' }))
+    shallow(<Home />)
+    expect.assertions(1)
+    expect(mockedPost).not.toBeCalled()
+    mockedPost.mockRestore()
+  })
+
+  it('getGospel gets the gospel', async () => {
+    expect.assertions(2)
+    const spiedGetGospel = jest.spyOn(Home.prototype, 'getGospel')
+    const gospel = await spiedGetGospel()
+    expect(gospel.title).toBeTruthy()
+    expect(gospel.text).toBeTruthy()
+  })
+
+  it('getGospel sets default title and text when post rejects', async () => {
+    jest.spyOn(services, 'post')
+      .mockImplementation(() => Promise.reject(new Error()))
+    const gospel = await Home.prototype.getGospel()
+    expect(gospel.title).toEqual(`Couldn't get Gospel`)
+    expect(gospel.text).toEqual(`Couldn't get Gospel`)
   })
 })

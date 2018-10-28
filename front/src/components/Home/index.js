@@ -2,6 +2,7 @@ import React from 'react'
 import { post } from '@services'
 import { usersLanguage } from '@helpers/usersLanguage'
 import { literals } from './literals'
+import * as status from '@status'
 
 export class Home extends React.Component {
   constructor (props) {
@@ -12,11 +13,12 @@ export class Home extends React.Component {
     }
   }
   async componentDidMount () {
-    this._isMounted = true
-    if (!this.state.gospel.title || !this.state.gospel.text) {
-      const gospel = this.getGospel()
-      this.setState({ gospel })
+    let gospel = status.getState(status.type.GOSPEL)
+    if (gospel === undefined) {
+      let gospel = await this.getGospel()
+      status.update(status.type.GOSPEL, gospel)
     }
+    this.setState({ gospel })
   }
   async getGospel () {
     const todaysDate = (new Date()).toLocaleString('en-AU').slice(0, 10).split('/').reverse().join('-')
@@ -34,8 +36,8 @@ export class Home extends React.Component {
       <div>
         <h1>Home Page</h1>
         <h1 id='date'>{this.state.day}</h1>
-        <h1 id='gospelTitle'>{this.state.gospel.title}</h1>
-        <small id='gospelText'>{this.state.gospel.text}</small>
+        <h1 id='gospelTitle'>{this.state.gospel && this.state.gospel.title}</h1>
+        <small id='gospelText'>{this.state.gospel && this.state.gospel.text}</small>
       </div>
     )
   }
