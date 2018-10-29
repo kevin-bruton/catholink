@@ -24,7 +24,7 @@ export class Home extends React.Component {
     const todaysDate = (new Date()).toLocaleString('en-AU').slice(0, 10).split('/').reverse().join('-')
     let gospel = {}
     try {
-      gospel = await post('gospel', { lang: usersLanguage, date: todaysDate })
+      gospel = await post('gospel', { lang: usersLanguage(), date: todaysDate })
     } catch (err) {
       gospel.title = literals.noGospel
       gospel.text = literals.noGospel
