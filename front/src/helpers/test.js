@@ -1,6 +1,3 @@
-/**
- * @jest-environment jsdom
- */
 /* global describe it expect jest */
 import React from 'react'
 import * as cookie from './cookie'

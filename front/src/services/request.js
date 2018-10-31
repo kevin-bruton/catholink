@@ -25,7 +25,7 @@ async function auth (data) {
 
 async function call (method, url, data) {
   try {
-    const resp = await axios({ method, url, headers, data })
+    const resp = await axios({ method, url, headers: headers(), data })
     if (resp.status !== 200) {
       const error = data || resp.statusText
       return Promise.reject(error)
