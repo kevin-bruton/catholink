@@ -25,8 +25,8 @@
       "runtimeArgs": [
         "--inspect-brk",
         "${workspaceRoot}/node_modules/jest/bin/jest.js",
-        "--runInBand",
-        "--env=jsdom"
+        "src/status/test.js",
+        "--runInBand"
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",

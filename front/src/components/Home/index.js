@@ -1,5 +1,5 @@
 import React from 'react'
-import { post } from '@services'
+import { post } from '@request'
 import { usersLanguage } from '@helpers/usersLanguage'
 import { literals } from './literals'
 import * as status from '@status'
@@ -15,7 +15,7 @@ export class Home extends React.Component {
   async componentDidMount () {
     let gospel = status.getState(status.type.GOSPEL)
     if (gospel === undefined) {
-      let gospel = await this.getGospel()
+      gospel = await this.getGospel()
       status.update(status.type.GOSPEL, gospel)
     }
     this.setState({ gospel })

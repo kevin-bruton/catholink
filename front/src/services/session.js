@@ -1,6 +1,6 @@
 import { auth } from './request'
 
-export const userService = {
+export {
   login,
   logout
 }

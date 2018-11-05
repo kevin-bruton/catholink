@@ -94,6 +94,7 @@ module.exports = {
       '@containers': path.resolve(__dirname, '..', 'src/containers'),
       '@helpers': path.resolve(__dirname, '..', 'src/helpers'),
       '@services': path.resolve(__dirname, '..', 'src/services'),
+      '@request': path.resolve(__dirname, '..', 'src/services/request'),
       '@status': path.resolve(__dirname, '..', 'src/status'),
     },
     plugins: [

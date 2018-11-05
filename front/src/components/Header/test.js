@@ -1,6 +1,6 @@
 /* global describe it expect */
 import React from 'react'
-import { Header } from '@components'
+import { Header } from '@components/Header'
 import { shallow } from 'enzyme'
 
 describe('The Header Component', () => {

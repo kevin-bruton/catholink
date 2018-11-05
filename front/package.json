@@ -70,7 +70,8 @@
       "src/**/*.{js,jsx,mjs}",
       "!<rootDir>/src/*.js",
       "!<rootDir>/src/components/index.js",
-      "!<rootDir>/src/components/App/*.js"
+      "!<rootDir>/src/components/App/*.js",
+      "!<rootDir>/src/services/index.js"
     ],
     "setupFiles": [
       "<rootDir>/config/polyfills.js"
@@ -95,6 +96,7 @@
       "^@containers(.*)$": "<rootDir>/src/containers$1",
       "^@helpers(.*)$": "<rootDir>/src/helpers$1",
       "^@services(.*)$": "<rootDir>/src/services$1",
+      "^@request(.*)$": "<rootDir>/src/services/request$1",
       "^@status(.*)$": "<rootDir>/src/status$1"
     },
     "moduleFileExtensions": [
@@ -106,11 +108,15 @@
       "node",
       "mjs"
     ],
-    "setupTestFrameworkScriptFile": "<rootDir>/test/testSetup.js"
+    "setupTestFrameworkScriptFile": "<rootDir>/test/testSetup.js",
+    "restoreMocks": true
   },
   "babel": {
     "presets": [
       "react-app"
+    ],
+    "plugins": [
+      "rewire"
     ]
   },
   "eslintConfig": {

@@ -1,60 +1,99 @@
-/* global describe it expect jest */
+/* global describe it expect jest beforeAll afterAll */
 import React from 'react'
-import { Home } from '@components/Home'
+import { Home, __RewireAPI__ as R } from '@components/Home'
 import { shallow } from 'enzyme'
-import * as services from '@services/request'
-import * as status from '@status/manager'
+// import * as services from '@services/request'
 
 describe('The Home Component', () => {
-  it('Renders the date, gospel title and gospel text elements', () => {
+  it('Renders the date, gospel title and gospel text elements', async () => {
     const wrapper = shallow(<Home />)
     expect(wrapper.find('#date')).toHaveLength(1)
     expect(wrapper.find('#gospelTitle')).toHaveLength(1)
     expect(wrapper.find('#gospelText')).toHaveLength(1)
+    await wrapper.instance().getGospel()
   })
 
-  it('Tries to get gospel when component is mounted', () => {
-    const getGospelSpy = jest.spyOn(Home.prototype, 'getGospel')
-    shallow(<Home />)
-    expect(getGospelSpy).toHaveBeenCalled()
-    getGospelSpy.mockRestore()
+  describe(`componentDidMount`, () => {
+    it('Tries to get gospel if gospel is undefined', async () => {
+      const gospel = {title: 'Gospel', text: 'Gospel text'}
+      R.__Rewire__('status', {
+        getState: jest.fn().mockReturnValue(undefined),
+        type: { GOSPEL: 'GOSPEL' },
+        update: jest.fn()
+      })
+      const getGospelSpy = jest.spyOn(Home.prototype, 'getGospel')
+        .mockImplementation(() => Promise.resolve(gospel))
+      await shallow(<Home />)
+      expect(getGospelSpy).toHaveBeenCalled()
+      expect(getGospelSpy()).resolves.toEqual(gospel)
+    })
+
+    it(`Doesn't try to get gospel if gospel is defined`, async () => {
+      const gospel = {title: 'Gospel', text: 'Gospel text'}
+      R.__Rewire__('status', {
+        getState: jest.fn().mockReturnValue(gospel),
+        type: { GOSPEL: 'GOSPEL' },
+        update: jest.fn()
+      })
+      const getGospelSpy = jest.spyOn(Home.prototype, 'getGospel')
+        .mockImplementation(() => Promise.resolve(gospel))
+      await shallow(<Home />)
+      expect(getGospelSpy).not.toHaveBeenCalled()
+    })
+
+    it(`Calls getStatus to get the gospel`, async () => {
+      R.__Rewire__('status',
+        {update: jest.fn(), getState: jest.fn(), type: { GOSPEL: 'GOSPEL' }}
+      )
+      const status = R.__get__('status')
+      await shallow(<Home />)
+      expect(status.getState).toBeCalled()
+      R.__ResetDependency__('status')
+    })
+
+    it(`Calls update status with the gospel if gospel is undefined`, async () => {
+      R.__Rewire__('status',
+        {
+          update: jest.fn(),
+          getState: jest.fn().mockReturnValue(undefined),
+          type: { GOSPEL: 'GOSPEL' }
+        }
+      )
+      const status = R.__get__('status')
+      const gospel = {title: 'Gospel', text: 'Gospel text'}
+      jest.spyOn(Home.prototype, 'getGospel')
+        .mockImplementation(() => Promise.resolve(gospel))
+      await shallow(<Home />)
+      expect(status.update).toBeCalledWith(status.type.GOSPEL, gospel)
+      R.__ResetDependency__('status')
+    })
   })
 
-  it('Makes post call to get gospel when mounted and gospel is undefined', () => {
-    const mockedPost = jest.spyOn(services, 'post')
-      .mockImplementation(() => {})
-    jest.spyOn(status, 'getState')
-      .mockImplementation(() => undefined)
-    shallow(<Home />)
-    expect.assertions(1)
-    expect(mockedPost).toBeCalled()
-    mockedPost.mockRestore()
-  })
+  describe(`getGospel`, () => {
+    it(`Makes a post request to get the gospel with users language and the date`, async () => {
+      R.__Rewire__('post', jest.fn().mockResolvedValue('OK'))
+      const post = R.__get__('post')
+      const date = (new Date()).toLocaleString('en-AU').slice(0, 10).split('/').reverse().join('-')
+      const lang = 'en'
+      await Home.prototype.getGospel()
+      expect(post).toBeCalledWith('gospel', {lang, date})
+      R.__ResetDependency__('post')
+    })
 
-  it(`Doesn't make post call to get gospel when mounted and gospel is defined`, () => {
-    const mockedPost = jest.spyOn(services, 'post')
-      .mockImplementation(() => {})
-    jest.spyOn(status, 'getState')
-      .mockImplementation(() => ({ title: 'title', text: 'text' }))
-    shallow(<Home />)
-    expect.assertions(1)
-    expect(mockedPost).not.toBeCalled()
-    mockedPost.mockRestore()
-  })
+    it(`Returns the gospel if post request is successful`, async () => {
+      const gospel = {title: 'Gospel', text: 'Gospel text'}
+      R.__Rewire__('post', jest.fn().mockResolvedValue(gospel))
+      const gospelReturned = await Home.prototype.getGospel()
+      expect(gospelReturned).toEqual(gospel)
+      R.__ResetDependency__('post')
+    })
 
-  it('getGospel gets the gospel', async () => {
-    expect.assertions(2)
-    const spiedGetGospel = jest.spyOn(Home.prototype, 'getGospel')
-    const gospel = await spiedGetGospel()
-    expect(gospel.title).toBeTruthy()
-    expect(gospel.text).toBeTruthy()
-  })
-
-  it('getGospel sets default title and text when post rejects', async () => {
-    jest.spyOn(services, 'post')
-      .mockImplementation(() => Promise.reject(new Error()))
-    const gospel = await Home.prototype.getGospel()
-    expect(gospel.title).toEqual(`Couldn't get Gospel`)
-    expect(gospel.text).toEqual(`Couldn't get Gospel`)
+    it(`Returns the gospel with dummy values if post request isn't successful`, async () => {
+      const gospel = {title: `Couldn't get Gospel`, text: `Couldn't get Gospel`}
+      R.__Rewire__('post', jest.fn().mockRejectedValue('NOK'))
+      const gospelReturned = await Home.prototype.getGospel()
+      expect(gospelReturned).toEqual(gospel)
+      R.__ResetDependency__('post')
+    })
   })
 })

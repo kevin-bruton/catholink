@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 
-import { userService } from '@services'
+import * as session from '@services/session'
 import { spinner } from './spinner'
 import { literals } from './literals'
 import * as status from '@status'
@@ -16,7 +16,7 @@ export class Login extends React.Component {
 
     this.state = { username: '', password: '', login: status.login.LOGOUT }
     status.subscribe(status.type.LOGIN, this.loginUpdated)
-    userService.logout()
+    session.logout()
   }
 
   handleChange (e) {
@@ -36,7 +36,7 @@ export class Login extends React.Component {
 
   async loginRequest (username, password) {
     try {
-      await userService.login(username, password)
+      await session.login(username, password)
       status.update(status.type.LOGIN, status.login.SUCCESSFUL)
       this.setState({ login: status.login.SUCCESSFUL })
     } catch (err) {
@@ -46,7 +46,7 @@ export class Login extends React.Component {
   }
 
   loginUpdated (newLoginState) {
-    newLoginState === status.login.LOGOUT && userService.logout()
+    newLoginState === status.login.LOGOUT && session.logout()
     this.setState({ login: newLoginState })
   }
 

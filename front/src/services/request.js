@@ -27,11 +27,10 @@ async function call (method, url, data) {
   try {
     const resp = await axios({ method, url, headers: headers(), data })
     if (resp.status !== 200) {
-      const error = data || resp.statusText
-      return Promise.reject(error)
+      return Promise.reject(new Error(`Rejected with status ${resp.status}`))
     }
     return resp.data
   } catch (err) {
-    return Promise.reject(err)
+    return Promise.reject(new Error(err))
   }
 }

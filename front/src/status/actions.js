@@ -8,6 +8,8 @@ export const actions = {
 }
 
 function loginAction (newLoginState, user) {
-  newLoginState === login.SUCCESSFUL ? update(type.USER, user) : update(type.USER, {})
+  newLoginState === login.SUCCESSFUL
+    ? update(type.USER, user)
+    : update(type.USER, {})
   return newLoginState
 }
