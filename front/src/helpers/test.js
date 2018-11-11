@@ -1,5 +1,4 @@
-/* global describe it expect jest */
-import React from 'react'
+/* global describe it expect */
 import * as cookie from './cookie'
 import { usersLanguage } from './usersLanguage'
 import { getLangLiterals } from './get-lang-literals'
@@ -8,7 +7,7 @@ describe(`Cookie helper`, () => {
   it(`Can set and get cookies`, () => {
     const cookieName = 'tester'
     const cookieValue = 'tester-value'
-    
+
     cookie.set(cookieName, cookieValue)
     const valueGot = cookie.get('tester')
     expect(valueGot).toEqual(cookieValue)
@@ -59,7 +58,7 @@ describe(`Get language literals`, () => {
       password: 'Password',
       usernameRequired: 'Please enter username',
       passwordRequired: 'Please enter password',
-      incorrectCredentials: 'Incorrect credentials provided!' 
+      incorrectCredentials: 'Incorrect credentials provided!'
     }
     const languageLiterals = getLangLiterals(literalsObject)
     expect(languageLiterals).toEqual(expectedLanguageLiterals)
