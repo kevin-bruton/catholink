@@ -22,7 +22,6 @@ const db = (function () {
     } catch (err) {
       console.log(`CAUGHT A DB ERROR WHILE EXECUTING "${funcName}" on the "${colName}" collection:\n${err}\n${err.stack}`)
       _mongoConnection.close()
-      process.exit()
     }
     return resp
   }

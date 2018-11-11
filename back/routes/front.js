@@ -3,10 +3,7 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const frontRouter = express.Router()
 const frontDir = path.join(__dirname, '..', '..', 'front', 'build')
-// const authorizeFront = require('./auth').authorizeFront
 const requestLanguage = require('express-request-language')
-// frontRouter.get('/service-worker.js', (req, res) => res.sendFile(path.join(__dirname, '..', '..', 'front', 'service-worker.js')))
-// frontRouter.get('/login-logo', (req, res) => res.sendFile(path.join(frontDir, 'images', 'logo3.jpg')))
 
 frontRouter.use(cookieParser())
 
@@ -18,8 +15,6 @@ frontRouter.use(requestLanguage({
     url: '/languages/{language}'
   }
 }))
-
-// frontRouter.use(authorizeFront)
 
 frontRouter.use(express.static(frontDir))
 
