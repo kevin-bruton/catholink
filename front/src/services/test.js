@@ -7,7 +7,7 @@ describe(`Header construction for all http requests`, () => {
   it(`If there is no token in localStorage it only includes the Content-Type header`, () => {
     const baseHeaders = { 'Content-Type': 'application/json; charset=utf-8' }
     const userItem = window.localStorage.getItem('user')
-    expect(userItem).toBeFalsy()
+    expect(userItem).toBeUndefined()
     expect(headers()).toEqual(baseHeaders)
   })
 
@@ -120,7 +120,7 @@ describe(`Session`, () => {
       window.localStorage.setItem('user', 'myValue')
       expect(window.localStorage.getItem('user')).toEqual('myValue')
       logout()
-      expect(window.localStorage.getItem('user')).toBeFalsy()
+      expect(window.localStorage.getItem('user')).toEqual(undefined)
     })
   })
 })

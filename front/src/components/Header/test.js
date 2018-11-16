@@ -7,8 +7,7 @@ describe('The Header Component', () => {
   it('Renders the header', () => {
     const component = shallow(<Header />)
     expect(component.find('header')).toHaveLength(1)
-    expect(component.find('header > div > div img')).toHaveLength(1)
-    expect(component.find('header > div > div > h1')).toHaveLength(1)
-    expect(component.find('header > div > div > h4')).toHaveLength(1)
+    expect(component.find('header > Link')).toHaveLength(1)
+    expect(component.find('header > Link > h1')).toHaveLength(1)
   })
 })
