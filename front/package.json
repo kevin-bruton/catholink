@@ -97,7 +97,8 @@
       "^@helpers(.*)$": "<rootDir>/src/helpers$1",
       "^@services(.*)$": "<rootDir>/src/services$1",
       "^@request(.*)$": "<rootDir>/src/services/request$1",
-      "^@status(.*)$": "<rootDir>/src/status$1"
+      "^@status(.*)$": "<rootDir>/src/status$1",
+      "^@assets(.*)$": "<rootDir>/src/assets$1"
     },
     "moduleFileExtensions": [
       "web.js",

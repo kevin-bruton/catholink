@@ -101,6 +101,7 @@ module.exports = {
       '@services': path.resolve(__dirname, '..', 'src/services'),
       '@request': path.resolve(__dirname, '..', 'src/services/request'),
       '@status': path.resolve(__dirname, '..', 'src/status'),
+      '@assets': path.resolve(__dirname, '..', 'src/assets')
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
