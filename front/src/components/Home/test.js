@@ -6,11 +6,13 @@ import { shallow } from 'enzyme'
 
 describe('The Home Component', () => {
   it('Renders the date, gospel title and gospel text elements', async () => {
+    R.__Rewire__('post', jest.fn(() => Promise.resolve()))
     const wrapper = shallow(<Home />)
     expect(wrapper.find('#date')).toHaveLength(1)
     expect(wrapper.find('#gospelTitle')).toHaveLength(1)
     expect(wrapper.find('#gospelText')).toHaveLength(1)
     await wrapper.instance().getGospel()
+    R.__ResetDependency__('post')
   })
 
   describe(`componentDidMount`, () => {
@@ -26,6 +28,7 @@ describe('The Home Component', () => {
       await shallow(<Home />)
       expect(getGospelSpy).toHaveBeenCalled()
       expect(getGospelSpy()).resolves.toEqual(gospel)
+      R.__ResetDependency__('status')
     })
 
     it(`Doesn't try to get gospel if gospel is defined`, async () => {
@@ -39,6 +42,7 @@ describe('The Home Component', () => {
         .mockImplementation(() => Promise.resolve(gospel))
       await shallow(<Home />)
       expect(getGospelSpy).not.toHaveBeenCalled()
+      R.__ResetDependency__('status')
     })
 
     it(`Calls getStatus to get the gospel`, async () => {
