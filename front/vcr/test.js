@@ -1,0 +1,173 @@
+/* global describe it jest expect beforeEach afterEach beforeAll afterAll __rewire_reset_all__ */
+const axios = require('axios')
+const express = require('express')
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const vcr = require('./vcr')
+const request = require('./request')
+const rp = require('request-promise')
+const fs = require('fs-extra')
+const path = require('path')
+
+describe('VCR Middleware', () => {
+  const vcrPort = 5500
+  const remotePort = 5000
+  const recordingsDir = 'testRecordings'
+  const remoteUrl = `http://localhost:${remotePort}`
+  const vcrUrl = `http://localhost:${vcrPort}`
+  const testEndpoint = '/my/endpoint'
+  let server, resp
+  const requestData = {method: 'POST', url: `${vcrUrl}${testEndpoint}`, data: {info: 'info'}, headers: {'Content-Type': 'application/json'}}
+  const expectedToReturn = {status: 200, statusText: 'OK', data: {info: 'info returned'}}
+  request.__Rewire__('axios', jest.fn(() => Promise.resolve(expectedToReturn)))
+  const axios = request.__get__('axios')
+  const startServer = mode => {
+    return new Promise(resolve => {
+      const config = {
+        remoteUrl,
+        vcrUrl,
+        dir: recordingsDir,
+        mode: mode,
+        port: vcrPort
+      }
+      const app = express()
+      app.use(cors())
+      app.use(bodyParser.urlencoded({ extended: false }))
+      app.use(bodyParser.json())
+
+      app.use(vcr(config))
+
+      const server = app.listen(config.port, () => resolve(server))
+    })
+  }
+  const stopServer = server => {
+    return new Promise(resolve => {
+      server.close(() => resolve())
+    })
+  }
+
+  describe(`Record mode. When a HTTP request is made:`, () => {
+    beforeAll(async () => {
+      jest.spyOn(global.console, 'log').mockImplementation(() => jest.fn())
+      server = await startServer('record')
+      resp = await rp(requestData.url, {method: requestData.method, body: requestData.data, json: true, resolveWithFullResponse: true})
+      requestData.url = `${remoteUrl}${testEndpoint}`
+    })
+    afterAll(async () => {
+      await stopServer(server)
+      requestData.url = `${vcrUrl}${testEndpoint}`
+      axios.mockClear()
+    })
+    it(`makes the same request but to the remote URL`, async () => {
+      expect(axios).toBeCalledWith(requestData)
+    })
+
+    it(`saves the request`, () => {
+      const getRecordingFilePath = vcr.__get__('getRecordingFilePath')
+      const filepath = getRecordingFilePath(recordingsDir, remoteUrl, testEndpoint, requestData)
+      const recording = JSON.parse(fs.readFileSync(filepath))
+      const expectedRecording = {
+        request: requestData,
+        response: expectedToReturn
+      }
+      expect(recording).toEqual(expectedRecording)
+    })
+
+    it(`returns the response`, () => {
+      expect(resp.body).toEqual(expectedToReturn.data)
+    })
+  })
+
+  describe(`Playback mode. When a HTTP request is made:`, () => {
+    beforeAll(async () => {
+      jest.spyOn(global.console, 'log').mockImplementation(() => jest.fn())
+      server = await startServer('playback')
+      resp = await rp(requestData.url, {method: requestData.method, body: requestData.data, json: true, resolveWithFullResponse: true})
+      requestData.url = `${remoteUrl}${testEndpoint}`
+    })
+    afterAll(async () => {
+      await stopServer(server)
+      axios.mockClear()
+      requestData.url = `${vcrUrl}${testEndpoint}`
+    })
+    it(`doesn't make a new request`, () => {
+      expect(axios).not.toBeCalled()
+    })
+    describe(`When there is a recording`, () => {
+      it(`returns a recording`, async () => {
+        expect(resp.statusCode).toBe(200)
+        expect(resp.statusMessage).toBe('OK')
+        expect(resp.body).toEqual(expectedToReturn.data)
+      })
+    })
+    describe(`When there is NOT a recording`, () => {
+      it(`returns 404`, async () => {
+        requestData.url = `${vcrUrl}${testEndpoint}`
+        try {
+          resp = await rp(requestData.url, {method: 'GET', body: {unknown: 'nonExistant'}, json: true, resolveWithFullResponse: true})
+        } catch (err) {
+          expect(err.statusCode).toBe(404)
+        }
+      })
+    })
+  })
+
+  describe(`Cache mode. When a HTTP request is made:`, () => {
+    describe(`When there is a recording saved`, () => {
+      beforeAll(async () => {
+        jest.spyOn(global.console, 'log').mockImplementation(() => jest.fn())
+        server = await startServer('cache')
+        resp = await rp(requestData.url, {method: requestData.method, body: requestData.data, json: true, resolveWithFullResponse: true})
+        requestData.url = `${remoteUrl}${testEndpoint}`
+      })
+      afterAll(async () => {
+        await stopServer(server)
+        axios.mockClear()
+        requestData.url = `${vcrUrl}${testEndpoint}`
+      })
+      it(`doesn't make a request to the remote`, () => {
+        expect(axios).not.toBeCalled()
+      })
+
+      it(`returns that recording`, () => {
+        expect(resp.statusCode).toBe(200)
+        expect(resp.statusMessage).toBe('OK')
+        expect(resp.body).toEqual(expectedToReturn.data)
+      })
+    })
+    
+    describe(`When there isn't a recording saved`, () => {
+      beforeAll(async () => {
+        jest.spyOn(global.console, 'log').mockImplementation(() => jest.fn())
+        requestData.method = 'GET'
+        server = await startServer('cache')
+        resp = await rp(requestData.url, {method: requestData.method, body: requestData.data, json: true, resolveWithFullResponse: true})
+        requestData.url = `${remoteUrl}${testEndpoint}`
+      })
+      afterAll(async () => {
+        await stopServer(server)
+        axios.mockClear()
+        requestData.url = `${vcrUrl}${testEndpoint}`
+        fs.removeSync(path.join(__dirname, recordingsDir))
+      })
+      it(`makes the same request but to the remote URL`, () => {
+        expect(axios).toBeCalledWith(requestData)
+      })
+
+      it(`saves the request`, () => {
+        const getRecordingFilePath = vcr.__get__('getRecordingFilePath')
+        const filepath = getRecordingFilePath(recordingsDir, remoteUrl, testEndpoint, requestData)
+        const recording = JSON.parse(fs.readFileSync(filepath))
+        const expectedRecording = {
+          request: requestData,
+          response: expectedToReturn
+        }
+        expect(recording).toEqual(expectedRecording)
+      })
+
+      it.skip(`returns the response`, () => {
+        expect(true).toEqual(false)
+      })
+    })
+  })
+})
