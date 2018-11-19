@@ -14,7 +14,7 @@ module.exports = config => {
     }
 
     console.log('Request received for', requestData.url, 'via', requestData.method)
-    const filepath = getRecordingFilePath(config.dir, config.remoteUrl, req.originalUrl, requestData)
+    const filepath = getRecordingFilePath(config.dir, config.remoteUrl, req.originalUrl, requestData, config.dataFilter4FileHash)
 
     if (config.mode === mode.RECORD) {
       console.log('  In recording mode. Making the request to remote...')
@@ -71,17 +71,13 @@ function save (filepath, requestData, response) {
   fs.writeFileSync(filepath, JSON.stringify(toSave, null, 2))
 }
 
-function getRecordingFilePath (configDir, remoteUrl, originalUrl, requestData) {
+function getRecordingFilePath (configDir, remoteUrl, originalUrl, requestData, dataFilter4FileHash) {
   originalUrl.startsWith('/') && (originalUrl = originalUrl.substring(1))
   const dir = path.join(__dirname, configDir, remoteUrl.replace('http://', '').replace('/', '-').replace(':', '-'), originalUrl.replace('/', '-'), requestData.method)
-  return path.join(dir, hashOnData(requestData.data) + '.json')
+  return path.join(dir, hashOnData(requestData.data, dataFilter4FileHash) + '.json')
 }
 
-function hashOnData (data) {
-  if (data.date) { // Don't fetch again if the only difference is the date
-    const newData = Object.assign({}, data)
-    delete newData.date
-    return hash(newData)
-  }
-  return hash(data)
+function hashOnData (data, dataFilter4FileHash) {
+  const newData = dataFilter4FileHash(data)
+  return hash(newData)
 }

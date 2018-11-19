@@ -8,28 +8,25 @@ const request = require('./request')
 const rp = require('request-promise')
 const fs = require('fs-extra')
 const path = require('path')
+const config = require('./config')
 
 describe('VCR Middleware', () => {
   const vcrPort = 5500
   const remotePort = 5000
   const recordingsDir = 'testRecordings'
-  const remoteUrl = `http://localhost:${remotePort}`
-  const vcrUrl = `http://localhost:${vcrPort}`
+  config.remoteUrl = `http://localhost:${remotePort}`
+  config.vcrUrl = `http://localhost:${vcrPort}`
+  config.dir = 'testRecordings'
+  config.port = vcrPort
   const testEndpoint = '/my/endpoint'
   let server, resp
-  const requestData = {method: 'POST', url: `${vcrUrl}${testEndpoint}`, data: {info: 'info'}, headers: {'Content-Type': 'application/json'}}
+  const requestData = {method: 'POST', url: `${config.vcrUrl}${testEndpoint}`, data: {info: 'info'}, headers: {'Content-Type': 'application/json'}}
   const expectedToReturn = {status: 200, statusText: 'OK', data: {info: 'info returned'}}
   request.__Rewire__('axios', jest.fn(() => Promise.resolve(expectedToReturn)))
   const axios = request.__get__('axios')
   const startServer = mode => {
     return new Promise(resolve => {
-      const config = {
-        remoteUrl,
-        vcrUrl,
-        dir: recordingsDir,
-        mode: mode,
-        port: vcrPort
-      }
+      config.mode = mode
       const app = express()
       app.use(cors())
       app.use(bodyParser.urlencoded({ extended: false }))
@@ -51,11 +48,11 @@ describe('VCR Middleware', () => {
       jest.spyOn(global.console, 'log').mockImplementation(() => jest.fn())
       server = await startServer('record')
       resp = await rp(requestData.url, {method: requestData.method, body: requestData.data, json: true, resolveWithFullResponse: true})
-      requestData.url = `${remoteUrl}${testEndpoint}`
+      requestData.url = `${config.remoteUrl}${testEndpoint}`
     })
     afterAll(async () => {
       await stopServer(server)
-      requestData.url = `${vcrUrl}${testEndpoint}`
+      requestData.url = `${config.vcrUrl}${testEndpoint}`
       axios.mockClear()
     })
     it(`makes the same request but to the remote URL`, async () => {
@@ -64,7 +61,7 @@ describe('VCR Middleware', () => {
 
     it(`saves the request`, () => {
       const getRecordingFilePath = vcr.__get__('getRecordingFilePath')
-      const filepath = getRecordingFilePath(recordingsDir, remoteUrl, testEndpoint, requestData)
+      const filepath = getRecordingFilePath(config.dir, config.remoteUrl, testEndpoint, requestData, config.dataFilter4FileHash)
       const recording = JSON.parse(fs.readFileSync(filepath))
       const expectedRecording = {
         request: requestData,
@@ -83,12 +80,12 @@ describe('VCR Middleware', () => {
       jest.spyOn(global.console, 'log').mockImplementation(() => jest.fn())
       server = await startServer('playback')
       resp = await rp(requestData.url, {method: requestData.method, body: requestData.data, json: true, resolveWithFullResponse: true})
-      requestData.url = `${remoteUrl}${testEndpoint}`
+      requestData.url = `${config.remoteUrl}${testEndpoint}`
     })
     afterAll(async () => {
       await stopServer(server)
       axios.mockClear()
-      requestData.url = `${vcrUrl}${testEndpoint}`
+      requestData.url = `${config.vcrUrl}${testEndpoint}`
     })
     it(`doesn't make a new request`, () => {
       expect(axios).not.toBeCalled()
@@ -103,7 +100,7 @@ describe('VCR Middleware', () => {
     describe(`When there is NOT a recording`, () => {
       it(`returns 404`, async () => {
         jest.spyOn(global.console, 'log').mockImplementation(() => jest.fn())
-        requestData.url = `${vcrUrl}${testEndpoint}`
+        requestData.url = `${config.vcrUrl}${testEndpoint}`
         try {
           resp = await rp(requestData.url, {method: 'GET', body: {unknown: 'nonExistant'}, json: true, resolveWithFullResponse: true})
         } catch (err) {
@@ -119,12 +116,12 @@ describe('VCR Middleware', () => {
         jest.spyOn(global.console, 'log').mockImplementation(() => jest.fn())
         server = await startServer('cache')
         resp = await rp(requestData.url, {method: requestData.method, body: requestData.data, json: true, resolveWithFullResponse: true})
-        requestData.url = `${remoteUrl}${testEndpoint}`
+        requestData.url = `${config.remoteUrl}${testEndpoint}`
       })
       afterAll(async () => {
         await stopServer(server)
         axios.mockClear()
-        requestData.url = `${vcrUrl}${testEndpoint}`
+        requestData.url = `${config.vcrUrl}${testEndpoint}`
       })
       it(`doesn't make a request to the remote`, () => {
         expect(axios).not.toBeCalled()
@@ -143,12 +140,12 @@ describe('VCR Middleware', () => {
         requestData.method = 'GET'
         server = await startServer('cache')
         resp = await rp(requestData.url, {method: requestData.method, body: requestData.data, json: true, resolveWithFullResponse: true})
-        requestData.url = `${remoteUrl}${testEndpoint}`
+        requestData.url = `${config.remoteUrl}${testEndpoint}`
       })
       afterAll(async () => {
         await stopServer(server)
         axios.mockClear()
-        requestData.url = `${vcrUrl}${testEndpoint}`
+        requestData.url = `${config.vcrUrl}${testEndpoint}`
         fs.removeSync(path.join(__dirname, recordingsDir))
       })
       it(`makes the same request but to the remote URL`, () => {
@@ -157,7 +154,7 @@ describe('VCR Middleware', () => {
 
       it(`saves the request`, () => {
         const getRecordingFilePath = vcr.__get__('getRecordingFilePath')
-        const filepath = getRecordingFilePath(recordingsDir, remoteUrl, testEndpoint, requestData)
+        const filepath = getRecordingFilePath(recordingsDir, config.remoteUrl, testEndpoint, requestData, config.dataFilter4FileHash)
         const recording = JSON.parse(fs.readFileSync(filepath))
         const expectedRecording = {
           request: requestData,
@@ -169,6 +166,12 @@ describe('VCR Middleware', () => {
       it(`returns the response`, () => {
         expect(resp.body).toEqual(expectedToReturn.data)
       })
+    })
+  })
+
+  describe('Hash to get filename', () => {
+    it(`applies a filter on the request data and then hashes the rest`, () => {
+
     })
   })
 })
