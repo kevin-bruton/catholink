@@ -72,7 +72,8 @@
       "!<rootDir>/src/*.js",
       "!<rootDir>/src/components/index.js",
       "!<rootDir>/src/components/App/*.js",
-      "!<rootDir>/src/services/index.js"
+      "!<rootDir>/src/services/index.js",
+      "!<rootDir>/vcr/index.js"
     ],
     "setupFiles": [
       "<rootDir>/config/polyfills.js"
