@@ -8,14 +8,18 @@ module.exports = async function (config) {
   } catch (err) {
     if (err.code === 'ECONNREFUSED') {
       const info = { error: err.code, address: err.address, port: err.port }
-      console.log(`Error: ${err.code}. Address: ${err.address}. Port: ${err.port}`)
       return { status: 500, statusText: err.code, data: info }
     }
-    if (err.response) {
-      const info = { data: err.response.data, status: err.response.status, statusText: err.response.statusText }
-      console.log('ERROR INFO:', info)
-      return info
+    if (err.response) { // Server responded with status code
+      return err.response
+    } else if (err.request) { // The request was made but no response was received
+      return err.request
     }
-    console.log('Unknown error caught')
+    // Something happened in setting up the request that triggered an Error
+    return {
+      status: 500,
+      statusText: 'Error connecting to remote',
+      message: err.message
+    }
   }
 }

@@ -198,4 +198,40 @@ describe('VCR Middleware', () => {
       expect(filename1).toEqual(filename2)
     })
   })
+
+  describe(`The Request Module`, () => {
+    const requestData = {method: 'GET', url: 'http://localhost/myapi', headers: {'Content-Type': 'application/json'}, data: {data: 'data'}}
+    it(`returns the response when the request is successful`, async () => {
+      const response = { response: 'this is a response' }
+      request.__Rewire__('axios', () => Promise.resolve(response))
+      const resp = await request(requestData)
+      expect(resp).toEqual(response)
+    })
+
+    it(`returns status 500 when error is thrown`, async () => {
+      const error = new Error()
+      error.code = 'ECONNREFUSED'
+      error.address = 1234
+      error.port = 5000
+      request.__Rewire__('axios', () => Promise.reject(error))
+      const resp = await request(requestData)
+      expect(resp).toEqual({status: 500, statusText: error.code, data: {error: error.code, address: error.address, port: error.port}})
+    })
+
+    it(`returns the status and response info when server responds with a non 200 code`, async () => {
+      const error = new Error()
+      error.response = {status: 401, statusText: 'forbidden', data: 'data'}
+      request.__Rewire__('axios', () => Promise.reject(error))
+      const resp = await request(requestData)
+      expect(resp).toEqual(error.response)
+    })
+
+    it(`returns request info when request made but no response received`, async () => {
+      throw new Error('not implemented')
+    })
+
+    it(`returns error message when something happened setting up the request`, async () => {
+      throw new Error('not implemented yet')
+    })
+  })
 })
