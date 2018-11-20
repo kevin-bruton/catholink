@@ -169,9 +169,33 @@ describe('VCR Middleware', () => {
     })
   })
 
-  describe('Hash to get filename', () => {
-    it(`applies a filter on the request data and then hashes the rest`, () => {
+  describe('config.dataFilter4FileHash: Hash to get filename', () => {
+    it(`returns a filename if data is empty`, () => {
+      const filename = config.dataFilter4FileHash()
+      expect(filename).toBeTruthy()
+    })
 
+    it(`returns the same filename if data is the same`, () => {
+      const data = {info: 'info'}
+      const filename1 = config.dataFilter4FileHash(data)
+      const filename2 = config.dataFilter4FileHash(data)
+      expect(filename1).toEqual(filename2)
+    })
+
+    it(`returns a different filename for different sets of data`, () => {
+      const data1 = {info: 'info1'}
+      const data2 = {info: 'info2'}
+      const filename1 = config.dataFilter4FileHash(data1)
+      const filename2 = config.dataFilter4FileHash(data2)
+      expect(filename1).not.toEqual(filename2)
+    })
+
+    it(`returns the same filename even though data.date is different`, () => {
+      const data1 = {info: 'info', date: '123'}
+      const data2 = {info: 'info', date: '456'}
+      const filename1 = config.dataFilter4FileHash(data1)
+      const filename2 = config.dataFilter4FileHash(data2)
+      expect(filename1).toEqual(filename2)
     })
   })
 })
