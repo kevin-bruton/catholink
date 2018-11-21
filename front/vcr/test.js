@@ -227,11 +227,19 @@ describe('VCR Middleware', () => {
     })
 
     it(`returns request info when request made but no response received`, async () => {
-      throw new Error('not implemented')
+      const error = new Error()
+      error.request = requestData
+      request.__Rewire__('axios', () => Promise.reject(error))
+      const resp = await request(requestData)
+      expect(resp).toEqual(error.request)
     })
 
     it(`returns error message when something happened setting up the request`, async () => {
-      throw new Error('not implemented yet')
+      const generalError = {status: 500, statusText: 'Error setting up request', message: ''}
+      const error = new Error()
+      request.__Rewire__('axios', () => Promise.reject(error))
+      const resp = await request(requestData)
+      expect(resp).toEqual(generalError)
     })
   })
 })

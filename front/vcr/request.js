@@ -18,7 +18,7 @@ module.exports = async function (config) {
     // Something happened in setting up the request that triggered an Error
     return {
       status: 500,
-      statusText: 'Error connecting to remote',
+      statusText: 'Error setting up request',
       message: err.message
     }
   }
