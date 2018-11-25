@@ -1,5 +1,4 @@
 /* global describe it jest expect beforeEach afterEach beforeAll afterAll __rewire_reset_all__ */
-const axios = require('axios')
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')

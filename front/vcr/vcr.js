@@ -13,40 +13,46 @@ module.exports = config => {
       url: config.remoteUrl + req.originalUrl
     }
 
-    console.log('Request received for', requestData.url, 'via', requestData.method)
     const filepath = getRecordingFilePath(config.dir, config.remoteUrl, req.originalUrl, requestData, config.dataFilter4FileHash)
 
     if (config.mode === mode.RECORD) {
-      console.log('  In recording mode. Making the request to remote...')
-      const responseData = await makeRequestAndSave(filepath, requestData)
-      if (responseData.status !== 200) res.status(responseData.status).send(responseData.statusText)
-      else res.status(responseData.status).send(responseData.data)
+      console.log(`${requestData.url} via ${requestData.method}: RECORD MODE. REQUESTING...`)
+      const responseData = await makeRequest(requestData)
+      save(filepath, requestData, responseData)
+      sendResponse(responseData, res)
     } else {
-      const recordingExists = fs.existsSync(filepath)
-      if (recordingExists) {
-        console.log(`  ${config.mode} MODE; HIT`)
-        const recording = JSON.parse(fs.readFileSync(filepath))
-        if (recording.response.status !== 200) res.status(recording.response.status).send(recording.response.statusText)
-        else res.status(recording.response.status).send(recording.response.data)
+      if (recordingExists(filepath)) {
+        console.log(`${requestData.url} via ${requestData.method}: ${config.mode} MODE; HIT`)
+        const recording = getRecording(filepath)
+        sendResponse(recording.response, res)
       } else if (config.mode === mode.PLAYBACK) {
-        console.log(`  ${config.mode} MODE; NO HIT. RETURNING 404...`)
+        console.log(`${requestData.url} via ${requestData.method}: ${config.mode} MODE; NO HIT. RETURNING 404...`)
         res.sendStatus(404)
-      } else if (config.mode === mode.CACHE) {
-        console.log(`  ${config.mode} MODE; NO HIT. REQUESTING...`)
-        const responseData = await makeRequestAndSave(filepath, requestData)
-        if (responseData.status !== 200) res.status(responseData.status).send(responseData.statusText)
-        else res.status(responseData.status).send(responseData.data)
+      } else {
+        console.log(`${requestData.url} via ${requestData.method}: ${config.mode} MODE; NO HIT. REQUESTING...`)
+        const responseData = await makeRequest(requestData)
+        save(filepath, requestData, responseData)
+        sendResponse(responseData, res)
       }
     }
     next()
   }
 }
 
-async function makeRequestAndSave (filepath, requestData) {
-  const response = await request(requestData)
-  const resp = { status: response.status, statusText: response.statusText, data: response.data }
-  save(filepath, requestData, resp)
-  return resp
+function getRecording (filepath) {
+  return JSON.parse(fs.readFileSync(filepath))
+}
+
+function recordingExists (filepath) {
+  return fs.existsSync(filepath)
+}
+
+function sendResponse (response, res) {
+  res.status(response.status).send(response.data)
+}
+
+async function makeRequest (requestData) {
+  return request(requestData)
 }
 
 function getRequestHeaders (req) {
@@ -57,7 +63,8 @@ function getRequestHeaders (req) {
   }, {})
 }
 
-function save (filepath, requestData, response) {
+function save (filepath, requestData, resp) {
+  const response = { status: resp.status, statusText: resp.statusText, data: resp.data }
   function ensureDirExists (filePath) {
     var dirname = path.dirname(filePath)
     if (fs.existsSync(dirname)) {

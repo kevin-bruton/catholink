@@ -34,15 +34,17 @@ describe(`HTTP Requests`, () => {
   })
 
   it(`Call returns a promise rejection with error if status isn't OK`, async () => {
-    R.__Rewire__('axios', () => Promise.resolve({status: 403}))
+    const error = new Error()
+    error.response = {status: 403}
+    R.__Rewire__('axios', () => Promise.reject(error))
     const call = R.__get__('call')
     let resp
     try {
       resp = await call()
     } catch (err) {
-      resp = err.message
+      resp = err.response
     }
-    expect(resp).toContain('403')
+    expect(resp.status).toEqual(403)
     R.__ResetDependency__('axios')
   })
 
