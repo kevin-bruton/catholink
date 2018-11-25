@@ -57,7 +57,7 @@ export class Login extends React.Component {
       return <Redirect to={from} />
     }
     return (
-      <div className='col-md-6 col-md-offset-3'>
+      <div id='LoginPage' className='col-md-6 col-md-offset-3'>
         <h2 id='pageTitle'>Login</h2>
         <form id='loginForm' name='form' onSubmit={this.handleSubmit}>
           <div className={'form-group' + (login === status.login.FAILED ? ' has-error' : '')}>

@@ -33,7 +33,7 @@ export class Home extends React.Component {
   }
   render () {
     return (
-      <div>
+      <div id='HomePage'>
         <h1>Home Page</h1>
         <h1 id='date'>{this.state.day}</h1>
         <h1 id='gospelTitle'>{this.state.gospel && this.state.gospel.title}</h1>

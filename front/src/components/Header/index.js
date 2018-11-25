@@ -7,7 +7,7 @@ import brandname from '../../assets/brandname.svg'
 export class Header extends Component {
   render () {
     return (
-      <header className={styles.header}>
+      <header id='Header' className={styles.header}>
         <div className='columns'>
           <div className='column'>
             <Link to='/'><img src={brandname} align='left' width='100' alt='Brand name' /></Link>
