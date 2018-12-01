@@ -5,6 +5,8 @@ import { shallow } from 'enzyme'
 // import * as services from '@services/request'
 
 describe('The Home Component', () => {
+  beforeAll(() => R.__Rewire__('post', () => Promise.resolve()))
+  afterAll(() => R.__ResetDependency__('post'))
   it('Renders the date, gospel title and gospel text elements', async () => {
     const wrapper = shallow(<Home />)
     expect(wrapper.find('#date')).toHaveLength(1)

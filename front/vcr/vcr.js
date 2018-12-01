@@ -16,20 +16,20 @@ module.exports = config => {
     const filepath = getRecordingFilePath(config.dir, config.remoteUrl, req.originalUrl, requestData, config.dataFilter4FileHash)
 
     if (config.mode === mode.RECORD) {
-      console.log(`${requestData.url} via ${requestData.method}: RECORD MODE. REQUESTING...`)
+      console.log(`${requestData.method} ${requestData.url}: RECORD MODE. REQUESTING...`)
       const responseData = await makeRequest(requestData)
       save(filepath, requestData, responseData)
       sendResponse(responseData, res)
     } else {
       if (recordingExists(filepath)) {
-        console.log(`${requestData.url} via ${requestData.method}: ${config.mode} MODE; HIT`)
+        console.log(`${requestData.url} ${requestData.method}: ${config.mode} MODE; HIT`)
         const recording = getRecording(filepath)
         sendResponse(recording.response, res)
       } else if (config.mode === mode.PLAYBACK) {
-        console.log(`${requestData.url} via ${requestData.method}: ${config.mode} MODE; NO HIT. RETURNING 404...`)
+        console.log(`${requestData.method} ${requestData.url}: ${config.mode} MODE; NO HIT. RETURNING 404...`)
         res.sendStatus(404)
       } else {
-        console.log(`${requestData.url} via ${requestData.method}: ${config.mode} MODE; NO HIT. REQUESTING...`)
+        console.log(`${requestData.method} ${requestData.url}: ${config.mode} MODE; NO HIT. REQUESTING...`)
         const responseData = await makeRequest(requestData)
         save(filepath, requestData, responseData)
         sendResponse(responseData, res)
