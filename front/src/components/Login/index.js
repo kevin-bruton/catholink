@@ -19,6 +19,10 @@ export class Login extends React.Component {
     session.logout()
   }
 
+  componentDidMount () {
+    status.update(status.type.LOGIN, status.login.LOGOUT)
+  }
+
   handleChange (e) {
     const { name, value } = e.target
     this.setState({ [name]: value })

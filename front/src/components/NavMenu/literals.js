@@ -8,9 +8,5 @@ export const literals = getLangLiterals({
   about: {
     en: 'About',
     es: 'Información'
-  },
-  logout: {
-    en: 'Logout',
-    es: 'Cerrar sesión'
   }
 })

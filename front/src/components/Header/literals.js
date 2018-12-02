@@ -4,9 +4,5 @@ export const literals = getLangLiterals({
   descriptiveTitle: {
     en: 'My Catholic Connections',
     es: 'Mis Conexiones Católicas'
-  },
-  myProfile: {
-    en: 'My Profile',
-    es: 'Mi perfil'
   }
 })
