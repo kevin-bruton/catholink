@@ -14,13 +14,22 @@ export class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.loginUpdated = this.loginUpdated.bind(this)
 
-    this.state = { username: '', password: '', login: status.login.LOGOUT }
-    status.subscribe(status.type.LOGIN, this.loginUpdated)
-    session.logout()
+    this.state = {
+      username: '',
+      password: '',
+      login: status.login.LOGOUT,
+      redirecting: false
+    }
   }
 
   componentDidMount () {
+    status.subscribe(status.type.LOGIN, this.loginUpdated)
+    session.logout()
     status.update(status.type.LOGIN, status.login.LOGOUT)
+  }
+
+  componentWillUnmount () {
+    status.unsubscribe(status.type.LOGIN)
   }
 
   handleChange (e) {
@@ -42,16 +51,18 @@ export class Login extends React.Component {
     try {
       await session.login(username, password)
       status.update(status.type.LOGIN, status.login.SUCCESSFUL)
-      this.setState({ login: status.login.SUCCESSFUL })
+      this.setState({redirecting: true})
+      this.setState({login: status.login.SUCCESSFUL})
     } catch (err) {
       status.update(status.type.LOGIN, status.login.FAILED, err)
-      this.setState({ login: status.login.FAILED })
+      this.setState({login: status.login.FAILED})
     }
   }
 
   loginUpdated (newLoginState) {
     newLoginState === status.login.LOGOUT && session.logout()
-    this.setState({ login: newLoginState })
+    ;(newLoginState === status.login.SUCCESSFUL && this.state.redirecting) &&
+      this.setState({ login: newLoginState })
   }
 
   render () {
