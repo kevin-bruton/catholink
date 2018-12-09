@@ -1,8 +1,9 @@
-import { auth } from './request'
+import { auth, validate } from './request'
 
 export {
   login,
-  logout
+  logout,
+  validateSession
 }
 
 async function login (username, password) {
@@ -15,7 +16,12 @@ async function login (username, password) {
   }
 }
 
+async function validateSession () {
+  const userToken = window.localStorage.getItem('user')
+  const validated = await validate(userToken)
+  return validated
+}
+
 function logout () {
-  // remove user from local storage to log user out
   window.localStorage.removeItem('user')
 }

@@ -4,35 +4,28 @@ import { Link } from 'react-router-dom'
 import { literals } from './literals'
 import brandname from '../../assets/brandname.svg'
 import {ProfileBtn} from '@components/ProfileBtn'
-import * as status from '@status'
+import {getStatus, statusType, subscribeStatus, unsubscribeStatus, loginStatus} from '@status'
 
 export class Header extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      login: 'SUCCESSFUL'
+      login: loginStatus.FAILURE
     }
     this.loginStatusChange = this.loginStatusChange.bind(this)
-    this.printStatus = this.printStatus.bind(this)
   }
 
   componentDidMount () {
-    status.subscribe(status.type.LOGIN, this.loginStatusChange)
-    // this.setState({login: status.getState(status.type.LOGIN)})
+    this.setState({login: getStatus(statusType.LOGIN)})
+    subscribeStatus(statusType.LOGIN, this.constructor.name, this.loginStatusChange)
   }
 
   componentWillUnmount () {
-    status.unsubscribe(status.type.LOGIN)
+    unsubscribeStatus(statusType.LOGIN, this.constructor.name)
   }
 
   loginStatusChange (newValue) {
     this.setState({login: newValue})
-    console.log('loginStatusChange', this.state.login)
-  }
-
-  printStatus () {
-    const loginStatus = status.getState(status.type.LOGIN)
-    console.log('printStatus', loginStatus)
   }
 
   render () {
@@ -46,7 +39,7 @@ export class Header extends Component {
             <h1 className={styles.descriptiveTitle}>{literals.descriptiveTitle}</h1>
           </div>
           <div className='column'>
-            {(this.state.login === status.login.SUCCESSFUL) && <ProfileBtn />}<button onClick={this.printStatus()}>Login</button>
+            {(this.state.login === loginStatus.SUCCESSFUL) && <ProfileBtn />}
           </div>
         </div>
       </header>

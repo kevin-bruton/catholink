@@ -2,7 +2,7 @@
 import React from 'react'
 import { Home, __RewireAPI__ as R } from '@components/Home'
 import { shallow } from 'enzyme'
-// import * as services from '@services/request'
+import { statusType } from '@status/constants'
 
 describe('The Home Component', () => {
   beforeAll(() => R.__Rewire__('post', () => Promise.resolve()))
@@ -44,30 +44,22 @@ describe('The Home Component', () => {
     })
 
     it(`Calls getStatus to get the gospel`, async () => {
-      R.__Rewire__('status',
-        {update: jest.fn(), getState: jest.fn(), type: { GOSPEL: 'GOSPEL' }}
-      )
-      const status = R.__get__('status')
+      R.__Rewire__('getStatus', jest.fn())
+      const getStatus = R.__get__('getStatus')
       await shallow(<Home />)
-      expect(status.getState).toBeCalled()
-      R.__ResetDependency__('status')
+      expect(getStatus).toBeCalled()
+      R.__ResetDependency__('getStatus')
     })
 
-    it(`Calls update status with the gospel if gospel is undefined`, async () => {
-      R.__Rewire__('status',
-        {
-          update: jest.fn(),
-          getState: jest.fn().mockReturnValue(undefined),
-          type: { GOSPEL: 'GOSPEL' }
-        }
-      )
-      const status = R.__get__('status')
+    it(`Calls setStatus with the gospel if gospel is undefined`, async () => {
+      R.__Rewire__('setStatus', jest.fn())
+      const setStatus = R.__get__('setStatus')
       const gospel = {title: 'Gospel', text: 'Gospel text'}
       jest.spyOn(Home.prototype, 'getGospel')
         .mockImplementation(() => Promise.resolve(gospel))
       await shallow(<Home />)
-      expect(status.update).toBeCalledWith(status.type.GOSPEL, gospel)
-      R.__ResetDependency__('status')
+      expect(setStatus).toBeCalledWith(statusType.GOSPEL, gospel)
+      R.__ResetDependency__('setStatus')
     })
   })
 

@@ -2,8 +2,7 @@
 import React from 'react'
 import { Login, __RewireAPI__ as R } from '@components/Login'
 import { shallow } from 'enzyme'
-import { login as loginStatus } from '@status'
-import * as status from '@status/constants'
+import {loginStatus} from '@status/constants'
 
 describe('The Login Component', () => {
   describe(`Renderer`, () => {
@@ -17,27 +16,23 @@ describe('The Login Component', () => {
 
     it(`Renders username required message when submitted without username`, () => {
       const component = shallow(<Login location="{from: {pathname: '/'}}" />)
-      component.setState({login: status.login.REQUESTED, username: null, password: 'pass'})
+      component.setState({login: loginStatus.REQUESTED, username: null, password: 'pass'})
       expect(component.find('#usernameReqMess')).toHaveLength(1)
     })
 
     it(`Renders password required message when submitted without password`, () => {
       const component = shallow(<Login location="{from: {pathname: '/'}}" />)
-      component.setState({login: status.login.REQUESTED, username: 'user', password: null})
+      component.setState({login: loginStatus.REQUESTED, username: 'user', password: null})
       expect(component.find('#passReqMess')).toHaveLength(1)
     })
   })
 
   describe(`Constructor`, () => {
     it(`Subscribes to status login changes`, () => {
-      R.__Rewire__('status', {
-        subscribe: jest.fn(),
-        type: {LOGIN: 'LOGIN'},
-        login: 'SUCCESSFUL',
-        update: jest.fn()})
-      const status = R.__get__('status')
+      R.__Rewire__('subscribeStatus', jest.fn())
+      const subscribeStatus = R.__get__('subscribeStatus')
       shallow(<Login location="{from:{pathname:'/'}" />)
-      expect(status.subscribe).toBeCalled()
+      expect(subscribeStatus).toBeCalled()
       R.__ResetDependency__('status')
     })
 
@@ -50,15 +45,9 @@ describe('The Login Component', () => {
     })
 
     it(`Sets the login status to logged out`, () => {
-      R.__Rewire__('status', {
-        subscribe: jest.fn(),
-        type: {LOGIN: 'LOGIN'},
-        login: 'SUCCESSFUL',
-        update: jest.fn()})
-      const status = R.__get__('status')
       const wrapper = shallow(<Login location="{from:{pathname:'/'}" />)
       const state = wrapper.instance().state
-      expect(state.login).toEqual(status.login.LOGOUT)
+      expect(state.login).toEqual(loginStatus.LOGOUT)
       R.__ResetDependency__('status')
     })
   })
@@ -138,7 +127,7 @@ describe('The Login Component', () => {
       R.__Rewire__('session', {logout: jest.fn().mockReturnValue(), update: jest.fn()})
       const session = R.__get__('session')
       const component = shallow(<Login location="{from: {pathname: '/'}}" />)
-      component.instance().loginUpdated(status.login.LOGOUT)
+      component.instance().loginUpdated(loginStatus.LOGOUT)
       expect(session.logout).toBeCalled()
       R.__ResetDependency__('session')
     })
