@@ -2,7 +2,7 @@ import React from 'react'
 import { post } from '@request'
 import { usersLanguage } from '@helpers/usersLanguage'
 import { literals } from './literals'
-import * as status from '@status'
+import {getStatus, setStatus, statusType} from '@status'
 
 export class Home extends React.Component {
   constructor (props) {
@@ -13,10 +13,10 @@ export class Home extends React.Component {
     }
   }
   async componentDidMount () {
-    let gospel = status.getState(status.type.GOSPEL)
+    let gospel = getStatus(statusType.GOSPEL)
     if (gospel === undefined) {
       gospel = await this.getGospel()
-      status.update(status.type.GOSPEL, gospel)
+      setStatus(statusType.GOSPEL, gospel)
     }
     this.setState({ gospel })
   }

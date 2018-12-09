@@ -9,6 +9,5 @@ describe('The Header Component', () => {
     expect(component.find('header')).toHaveLength(1)
     expect(component.find('header > .columns > .column img')).toHaveLength(1)
     expect(component.find('header > .columns > .column > h1')).toHaveLength(1)
-    expect(component.find('header > .columns > .column > h4')).toHaveLength(1)
   })
 })

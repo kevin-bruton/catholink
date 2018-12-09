@@ -9,6 +9,5 @@ describe('The NavMenu Component', () => {
     expect(component.find('aside')).toHaveLength(1)
     expect(component.find('NavLink[to="/"]')).toHaveLength(1)
     expect(component.find('NavLink[to="/about"]')).toHaveLength(1)
-    expect(component.find('NavLink[to="/login"]')).toHaveLength(1)
   })
 })

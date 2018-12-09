@@ -3,21 +3,29 @@ import styles from './styles.scss'
 import { Link } from 'react-router-dom'
 import { literals } from './literals'
 import brandname from '../../assets/brandname.svg'
-import {ProfileBtn} from '@components'
-import * as status from '@status'
+import {ProfileBtn} from '@components/ProfileBtn'
+import {getStatus, statusType, subscribeStatus, unsubscribeStatus, loginStatus} from '@status'
 
 export class Header extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      login: status.getState(status.type.LOGIN)
+      login: loginStatus.FAILURE
     }
-    status.subscribe(status.type.LOGIN, this.loginStatusChange)
+    this.loginStatusChange = this.loginStatusChange.bind(this)
+  }
+
+  componentDidMount () {
+    this.setState({login: getStatus(statusType.LOGIN)})
+    subscribeStatus(statusType.LOGIN, this.constructor.name, this.loginStatusChange)
+  }
+
+  componentWillUnmount () {
+    unsubscribeStatus(statusType.LOGIN, this.constructor.name)
   }
 
   loginStatusChange (newValue) {
     this.setState({login: newValue})
-    console.log(this.state.login)
   }
 
   render () {
@@ -31,7 +39,7 @@ export class Header extends Component {
             <h1 className={styles.descriptiveTitle}>{literals.descriptiveTitle}</h1>
           </div>
           <div className='column'>
-            {(this.state.login === status.login.SUCCESSFUL) && <ProfileBtn />}
+            {(this.state.login === loginStatus.SUCCESSFUL) && <ProfileBtn />}
           </div>
         </div>
       </header>

@@ -1,17 +1,17 @@
-export const type = {
+export const statusType = {
   LOGIN: 'LOGIN',
   ALERT: 'ALERT',
   USER: 'USER',
   GOSPEL: 'GOSPEL'
 }
 
-export const alert = {
+export const alertStatus = {
   SUCCESS: 'SUCCESS',
   ERROR: 'ERROR',
   CLEAR: 'CLEAR'
 }
 
-export const login = {
+export const loginStatus = {
   REQUESTED: 'REQUESTED',
   SUCCESSFUL: 'SUCCESSFUL',
   FAILED: 'FAILED',

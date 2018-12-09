@@ -1,32 +1,40 @@
 import { actions } from './actions'
 
 export {
-  getState,
-  update,
-  subscribe,
-  unsubscribe
+  getStatus,
+  setStatus,
+  subscribeStatus,
+  unsubscribeStatus
 }
 
 let store = {}
 let listeners = {}
 
-function getState (type) {
+function getStatus (type) {
   return store[type]
 }
 
-function subscribe (type, listener) {
-  listeners[type] = listener
+function subscribeStatus (type, name, listener) {
+  listeners[type] = listeners[type] || {}
+  listeners[type][name] = listener
 }
 
-function unsubscribe (type) {
-  delete listeners[type]
+function unsubscribeStatus (type, name) {
+  delete listeners[type][name]
 }
 
-function update (type, value, ...data) {
+function setStatus (type, value, ...data) {
   const newValue = actions[type]
     ? actions[type](value, ...data)
     : value
 
+  /*
+  console.log('setting new status of type', type, ':', newValue)
+  console.log('  calling listeners:')
+  listeners[type] && (console.log('  ', listeners[type]))
+  */
   store = Object.assign(store, { [type]: newValue })
-  listeners[type] && listeners[type](store[type])
+  listeners[type] && Object.keys(listeners[type]).forEach(name => {
+    listeners[type][name](newValue)
+  })
 }
