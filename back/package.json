@@ -7,10 +7,10 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "start": "nodemon server",
     "start-db": "mongod --dbpath=./db-data",
+    "test": "jest",
     "lint": "node ./node_modules/eslint/bin/eslint .",
-    "start": "node server",
     "postinstall": "node scripts/route-aliases",
     "aliases": "node scripts/route-aliases"
   },

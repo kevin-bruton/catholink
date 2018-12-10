@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "headers": {
+      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YjllYjA3MmIwNTYxYzU2NjRhZDlkYzUiLCJ1c2VybmFtZSI6ImtldmluIiwicGFzc3dvcmQiOiJrZXZpbiIsImlhdCI6MTU0NDQ3Nzc4NH0.l3rvdIjSj722idszQLejeajlbk6kf1K6qJk3Hs_guxs"
+    },
+    "data": {},
+    "url": "http://localhost:5000/api/validate"
+  },
+  "response": {
+    "status": 200,
+    "statusText": "OK",
+    "data": ""
+  }
+}

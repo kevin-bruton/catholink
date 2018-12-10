@@ -12,6 +12,11 @@ router.get('/', (req, res, next) => {
   res.json({ apiVersion: '1.0' })
 })
 
+router.get('/validate', (req, res) => {
+  console.log('Validate')
+  res.status(200).end()
+})
+
 router.get('/user', (req, res, next) => {
   res.send()
 })

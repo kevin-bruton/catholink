@@ -1,4 +1,4 @@
-import { auth, validate } from './request'
+import { auth, get } from './request'
 
 export {
   login,
@@ -17,8 +17,12 @@ async function login (username, password) {
 }
 
 async function validateSession () {
-  const userToken = window.localStorage.getItem('user')
-  const validated = await validate(userToken)
+  let validated = false
+  try {
+    await get('validate')
+    validated = true
+  } catch (err) {
+  }
   return validated
 }
 
