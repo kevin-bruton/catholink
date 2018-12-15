@@ -1,5 +1,6 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
+import styles from './styles.scss'
 
 import * as session from '@services/session'
 import { spinner } from './spinner'
@@ -13,12 +14,14 @@ export class Login extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.loginUpdated = this.loginUpdated.bind(this)
+    this.inputValidation = this.inputValidation.bind(this)
 
     this.state = {
       username: '',
       password: '',
       login: loginStatus.LOGOUT,
-      redirecting: false
+      usernameEmpty: false,
+      passwordEmpty: false
     }
   }
 
@@ -32,6 +35,11 @@ export class Login extends React.Component {
     unsubscribeStatus(statusType.LOGIN, this.constructor.name)
   }
 
+  inputValidation (e) {
+    const {name, value} = e.target
+    this.setState({[name + 'Empty']: !value})
+  }
+
   handleChange (e) {
     const { name, value } = e.target
     this.setState({ [name]: value })
@@ -41,8 +49,8 @@ export class Login extends React.Component {
     e && e.preventDefault()
 
     const { username, password } = this.state
-    this.setState({ login: loginStatus.REQUESTED })
     if (username && password) {
+      this.setState({ login: loginStatus.REQUESTED })
       this.loginRequest(username, password)
     }
   }
@@ -51,7 +59,6 @@ export class Login extends React.Component {
     try {
       await session.login(username, password)
       setStatus(statusType.LOGIN, loginStatus.SUCCESSFUL)
-      this.setState({redirecting: true})
       this.setState({login: loginStatus.SUCCESSFUL})
     } catch (err) {
       setStatus(statusType.LOGIN, loginStatus.FAILED, err)
@@ -66,38 +73,45 @@ export class Login extends React.Component {
   }
 
   render () {
-    const { username, password, login } = this.state
+    const { login } = this.state
     const { from } = this.props.location.state || { from: { pathname: '/' } }
     if (login === loginStatus.SUCCESSFUL) {
       return <Redirect to={from} />
     }
     return (
       <div id='LoginPage' className='col-md-6 col-md-offset-3'>
-        <h2 id='pageTitle'>Login</h2>
-        <form id='loginForm' name='form' onSubmit={this.handleSubmit}>
-          <div className={'form-group' + (login === loginStatus.FAILED ? ' has-error' : '')}>
-            <label htmlFor='username'>{literals.username}</label>
-            <input type='text' className='form-control' name='username' value={username} onChange={this.handleChange} />
-            {login === loginStatus.REQUESTED && !username &&
-            <div id='usernameReqMess' className='help-block'>{literals.usernameRequired}</div>
-            }
+        <h2 id='pageTitle' className={'title is-3 ' + styles.separateTop}>{literals.startHere}</h2>
+        <div className='columns'>
+          <div className='column is-offset-4 is-4'>
+            <form id='loginForm' name='form' onSubmit={this.handleSubmit} className='box'>
+              <div className='help is-danger'>{(login === loginStatus.FAILED) && literals.incorrectCredentials} </div>
+              <div className='field'>
+                <label className={styles.labelAlign + ' label'}>{literals.username}</label>
+                <div className='control'>
+                  <input className={'input' + (this.state.usernameEmpty ? ' is-danger' : '')} type='text' placeholder={literals.username} name='username' onChange={this.handleChange} onBlur={this.inputValidation} />
+                </div>
+                <p id='usernameReqMess' className='help is-danger'>{this.state.usernameEmpty && literals.usernameRequired}</p>
+              </div>
+              <div className='field'>
+                <label className={styles.labelAlign + ' label'}>{literals.password}</label>
+                <div className='control'>
+                  <input className={'input' + (this.state.passwordEmpty ? ' is-danger' : '')} type='password' name='password' onChange={this.handleChange} onBlur={this.inputValidation} />
+                </div>
+                <p id='passReqMess' className='help is-danger'>{this.state.passwordEmpty && literals.passwordRequired}</p>
+              </div>
+              <div className='field'>
+                <div className={'control' + styles.flexbox}>
+                  <button id='loginBtn' className={'button is-link ' + styles.flexitem} disabled={!this.state.username || !this.state.password} >{literals.signIn}</button>
+                  {(login === loginStatus.REQUESTED) && <img alt='' src={spinner} />}
+                </div>
+              </div>
+            </form>
+            <div className={'box ' + styles.separateTop}>
+              <h2 className='subtitle is 5'>{literals.cathNotMember}</h2>
+              <button id='signUpBtn' className={'button is-link ' + styles.flexitem}>{literals.signUp}</button>
+            </div>
           </div>
-          <div className={'form-group' + (login === loginStatus.REQUESTED && !password ? ' has-error' : '')}>
-            <label htmlFor='password'>{literals.password}</label>
-            <input type='password' className='form-control' name='password' value={password} onChange={this.handleChange} />
-            {login === loginStatus.REQUESTED && !password &&
-              <div id='passReqMess' className='help-block'>{literals.passwordRequired}</div>
-            }
-            {(login === loginStatus.FAILED) && <div>{literals.incorrectCredentials}</div>}
-          </div>
-          <div className='form-group'>
-            <button id='loginBtn' className='btn btn-primary'>Login</button>
-            {(login === loginStatus.REQUESTED) &&
-              <img alt='' src={spinner} />
-            }
-            {(login === loginStatus.FAILED) && <p>Login failed</p>}
-          </div>
-        </form>
+        </div>
       </div>
     )
   }

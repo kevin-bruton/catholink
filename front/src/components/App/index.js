@@ -10,8 +10,9 @@ export class CathApp extends Component {
       <div id='CathApp' className={styles.app}>
         <Header />
         <div className='columns'>
-          <div className='column is-1'>
+          <div className='column is-2'>
             <NavMenu />
+            <WidgetPanel />
           </div>
           <div className='column'>
             <Switch>
@@ -23,7 +24,6 @@ export class CathApp extends Component {
           </div>
           <div className='column is-2'>
             <PublicityPanel />
-            <WidgetPanel />
           </div>
         </div>
       </div>

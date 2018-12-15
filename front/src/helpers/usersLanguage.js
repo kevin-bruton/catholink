@@ -5,10 +5,10 @@ export { usersLanguage }
 
 function usersLanguage () {
   const defaultLang = 'en'
-  
+
   let usersLang = getCookie('language').substr(0, 2)
-  
+
   supportedLangs.includes(usersLang) || (usersLang = defaultLang)
-  
+
   return usersLang
 }

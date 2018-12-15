@@ -12,6 +12,7 @@ describe('The Login Component', () => {
       expect(component.find('#loginForm input[name="username"]')).toHaveLength(1)
       expect(component.find('#loginForm input[name="password"]')).toHaveLength(1)
       expect(component.find('#loginBtn')).toHaveLength(1)
+      expect(component.find('#signUpBtn')).toHaveLength(1)
     })
 
     it(`Renders username required message when submitted without username`, () => {

@@ -10,10 +10,23 @@ export class ProfileBtn extends Component {
       showProfileMenu: false
     }
     this.toggleShowProfileMenu = this.toggleShowProfileMenu.bind(this)
+    this.clickEv = this.clickEv.bind(this)
+  }
+
+  componentWillUnmount () {
+    document.querySelector('body').removeEventListener('mousedown', this.clickEv, true)
+  }
+
+  clickEv (e) {
+    document.querySelector('#ProfileBtn').contains(e.target) || this.toggleShowProfileMenu()
   }
 
   toggleShowProfileMenu () {
-    this.setState({showProfileMenu: !this.state.showProfileMenu})
+    this.setState({showProfileMenu: !this.state.showProfileMenu},
+      () => this.state.showProfileMenu
+        ? document.querySelector('body').addEventListener('mousedown', this.clickEv, true)
+        : document.querySelector('body').removeEventListener('mousedown', this.clickEv, true)
+    )
   }
 
   render () {
