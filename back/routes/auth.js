@@ -3,7 +3,7 @@ const router = express.Router()
 const jwt = require('jsonwebtoken')
 const jwtSecret = require('@auth/jwt-secret').privateKey
 const db = require('@db')
-// const bcrypt = require('bcrypt')
+// const bcrypt = require('bcrypt-nodejs')
 
 router.post('/', async (req, res, next) => {
   const clearPassword = req.body.password

@@ -27,12 +27,13 @@ export class Login extends React.Component {
 
   componentDidMount () {
     session.logout()
-    setStatus(statusType.LOGIN, loginStatus.LOGOUT)
-    subscribeStatus(statusType.LOGIN, this.constructor.name, this.loginUpdated)
+    setStatus(statusType.LOGIN, loginStatus.LOGOUT, () => 
+      subscribeStatus(statusType.LOGIN, 'LoginPage', this.loginUpdated)
+    )
   }
 
-  componentWillUnmount () {
-    unsubscribeStatus(statusType.LOGIN, this.constructor.name)
+  componentWillUnmount () {   
+    unsubscribeStatus(statusType.LOGIN, 'LoginPage')
   }
 
   inputValidation (e) {
@@ -67,8 +68,10 @@ export class Login extends React.Component {
   }
 
   loginUpdated (newLoginState) {
-    newLoginState === loginStatus.LOGOUT && session.logout()
-    ;(newLoginState === loginStatus.SUCCESSFUL && this.state.redirecting) &&
+    if (newLoginState === loginStatus.LOGOUT) {
+      session.logout()
+      this.setState({login: newLoginState})
+    } else if (newLoginState === loginStatus.SUCCESSFUL)
       this.setState({ login: newLoginState })
   }
 

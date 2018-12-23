@@ -16,11 +16,11 @@ export class PrivateRoute extends React.Component {
     loggedIn === true
       ? setStatus(statusType.LOGIN, loginStatus.SUCCESSFUL)
       : setStatus(statusType.LOGIN, loginStatus.FAILURE)
-    subscribeStatus(statusType.LOGIN, this.constructor.name, this.loginStatusChange)
+    subscribeStatus(statusType.LOGIN, 'PrivateRoute', this.loginStatusChange)
   }
 
   componentWillUnmount () {
-    unsubscribeStatus(statusType.LOGIN, this.constructor.name)
+    unsubscribeStatus(statusType.LOGIN, 'PrivateRoute')
   }
 
   loginStatusChange (newLoginStatus) {

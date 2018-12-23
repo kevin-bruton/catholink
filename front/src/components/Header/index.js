@@ -16,12 +16,13 @@ export class Header extends Component {
   }
 
   componentDidMount () {
-    this.setState({login: getStatus(statusType.LOGIN)})
-    subscribeStatus(statusType.LOGIN, this.constructor.name, this.loginStatusChange)
+    this.setState({login: getStatus(statusType.LOGIN)}, () =>
+      subscribeStatus(statusType.LOGIN, 'Header', this.loginStatusChange)
+    )
   }
 
   componentWillUnmount () {
-    unsubscribeStatus(statusType.LOGIN, this.constructor.name)
+    unsubscribeStatus(statusType.LOGIN, 'Header')
   }
 
   loginStatusChange (newValue) {
