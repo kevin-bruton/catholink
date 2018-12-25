@@ -14,9 +14,8 @@ export class PrivateRoute extends React.Component {
     const loggedIn = await validateSession()
     this.setState({loggedIn})
     loggedIn === true
-      ? setStatus(statusType.LOGIN, loginStatus.SUCCESSFUL)
-      : setStatus(statusType.LOGIN, loginStatus.FAILURE)
-    subscribeStatus(statusType.LOGIN, 'PrivateRoute', this.loginStatusChange)
+      ? setStatus(statusType.LOGIN, loginStatus.SUCCESSFUL, () => subscribeStatus(statusType.LOGIN, 'PrivateRoute', this.loginStatusChange))
+      : setStatus(statusType.LOGIN, loginStatus.FAILURE, () => subscribeStatus(statusType.LOGIN, 'PrivateRoute', this.loginStatusChange))
   }
 
   componentWillUnmount () {
