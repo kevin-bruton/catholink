@@ -5,11 +5,13 @@ import {backendHost} from './config'
 export {
   get,
   post,
-  auth
+  auth,
+  signUp
 }
 
 const apiUrl = `${backendHost}/api`
 const authUrl = `${backendHost}/auth`
+const signUpUrl = `${backendHost}/signup`
 
 async function get (endpoint) {
   return call('get', `${apiUrl}/${endpoint}`)
@@ -21,6 +23,10 @@ async function post (endpoint, data) {
 
 async function auth (data) {
   return call('post', authUrl, data)
+}
+
+async function signUp (data) {
+  return call('post', `${signUpUrl}/init`, data)
 }
 
 async function call (method, url, data) {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import styles from './styles.scss'
 
 import * as session from '@services/session'
@@ -14,14 +14,16 @@ export class Login extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.loginUpdated = this.loginUpdated.bind(this)
-    this.inputValidation = this.inputValidation.bind(this)
+    this.handleBlur = this.handleBlur.bind(this)
 
     this.state = {
       email: '',
       password: '',
       login: loginStatus.LOGOUT,
-      usernameEmpty: false,
-      passwordEmpty: false
+      error: {
+        emailEmpty: false,
+        passwordEmpty: false
+      }
     }
   }
 
@@ -36,9 +38,11 @@ export class Login extends React.Component {
     unsubscribeStatus(statusType.LOGIN, 'LoginPage')
   }
 
-  inputValidation (e) {
+  handleBlur (e) {
     const {name, value} = e.target
-    this.setState({[name + 'Empty']: !value})
+    const error = this.state.error
+    error[name + 'Empty'] = !value
+    this.setState({error})
   }
 
   handleChange (e) {
@@ -49,11 +53,24 @@ export class Login extends React.Component {
   handleSubmit (e) {
     e && e.preventDefault()
 
-    const { username, password } = this.state
-    if (username && password) {
+    if (this.inputValidated()) {
       this.setState({ login: loginStatus.REQUESTED })
-      this.loginRequest(username, password)
+      this.loginRequest()
     }
+  }
+
+  inputValidated () {
+    const {email, password, error} = this.state
+    
+    if (!email) {
+      error.emailEmpty = true
+      this.setState({error})
+    }
+    if (!password) {
+      error.passwordEmpty = true
+      this.setState({error})
+    }
+    return !!(email && password)
   }
 
   async loginRequest () {
@@ -77,7 +94,7 @@ export class Login extends React.Component {
   }
 
   render () {
-    const { login } = this.state
+    const { login, error } = this.state
     const { from } = this.props.location.state || { from: { pathname: '/' } }
     if (login === loginStatus.SUCCESSFUL) {
       return <Redirect to={from} />
@@ -90,29 +107,30 @@ export class Login extends React.Component {
             <form id='loginForm' name='form' onSubmit={this.handleSubmit} className='box'>
               <div className='help is-danger'>{(login === loginStatus.FAILED) && literals.incorrectCredentials} </div>
               <div className='field'>
-                <label className={styles.labelAlign + ' label'}>{literals.username}</label>
+                <label className={styles.labelAlign + ' label'}>{literals.email}</label>
                 <div className='control'>
-                  <input className={'input' + (this.state.usernameEmpty ? ' is-danger' : '')} type='text' placeholder={literals.username} name='username' onChange={this.handleChange} onBlur={this.inputValidation} />
+                  <input className={'input' + (error.emailEmpty ? ' is-danger' : '')} type='text' placeholder={literals.email} name='email' onChange={this.handleChange} onBlur={this.handleBlur} />
                 </div>
-                <p id='usernameReqMess' className='help is-danger'>{this.state.usernameEmpty && literals.usernameRequired}</p>
+                <p id='emailReqMess' className='help is-danger'>{error.emailEmpty && literals.emailRequired}</p>
               </div>
               <div className='field'>
                 <label className={styles.labelAlign + ' label'}>{literals.password}</label>
                 <div className='control'>
-                  <input className={'input' + (this.state.passwordEmpty ? ' is-danger' : '')} type='password' name='password' onChange={this.handleChange} onBlur={this.inputValidation} />
+                  <input className={'input' + (error.passwordEmpty ? ' is-danger' : '')} type='password' name='password' onChange={this.handleChange} onBlur={this.handleBlur} />
                 </div>
-                <p id='passReqMess' className='help is-danger'>{this.state.passwordEmpty && literals.passwordRequired}</p>
+                <p id='passReqMess' className='help is-danger'>{error.passwordEmpty && literals.passwordRequired}</p>
               </div>
               <div className='field'>
                 <div className={'control' + styles.flexbox}>
-                  <button id='loginBtn' className={'button is-link ' + styles.flexitem} disabled={!this.state.username || !this.state.password} >{literals.signIn}</button>
-                  {(login === loginStatus.REQUESTED) && <img alt='' src={spinner} />}
+                  <button id='loginBtn' className={'button is-link ' + styles.flexitem} disabled={(login === loginStatus.REQUESTED)}>
+                    {login === loginStatus.REQUESTED ? <img alt='' src={spinner} /> : literals.signIn}
+                  </button>
                 </div>
               </div>
             </form>
             <div className={'box ' + styles.separateTop}>
               <h2 className='subtitle is 5'>{literals.cathNotMember}</h2>
-              <button id='signUpBtn' className={'button is-link ' + styles.flexitem}>{literals.signUp}</button>
+              <Link to='/SignUp'><button id='signUpBtn' className={'button is-link ' + styles.flexitem}>{literals.signUp}</button></Link>
             </div>
           </div>
         </div>

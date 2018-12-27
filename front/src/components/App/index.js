@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styles from './styles.scss'
 import { Route, Switch, withRouter } from 'react-router-dom'
-import { Home, Login, About, Header, NavMenu, WidgetPanel, PublicityPanel } from '@components'
+import { Home, Login, About, Header, NavMenu, WidgetPanel, PublicityPanel, SignUp } from '@components'
 import { PrivateRoute } from './PrivateRoute'
 
 export class CathApp extends Component {
@@ -20,6 +20,7 @@ export class CathApp extends Component {
               <PrivateRoute path='/home' component={Home} />
               <PrivateRoute path='/about' component={About} />
               <Route path='/login' component={Login} />
+              <Route path='/signup' component={SignUp} />
             </Switch>
           </div>
           <div className='column is-2'>
