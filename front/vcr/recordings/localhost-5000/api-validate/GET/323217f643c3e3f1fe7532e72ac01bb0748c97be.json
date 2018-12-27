@@ -2,7 +2,7 @@
   "request": {
     "method": "GET",
     "headers": {
-      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YjllYjA3MmIwNTYxYzU2NjRhZDlkYzUiLCJ1c2VybmFtZSI6ImtldmluIiwicGFzc3dvcmQiOiJrZXZpbiIsImlhdCI6MTU0NDQ3Nzc4NH0.l3rvdIjSj722idszQLejeajlbk6kf1K6qJk3Hs_guxs"
+      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjEsImVtYWlsIjoia2V2aW5AbWFpbC5jb20iLCJwYXNzd29yZCI6InNlY3JldCIsImlhdCI6MTU0NTg1NjYzNX0.5CU7Lc01Nka5WTXaiQZhwm1IyntZH8_9hLH3ZHNDF7w"
     },
     "data": {},
     "url": "http://localhost:5000/api/validate"

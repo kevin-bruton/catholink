@@ -17,7 +17,7 @@ export class Login extends React.Component {
     this.inputValidation = this.inputValidation.bind(this)
 
     this.state = {
-      username: '',
+      email: '',
       password: '',
       login: loginStatus.LOGOUT,
       usernameEmpty: false,
@@ -56,9 +56,10 @@ export class Login extends React.Component {
     }
   }
 
-  async loginRequest (username, password) {
+  async loginRequest () {
+    const {email, password} = this.state
     try {
-      await session.login(username, password)
+      await session.login(email, password)
       setStatus(statusType.LOGIN, loginStatus.SUCCESSFUL)
       this.setState({login: loginStatus.SUCCESSFUL})
     } catch (err) {

@@ -3,11 +3,11 @@
     "method": "POST",
     "headers": {
       "Content-Type": "application/json; charset=UTF-8",
-      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YjllYjA3MmIwNTYxYzU2NjRhZDlkYzUiLCJ1c2VybmFtZSI6ImtldmluIiwicGFzc3dvcmQiOiJrZXZpbiIsImlhdCI6MTUzOTM1OTI5NH0.qcdo943zV56XT_KRKc8Y2oWawExFpgptuTfE1xYiWFc"
+      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjEsImVtYWlsIjoia2V2aW5AbWFpbC5jb20iLCJwYXNzd29yZCI6InNlY3JldCIsImlhdCI6MTU0NTg1NjYzNX0.5CU7Lc01Nka5WTXaiQZhwm1IyntZH8_9hLH3ZHNDF7w"
     },
     "data": {
       "lang": "en",
-      "date": "2018-12-10"
+      "date": "2018-12-26"
     },
     "url": "http://localhost:5000/api/gospel"
   },
@@ -15,8 +15,8 @@
     "status": 200,
     "statusText": "OK",
     "data": {
-      "text": "[[Lc 5,17]]One day as Jesus was teaching, Pharisees and teachers of the law were sitting there who had come from every village of Galilee and Judea and Jerusalem, and the power of the Lord was with him for healing.\n[[Lc 5,18]]And some men brought on a stretcher a man who was paralyzed; they were trying to bring him in and set (him) in his presence.\n[[Lc 5,19]]But not finding a way to bring him in because of the crowd, they went up on the roof and lowered him on the stretcher through the tiles into the middle in front of Jesus.\n[[Lc 5,20]]When he saw their faith, he said, \"As for you, your sins are forgiven.\"\n[[Lc 5,21]]Then the scribes and Pharisees began to ask themselves, \"Who is this who speaks blasphemies? Who but God alone can forgive sins?\"\n[[Lc 5,22]]Jesus knew their thoughts and said to them in reply, \"What are you thinking in your hearts?\n[[Lc 5,23]]Which is easier, to say, 'Your sins are forgiven,' or to say, 'Rise and walk'?\n[[Lc 5,24]]But that you may know that the Son of Man has authority on earth to forgive sins''--he said to the man who was paralyzed, \"I say to you, rise, pick up your stretcher, and go home.\"\n[[Lc 5,25]]He stood up immediately before them, picked up what he had been lying on, and went home, glorifying God.\n[[Lc 5,26]]Then astonishment seized them all and they glorified God, and, struck with awe, they said, \"We have seen incredible things today.\"",
-      "title": "Holy Gospel of Jesus Christ according to Saint Luke"
+      "text": "[[Mt 10,17]]Jesus said to His disciples: \"Beware of men, for they will hand you over to courts and scourge you in their synagogues,\n[[Mt 10,18]]and you will be led before governors and kings for my sake as a witness before them and the pagans.\n[[Mt 10,19]]When they hand you over, do not worry about how you are to speak or what you are to say. You will be given at that moment what you are to say.\n[[Mt 10,20]]For it will not be you who speak but the Spirit of your Father speaking through you.\n[[Mt 10,21]]Brother will hand over brother to death, and the father his child; children will rise up against parents and have them put to death.\n[[Mt 10,22]]You will be hated by all because of my name, but whoever endures to the end will be saved.\"",
+      "title": "Holy Gospel of Jesus Christ according to Saint Matthew"
     }
   }
 }

@@ -81,19 +81,19 @@ describe(`HTTP Requests`, () => {
 })
 describe(`Session`, () => {
   describe(`login`, () => {
-    const [username, password] = ['tester', 'secret']
-    it(`Makes auth request to obtain user, sending username and password`, async () => {
+    const [email, password] = ['tester', 'secret']
+    it(`Makes auth request to obtain user, sending email and password`, async () => {
       RS.__Rewire__('auth', jest.fn().mockResolvedValue({user: 'tester', token: '123456'}))
       const auth = RS.__get__('auth')
-      login(username, password)
-      expect(auth).toBeCalledWith({username, password})
+      login(email, password)
+      expect(auth).toBeCalledWith({email, password})
       RS.__ResetDependency__('auth')
     })
 
     it(`When a token is returned from auth call, it sets the user item with the token in localStorage`, () => {
       const userInfo = {user: 'tester', token: '123456'}
       RS.__Rewire__('auth', jest.fn().mockResolvedValue(userInfo))
-      login(username, password)
+      login(email, password)
       expect(window.localStorage.getItem('user')).toEqual(JSON.stringify(userInfo))
       RS.__ResetDependency__('auth')
     })
@@ -101,7 +101,7 @@ describe(`Session`, () => {
     it('When user info is returned from auth call, it returns it', async () => {
       const userInfo = {user: 'tester', token: '123456'}
       RS.__Rewire__('auth', jest.fn().mockResolvedValue(userInfo))
-      const returned = await login(username, password)
+      const returned = await login(email, password)
       expect(returned).toEqual(userInfo)
     })
 
@@ -109,7 +109,7 @@ describe(`Session`, () => {
       RS.__Rewire__('auth', jest.fn().mockResolvedValue({}))
       let error = false
       try {
-        await login(username, password)
+        await login(email, password)
       } catch (err) {
         error = true
       }

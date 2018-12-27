@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "POST",
+    "headers": {
+      "Content-Type": "application/json; charset=UTF-8"
+    },
+    "data": {
+      "email": "kevin@mail.com",
+      "password": "secret"
+    },
+    "url": "http://localhost:5000/auth"
+  },
+  "response": {
+    "status": 200,
+    "statusText": "OK",
+    "data": {
+      "user": "kevin@mail.com",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjEsImVtYWlsIjoia2V2aW5AbWFpbC5jb20iLCJwYXNzd29yZCI6InNlY3JldCIsImlhdCI6MTU0NTg1NjYzNX0.5CU7Lc01Nka5WTXaiQZhwm1IyntZH8_9hLH3ZHNDF7w"
+    }
+  }
+}

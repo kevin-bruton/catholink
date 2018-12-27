@@ -3,8 +3,8 @@
 const axios = require('axios')
 const db = require('@db')
 const users = [
-  { _id: '8888888', username: 'kev@mail.com', password: 'rocker', testDoc: true },
-  { _id: '999999', username: 'joker', password: 'joker', testDoc: true }
+  { _id: '8888888', email: 'kev@mail.com', password: 'rocker', testDoc: true },
+  { _id: '999999', email: 'joker@mail.com', password: 'joker', testDoc: true }
 ]
 
 describe('AUTH TESTS', function () {
@@ -17,7 +17,7 @@ describe('AUTH TESTS', function () {
     let resp
     beforeAll(async function () {
       try {
-        resp = await axios.post('http://localhost:5000/auth', { username: 'dummy', password: 'dummy' })
+        resp = await axios.post('http://localhost:5000/auth', { email: 'dummy@mail.com', password: 'dummy' })
       } catch (err) {
         resp = err.response
       }
@@ -30,11 +30,11 @@ describe('AUTH TESTS', function () {
     })
   })
 
-  describe('Invoke POST /auth with username and password to get authorization token', function () {
+  describe('Invoke POST /auth with email and password to get authorization token', function () {
     let resp
     beforeAll(async function () {
       try {
-        resp = await axios.post('http://localhost:5000/auth', { username: users[0].username, password: users[0].password })
+        resp = await axios.post('http://localhost:5000/auth', { email: users[0].email, password: users[0].password })
       } catch (err) {
         resp = err.response
       }

@@ -6,8 +6,8 @@ export {
   validateSession
 }
 
-async function login (username, password) {
-  const user = await auth({ username, password })
+async function login (email, password) {
+  const user = await auth({ email, password })
   if (user.token) {
     window.localStorage.setItem('user', JSON.stringify(user))
     return user

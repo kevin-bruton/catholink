@@ -43,7 +43,7 @@ export class ProfileBtn extends Component {
             <div className='media'>
               <div className='media-left'>
                 <figure className='image is-48x48'>
-                  <img src='https://bulma.io/images/placeholders/96x96.png' alt='Users foto' />
+                  <i className='fas fa-user fa-3x' alt='users foto' />
                 </figure>
               </div>
               <div className='media-content'>
@@ -55,7 +55,7 @@ export class ProfileBtn extends Component {
             <div className='content'>
               <div className='menu'>
                 <div className={'menu-list ' + styles.profileMenuItems}>
-                  <div><a>Settings</a></div>
+                  <div><a>{literals.settings}</a></div>
                   <div><Link to='/login' onClick={this.toggleShowProfileMenu}>{literals.logout}</Link></div>
                 </div>
               </div>

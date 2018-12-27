@@ -39,8 +39,8 @@ const db = (function () {
       const initialUsers = [
         {
           _id: 1,
-          username: 'kevin',
-          password: 'lucasdanielguapitos'
+          email: 'kevin@mail.com',
+          password: 'secret'
         }
       ]
       try {

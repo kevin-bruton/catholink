@@ -13,7 +13,7 @@ describe(`Status Actions`, () => {
 
   describe(`loginAction`, () => {
     it(`If newLoginState is SUCCESSFUL it updates user status and returns the new state`, () => {
-      const [loginAction, newLoginState, user] = [RA.__get__('loginAction'), 'SUCCESSFUL', { username: 'tester' }]
+      const [loginAction, newLoginState, user] = [RA.__get__('loginAction'), 'SUCCESSFUL', { email: 'tester' }]
       RA.__Rewire__('setStatus', jest.fn())
       const actionSetStatus = RA.__get__('setStatus')
       const returned = loginAction(newLoginState, user)

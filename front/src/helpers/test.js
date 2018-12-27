@@ -31,17 +31,17 @@ describe(`Get user's language`, () => {
 describe(`Get language literals`, () => {
   it(`Given a literals object it returns the literals corresponding to the users language`, () => {
     const literalsObject = {
-      username: {
-        en: 'Username',
-        es: 'Usuario'
+      email: {
+        en: 'Email',
+        es: 'Correo electrónico'
       },
       password: {
         en: 'Password',
         es: 'Contraseña'
       },
-      usernameRequired: {
-        en: 'Please enter username',
-        es: 'Es necesario ingresar nombre de usuario'
+      emailRequired: {
+        en: 'Please enter your email',
+        es: 'Es necesario ingresar tu dirección de correo electrónico'
       },
       passwordRequired: {
         en: 'Please enter password',
@@ -54,9 +54,9 @@ describe(`Get language literals`, () => {
     }
     cookie.set('language', 'en')
     const expectedLanguageLiterals = {
-      username: 'Username',
+      email: 'Email',
       password: 'Password',
-      usernameRequired: 'Please enter username',
+      emailRequired: 'Please enter your email',
       passwordRequired: 'Please enter password',
       incorrectCredentials: 'Incorrect credentials provided!'
     }

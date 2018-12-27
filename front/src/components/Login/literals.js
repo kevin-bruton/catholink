@@ -5,17 +5,17 @@ export const literals = getLangLiterals({
     en: 'Start here...',
     es: 'Empieza aquí...'
   },
-  username: {
-    en: 'Username',
-    es: 'Usuario'
+  email: {
+    en: 'Email',
+    es: 'Correo electrónico'
   },
   password: {
     en: 'Password',
     es: 'Contraseña'
   },
-  usernameRequired: {
-    en: 'Please enter your username',
-    es: 'Es necesario ingresar nombre de usuario'
+  emailRequired: {
+    en: 'Please enter your email',
+    es: 'Es necesario ingresar la dirección de correo electrónico'
   },
   passwordRequired: {
     en: 'Please enter your password',

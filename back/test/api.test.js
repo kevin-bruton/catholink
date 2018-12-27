@@ -39,7 +39,7 @@ describe('API TESTS', function () {
       let resp, token
       beforeAll(async function () {
         try {
-          resp = await axios.post('http://localhost:5000/auth', { username: 'kevin', password: 'kevin' })
+          resp = await axios.post('http://localhost:5000/auth', { email: 'kevin@mail.com', password: 'secret' })
           token = resp.data.token
         } catch (err) {
           resp = err.response
@@ -79,7 +79,7 @@ describe('API TESTS', function () {
       beforeAll(async function () {
         // jest.setTimeout(30000)
         try {
-          resp = await axios.post('http://localhost:5000/auth/', { username: 'kevin', password: 'kevin' })
+          resp = await axios.post('http://localhost:5000/auth/', { email: 'kevin@mail.com', password: 'secret' })
           token = resp.data.token
         } catch (err) {
           resp = err.response
