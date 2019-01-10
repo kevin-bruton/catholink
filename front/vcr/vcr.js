@@ -80,7 +80,8 @@ function save (filepath, requestData, resp) {
 
 function getRecordingFilePath (configDir, remoteUrl, originalUrl, requestData, dataFilter4FileHash) {
   originalUrl.startsWith('/') && (originalUrl = originalUrl.substring(1))
-  const dir = path.join(__dirname, configDir, remoteUrl.replace('http://', '').replace('/', '-').replace(':', '-'), originalUrl.replace('/', '-'), requestData.method)
+  let dir = path.join(__dirname, configDir, remoteUrl.replace('http://', '').replace('/', '-').replace(':', '-'), originalUrl.replace('/', '-'), requestData.method)
+  dir = dir.substring(0, dir.indexOf('?') === -1 ? dir.length : dir.indexOf('?'))
   return path.join(dir, hashOnData(requestData.data, dataFilter4FileHash) + '.json')
 }
 

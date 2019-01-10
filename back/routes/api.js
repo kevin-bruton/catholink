@@ -23,7 +23,7 @@ router.get('/user', (req, res, next) => {
 
 router.post('/gospel', async (req, res) => {
   // can be optimized with a cronjob to get gospel only once a day for supported languages
-  const lang = ((langCode) => { return { en: 'AM', es: 'SP' }[langCode] })(req.body.lang)
+  const lang = ((langCode) => ({ en: 'AM', es: 'SP' }[langCode]))(req.body.lang)
   let gospel = getGospel()
   if (!gospel.text) {
     console.log('Gospel not found. Fetching...')

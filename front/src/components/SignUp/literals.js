@@ -48,5 +48,17 @@ export const literals = getLangLiterals({
   signUp: {
     en: 'Send',
     es: 'Enviar'
+  },
+  emailSent1: {
+    en: `For your security, we've sent you an email to verify your account.`,
+    es: `Por tu seguridad, te hemos enviado un correo electróncio para verifcar tu cuenta.`
+  },
+  emailSent2: {
+    en: `Please revise your Inbox and if you don't find it there, your Spam.`,
+    es: `Revise tu bandeja de entrada y si no lo encuentras allí, tu Spam.`
+  },
+  emailSent3: {
+    en: `After verifying your account, you'll be able to log into your new account!`,
+    es: `Después de verificar la cuenta, podrás iniciar sesión en tu nueva cuenta!`
   }
 })

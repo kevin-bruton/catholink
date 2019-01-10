@@ -6,7 +6,8 @@ export {
   get,
   post,
   auth,
-  signUp
+  signUp,
+  signUpValidate
 }
 
 const apiUrl = `${backendHost}/api`
@@ -27,6 +28,15 @@ async function auth (data) {
 
 async function signUp (data) {
   return call('post', `${signUpUrl}/init`, data)
+}
+
+async function signUpValidate (validationId) {
+  try {
+    const resp = await call('get', `${signUpUrl}/validate?validationid=${validationId}`)
+    return !resp.error
+  } catch (err) {
+    return false
+  }
 }
 
 async function call (method, url, data) {

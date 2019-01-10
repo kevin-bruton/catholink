@@ -5,6 +5,7 @@ const db = require('./db')
 const apiRouter = require('./routes/api')
 const frontRouter = require('./routes/front')
 const authRouter = require('./routes/auth')
+const signUpRouter = require('./routes/signup')
 
 const app = express()
 
@@ -15,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 // routers
+app.use('/signup', signUpRouter)
 app.use('/auth', authRouter)
 app.use('/api', apiRouter)
 app.use('/', frontRouter)

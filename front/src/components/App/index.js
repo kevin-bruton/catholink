@@ -3,6 +3,7 @@ import styles from './styles.scss'
 import { Route, Switch, withRouter } from 'react-router-dom'
 import { Home, Login, About, Header, NavMenu, WidgetPanel, PublicityPanel, SignUp } from '@components'
 import { PrivateRoute } from './PrivateRoute'
+import { SignUpValidate } from '../SignUpValidate';
 
 export class CathApp extends Component {
   render () {
@@ -21,6 +22,7 @@ export class CathApp extends Component {
               <PrivateRoute path='/about' component={About} />
               <Route path='/login' component={Login} />
               <Route path='/signup' component={SignUp} />
+              <Route path='/signupvalidate' component={SignUpValidate} />
             </Switch>
           </div>
           <div className='column is-2'>

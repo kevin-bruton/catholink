@@ -1,5 +1,5 @@
 import React from 'react'
-import { Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import styles from './styles.scss'
 
 import {signUp as signUpService} from '@services'
@@ -40,12 +40,6 @@ export class SignUp extends React.Component {
     }
   }
 
-  componentDidMount () {
-  }
-
-  componentWillUnmount () {
-  }
-
   handleChange (e) {
     const { name, value } = e.target
     this.setState({ [name]: value })
@@ -73,7 +67,7 @@ export class SignUp extends React.Component {
     error.emailEmpty = !email
     error.passwordEmpty = !password
     error.passwordRepeatEmpty =!passwordRepeat
-    error.passwordsNotEqual = (password === passwordRepeat)
+    error.passwordsNotEqual = (password !== passwordRepeat)
     this.setState({error})
     return (!error.firstNameEmpty && !error.surnameEmpty && !error.emailEmpty && !error.passwordEmpty && !error.passwordRepeatEmpty && !error.passwordsNotEqual)
   }
@@ -137,11 +131,26 @@ export class SignUp extends React.Component {
               <div className='field' id='signUpBtn'>
                 <div className={'control' + styles.flexbox}>
                   <button id='loginBtn' className={'button is-link ' + styles.flexitem} disabled={(this.signUpRequest === SIGNUP.REQUESTED)} >
-                    {this.signUpRequest === SIGNUP.REQUESTED ? <img alt='' src={spinner} /> : literals.signUp}
+                    {this.state.signUpRequest === SIGNUP.REQUESTED ? <img alt='' src={spinner} /> : literals.signUp}
                   </button>
                 </div>
               </div>
             </form>
+          </div>
+        </div>
+        <div className={'modal' + (this.state.signUpRequest === SIGNUP.SUCCESSFUL ? ' is-active' : '')}>
+          <div className='modal-background'></div>
+          <div className='modal-content'>
+            <div className='box'>
+              <div className='content'>
+                <p className='centre'>
+                  {literals.emailSent1}<br />
+                  {literals.emailSent2}<br />
+                  {literals.emailSent3}
+                </p>
+              </div>
+              <Link to='/Home'><button className={'button is-link '}>Ok</button></Link>
+            </div>
           </div>
         </div>
       </div>

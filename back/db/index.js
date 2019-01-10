@@ -48,6 +48,7 @@ const db = (function () {
       } catch (err) {}
     },
     users: collection('users'),
+    signup: collection('signup'),
     close: () => _mongoConnection.close()
   }
 })()

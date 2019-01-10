@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "POST",
+    "headers": {
+      "Content-Type": "application/json; charset=UTF-8"
+    },
+    "data": {
+      "firstName": "Joe",
+      "surname": "Blow",
+      "email": "catholink@mail.com",
+      "password": "joker"
+    },
+    "url": "http://localhost:5000/signup/init"
+  },
+  "response": {
+    "status": 200,
+    "statusText": "OK",
+    "data": {
+      "message": "Validation email sent"
+    }
+  }
+}

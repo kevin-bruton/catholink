@@ -5,6 +5,12 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Server",
+      "program": "${workspaceFolder}/server.js"
+    },
+    {
       "name": "Debug Jest Tests",
       "type": "node",
       "request": "launch",
