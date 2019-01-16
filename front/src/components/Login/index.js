@@ -3,7 +3,7 @@ import { Redirect, Link } from 'react-router-dom'
 import styles from './styles.scss'
 
 import * as session from '@services/session'
-import { spinner } from './spinner'
+import { spinner } from '../../assets/spinner'
 import { literals } from './literals'
 import {loginStatus, statusType, subscribeStatus, unsubscribeStatus, setStatus} from '@status'
 
@@ -29,9 +29,8 @@ export class Login extends React.Component {
 
   componentDidMount () {
     session.logout()
-    setStatus(statusType.LOGIN, loginStatus.LOGOUT, () => 
-      subscribeStatus(statusType.LOGIN, 'LoginPage', this.loginUpdated)
-    )
+    setStatus(statusType.LOGIN, loginStatus.LOGOUT)
+    subscribeStatus(statusType.LOGIN, 'LoginPage', this.loginUpdated)
   }
 
   componentWillUnmount () {   
@@ -78,19 +77,14 @@ export class Login extends React.Component {
     try {
       await session.login(email, password)
       setStatus(statusType.LOGIN, loginStatus.SUCCESSFUL)
-      this.setState({login: loginStatus.SUCCESSFUL})
     } catch (err) {
-      setStatus(statusType.LOGIN, loginStatus.FAILED, err)
-      this.setState({login: loginStatus.FAILED})
+      setStatus(statusType.LOGIN, loginStatus.FAILED)
     }
   }
 
   loginUpdated (newLoginState) {
-    if (newLoginState === loginStatus.LOGOUT) {
-      session.logout()
-      this.setState({login: newLoginState})
-    } else if (newLoginState === loginStatus.SUCCESSFUL)
-      this.setState({ login: newLoginState })
+    (newLoginState === loginStatus.LOGOUT) && session.logout()
+    this.setState({login: newLoginState})
   }
 
   render () {

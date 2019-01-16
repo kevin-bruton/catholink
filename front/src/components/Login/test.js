@@ -2,7 +2,7 @@
 import React from 'react'
 import { Login, __RewireAPI__ as R } from '@components/Login'
 import { shallow } from 'enzyme'
-import {loginStatus} from '@status/constants'
+import {loginStatus, getStatus, statusType} from '@status'
 
 describe('The Login Component', () => {
   describe(`Renderer`, () => {
@@ -108,7 +108,7 @@ describe('The Login Component', () => {
       const session = R.__get__('session')
       await component.instance().loginRequest('tester', 'secret')
       expect(await session.login).toBeCalled()
-      expect(component.instance().state.login).toEqual(loginStatus.SUCCESSFUL)
+      expect(getStatus(statusType.LOGIN)).toEqual(loginStatus.SUCCESSFUL)
       R.__ResetDependency__('session')
     })
 
@@ -118,7 +118,7 @@ describe('The Login Component', () => {
       const session = R.__get__('session')
       await component.instance().loginRequest('tester', 'secret')
       expect(await session.login).toBeCalled()
-      expect(component.instance().state.login).toEqual(loginStatus.FAILED)
+      expect(getStatus(statusType.LOGIN)).toEqual(loginStatus.FAILED)
       R.__ResetDependency__('session')
     })
   })

@@ -1,4 +1,5 @@
 import { auth, get } from './request'
+import {statusType, setStatus} from '@status'
 
 export {
   login,
@@ -7,10 +8,12 @@ export {
 }
 
 async function login (email, password) {
-  const user = await auth({ email, password })
-  if (user.token) {
-    window.localStorage.setItem('user', JSON.stringify(user))
-    return user
+  const resp = await auth({ email, password })
+  if (resp.token) {
+    window.localStorage.setItem('user', resp.user)
+    window.localStorage.setItem('token', resp.token)
+    setStatus(statusType.USER, JSON.parse(atob(resp.user)))
+    return resp
   } else {
     return Promise.reject(new Error('Login failure'))
   }
@@ -21,6 +24,7 @@ async function validateSession () {
   try {
     await get('validate')
     validated = true
+    setStatus(statusType.USER, JSON.parse(atob(window.localStorage.getItem('user'))))
   } catch (err) {
   }
   return validated
@@ -28,4 +32,5 @@ async function validateSession () {
 
 function logout () {
   window.localStorage.removeItem('user')
+  window.localStorage.removeItem('token')
 }

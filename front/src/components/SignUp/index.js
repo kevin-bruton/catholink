@@ -2,8 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import styles from './styles.scss'
 
-import {signUp as signUpService} from '@services'
-import { spinner } from './spinner'
+import {signUp as signUpService} from '@services/request'
+import { spinner } from '../../assets/spinner'
 import { literals } from './literals'
 
 const SIGNUP = {
@@ -41,12 +41,11 @@ export class SignUp extends React.Component {
   }
 
   handleChange (e) {
-    const { name, value } = e.target
-    this.setState({ [name]: value })
+    this.setState(e.target)
   }
 
   handleBlur (e) {
-    const {name, value} = e.target
+    const [name, value] = Object.keys(e.target)
     const error = this.state.error
     error[name + 'Empty'] = !value
     if (name === 'passwordRepeat' || name === 'password') {
@@ -97,14 +96,14 @@ export class SignUp extends React.Component {
                 <div className='control'>
                   <input className={'input' + (error.firstNameEmpty ? ' is-danger' : '')} type='text' placeholder={literals.firstName} name='firstName' onChange={this.handleChange} onBlur={this.handleBlur} />
                 </div>
-                <p id='emailReqMess' className='help is-danger'>{error.firstNameEmpty && literals.firstNameRequired}</p>
+                <p id='firstNameReqMess' className='help is-danger'>{error.firstNameEmpty && literals.firstNameRequired}</p>
               </div>
               <div className='field' id='surname'>
                 <label className={styles.labelAlign + ' label'}>{literals.surname}</label>
                 <div className='control'>
                   <input className={'input' + (error.surnameEmpty ? ' is-danger' : '')} type='text' placeholder={literals.surname} name='surname' onChange={this.handleChange} onBlur={this.handleBlur} />
                 </div>
-                <p id='emailReqMess' className='help is-danger'>{error.surnameEmpty && literals.surnameRequired}</p>
+                <p id='surnameReqMess' className='help is-danger'>{error.surnameEmpty && literals.surnameRequired}</p>
               </div>
               <div className='field' id='email'>
                 <label className={styles.labelAlign + ' label'}>{literals.email}</label>
@@ -125,7 +124,7 @@ export class SignUp extends React.Component {
                 <div className='control'>
                   <input className={'input' + ((error.passwordRepeatEmpty || error.passwordsNotEqual) ? ' is-danger' : '')} type='password' name='passwordRepeat' onChange={this.handleChange} onBlur={this.handleBlur} />
                 </div>
-                <p id='passReqMess' className='help is-danger'>{error.passwordRepeatEmpty && literals.passwordRepeatRequired}</p>
+                <p id='passRepeatReqMess' className='help is-danger'>{error.passwordRepeatEmpty && literals.passwordRepeatRequired}</p>
                 <p id='samePassMess' className='help is-danger'>{error.passwordsNotEqual && literals.samePasswordsRequired}</p>
               </div>
               <div className='field' id='signUpBtn'>
@@ -138,7 +137,7 @@ export class SignUp extends React.Component {
             </form>
           </div>
         </div>
-        <div className={'modal' + (this.state.signUpRequest === SIGNUP.SUCCESSFUL ? ' is-active' : '')}>
+        <div id="signUpResultModal" className={'modal' + (this.state.signUpRequest === SIGNUP.SUCCESSFUL ? ' is-active' : '')}>
           <div className='modal-background'></div>
           <div className='modal-content'>
             <div className='box'>

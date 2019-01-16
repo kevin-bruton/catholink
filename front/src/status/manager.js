@@ -28,13 +28,6 @@ function setStatus (type, value, ...data) {
     ? actions[type](value, ...data)
     : value
 
-  /*
-  console.log('setting new status of type', type, ':', newValue)
-  console.log('  calling listeners:')
-  listeners[type] && (console.log('  ', listeners[type]))
-  */
   store = Object.assign(store, { [type]: newValue })
-  listeners[type] && Object.keys(listeners[type]).forEach(name => {
-    listeners[type][name](newValue)
-  })
+  listeners[type] && Object.keys(listeners[type]).forEach(name => listeners[type][name](newValue))
 }

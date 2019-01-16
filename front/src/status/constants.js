@@ -2,7 +2,8 @@ export const statusType = {
   LOGIN: 'LOGIN',
   ALERT: 'ALERT',
   USER: 'USER',
-  GOSPEL: 'GOSPEL'
+  GOSPEL: 'GOSPEL',
+  DUMMY: 'DUMMY'
 }
 
 export const alertStatus = {

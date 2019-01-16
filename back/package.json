@@ -22,6 +22,7 @@
     "babel-plugin-rewire": "^1.2.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
+    "btoa": "^1.2.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "express-request-language": "^1.1.15",

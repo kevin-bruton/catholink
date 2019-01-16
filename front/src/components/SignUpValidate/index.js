@@ -2,8 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import styles from './styles.scss'
 
-import {signUpValidate as validateService} from '@services'
-import { spinner } from './spinner'
+import {signUpValidate as validateService} from '@services/request'
+import { spinner } from '../../assets/spinner'
 import { literals } from './literals'
 
 const VALIDATION = {
@@ -37,18 +37,18 @@ export class SignUpValidate extends React.Component {
 
   render () {
     const RESULT = {
-      REQUESTED: <span>
+      REQUESTED: <span id='requestedMessage'>
           <h1 className='is-size-3'>{literals.validating}</h1>
           <img alt='' src={spinner} />
         </span>,
-      VALIDATED: <span>
+      VALIDATED: <span id='validatedMessage'>
           <h1 className='is-size-3'>{literals.emailValidatedHeading}</h1>
           <p>{literals.emailValidatedLine1}</p>
           <p>{literals.emailValidatedLine2}</p>
           <p>{literals.emailValidatedLine3}</p>
           <br /><Link to='/Login'><button className={'button is-link '}>{literals.goToLogin}</button></Link>
         </span>,
-      NOT_VALIDATED: <span>
+      NOT_VALIDATED: <span id='notValidatedMessage'>
           <h1 className='is-size-3'>{literals.notValidatedHeading}</h1>
           <p>{literals.notValidatedLine1}</p>
           <p>{literals.notValidatedLine2}</p>

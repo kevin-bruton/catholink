@@ -28,6 +28,7 @@ describe('The Home Component', () => {
       await shallow(<Home />)
       expect(getGospelSpy).toHaveBeenCalled()
       expect(getGospelSpy()).resolves.toEqual(gospel)
+      R.__ResetDependency__('status')
     })
 
     it(`Doesn't try to get gospel if gospel is defined`, async () => {
@@ -41,6 +42,7 @@ describe('The Home Component', () => {
         .mockImplementation(() => Promise.resolve(gospel))
       await shallow(<Home />)
       expect(getGospelSpy).not.toHaveBeenCalled()
+      R.__ResetDependency__('status')
     })
 
     it(`Calls getStatus to get the gospel`, async () => {
@@ -49,17 +51,6 @@ describe('The Home Component', () => {
       await shallow(<Home />)
       expect(getStatus).toBeCalled()
       R.__ResetDependency__('getStatus')
-    })
-
-    it(`Calls setStatus with the gospel if gospel is undefined`, async () => {
-      R.__Rewire__('setStatus', jest.fn())
-      const setStatus = R.__get__('setStatus')
-      const gospel = {title: 'Gospel', text: 'Gospel text'}
-      jest.spyOn(Home.prototype, 'getGospel')
-        .mockImplementation(() => Promise.resolve(gospel))
-      await shallow(<Home />)
-      expect(setStatus).toBeCalledWith(statusType.GOSPEL, gospel)
-      R.__ResetDependency__('setStatus')
     })
   })
 

@@ -2,12 +2,14 @@ import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
 import styles from './styles.scss'
 import {literals} from './literals'
+import {statusType, getStatus} from '@status'
 
 export class ProfileBtn extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      showProfileMenu: false
+      showProfileMenu: false,
+      user: getStatus(statusType.USER)
     }
     this.toggleShowProfileMenu = this.toggleShowProfileMenu.bind(this)
     this.clickEv = this.clickEv.bind(this)
@@ -47,8 +49,8 @@ export class ProfileBtn extends Component {
                 </figure>
               </div>
               <div className='media-content'>
-                <p className='title is-4'>John Smith</p>
-                <p className='subtitle is-6'>@johnsmith</p>
+                <p className='title is-4'>{this.state.user.firstName} {this.state.user.surname}</p>
+                <p className='subtitle is-6'>{this.state.user.email}</p>
               </div>
             </div>
 

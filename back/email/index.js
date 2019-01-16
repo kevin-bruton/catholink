@@ -19,7 +19,8 @@ const outlookConfig = {
 }
 
 const yandexConfig = {
-  host: "smtp.yandex.ru",
+  // host: "smtp.yandex.ru",
+  host: "smtp.yandex.com",
   secureConnection: false,
   port: 465,
   tls: { ciphers: 'SSLv3'},

@@ -72,7 +72,7 @@
       "!<rootDir>/src/components/index.js",
       "!<rootDir>/src/components/App/*.js",
       "!<rootDir>/src/services/index.js",
-      "!<rootDir>/vcr/index.js"
+      "!<rootDir>/vcr/*.js"
     ],
     "setupFiles": [
       "<rootDir>/config/polyfills.js"
@@ -128,6 +128,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "btoa": "^1.2.1",
     "cors": "^2.8.4",
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^4.0.1",

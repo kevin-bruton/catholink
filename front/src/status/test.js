@@ -5,8 +5,8 @@ import { __RewireAPI__ as RM, getStatus, subscribeStatus, unsubscribeStatus, set
 describe(`Status Actions`, () => {
   describe(`actions export`, () => {
     it(`Returns an action function given its type`, () => {
-      const exampleType = { LOGIN: 'LOGIN' }
-      const returned = actions[exampleType.LOGIN]
+      const exampleType = { DUMMY: 'DUMMY' }
+      const returned = actions[exampleType.DUMMY]
       expect(typeof returned).toEqual('function')
     })
   })
