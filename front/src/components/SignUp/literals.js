@@ -60,5 +60,17 @@ export const literals = getLangLiterals({
   emailSent3: {
     en: `After verifying your account, you'll be able to log into your new account!`,
     es: `Después de verificar la cuenta, podrás iniciar sesión en tu nueva cuenta!`
+  },
+  emailNotSent1: {
+    en: `We need to send you an email in order to verify your account.`,
+    es: `Necesitamos enviarte un correo electrónico para poder verificar tu cuenta.`
+  },
+  emailNotSent2: {
+    en: `However, there has been an error while trying to send it.`,
+    es: `Sin embargo, ha habido un error en el envío.`
+  },
+  emailNotSent3: {
+    en: `Please try again at another time.`,
+    es: `Intente otra vez más adelante.`
   }
 })

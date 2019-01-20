@@ -26,9 +26,9 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "express-request-language": "^1.1.15",
+    "googleapis": "^36.0.0",
     "jsonwebtoken": "^8.3.0",
-    "mongodb": "^3.1.4",
-    "nodemailer": "^5.0.0"
+    "mongodb": "^3.1.4"
   },
   "devDependencies": {
     "cors": "^2.8.4",

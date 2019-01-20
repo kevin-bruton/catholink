@@ -41,11 +41,12 @@ export class SignUp extends React.Component {
   }
 
   handleChange (e) {
-    this.setState(e.target)
+    this.setState({[e.target.name]: e.target.value})
   }
 
   handleBlur (e) {
-    const [name, value] = Object.keys(e.target)
+    const name = e.target.name
+    const value = e.target.value
     const error = this.state.error
     error[name + 'Empty'] = !value
     if (name === 'passwordRepeat' || name === 'password') {
@@ -75,8 +76,8 @@ export class SignUp extends React.Component {
     const {firstName, surname, email, password} = this.state
     this.setState({signUpRequest: SIGNUP.REQUESTED}, async () => {
       try {
-        await signUpService({firstName, surname, email, password})
-        this.setState({signUpRequest: SIGNUP.SUCCESSFUL})
+        const signedUp = await signUpService({firstName, surname, email, password})
+        this.setState({signUpRequest: signedUp ? SIGNUP.SUCCESSFUL : SIGNUP.FAILED})
       } catch (err) {
         this.setState({signUpRequest: SIGNUP.FAILED})
       }
@@ -137,16 +138,27 @@ export class SignUp extends React.Component {
             </form>
           </div>
         </div>
-        <div id="signUpResultModal" className={'modal' + (this.state.signUpRequest === SIGNUP.SUCCESSFUL ? ' is-active' : '')}>
+        <div id="signUpResultModal"
+          className={'modal' + ((this.state.signUpRequest === SIGNUP.SUCCESSFUL || this.state.signUpRequest === SIGNUP.FAILED) ? ' is-active' : '')}>
           <div className='modal-background'></div>
           <div className='modal-content'>
             <div className='box'>
               <div className='content'>
-                <p className='centre'>
-                  {literals.emailSent1}<br />
-                  {literals.emailSent2}<br />
-                  {literals.emailSent3}
-                </p>
+                {
+                  this.state.signUpRequest === SIGNUP.SUCCESSFUL &&
+                    <p className='centre'>                
+                      {literals.emailSent1}<br />
+                      {literals.emailSent2}<br />
+                      {literals.emailSent3}
+                    </p>
+                }{
+                  this.state.signUpRequest === SIGNUP.FAILED &&
+                    <p className='centre'>                
+                      {literals.emailNotSent1}<br />
+                      {literals.emailNotSent2}<br />
+                      {literals.emailNotSent3}
+                    </p>
+                }
               </div>
               <Link to='/Home'><button className={'button is-link '}>Ok</button></Link>
             </div>
