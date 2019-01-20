@@ -27,12 +27,17 @@ async function auth (data) {
 }
 
 async function signUp (data) {
-  return call('post', `${signUpUrl}/init`, data)
+  try {
+    const resp = await call('post', `${signUpUrl}/init`, data)
+    return !resp.error
+  } catch (err) {
+    return false
+  }
 }
 
 async function signUpValidate (validationId) {
   try {
-    const resp = await call('get', `${signUpUrl}/validate?validationid=${validationId}`)
+    const resp = await call('get', `${signUpUrl}/validate?code=${validationId}`)
     return !resp.error
   } catch (err) {
     return false

@@ -155,7 +155,7 @@ function getMessage(lang, firstName, code) {
 ${message.greeting} ${firstName}!<br><br>
 &nbsp;&nbsp;&nbsp;&nbsp;${message.line1}<br>
 ${message.line2}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://localhost:5000/signupvalidate?validationid=${code}">${message.validate}</a><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://localhost:5000/signupvalidate?code=${code}">${message.validate}</a><br><br>
 ${message.bye}<br>
 ${message.signature}
 `
