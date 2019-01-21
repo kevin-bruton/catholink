@@ -43,6 +43,7 @@ describe('API TESTS', function () {
           token = resp.data.token
         } catch (err) {
           resp = err.response
+          return
         }
         try {
           resp = await axios.get('http://localhost:5000/api', { headers: { Authorization: `Bearer ${token}` } })
@@ -56,7 +57,6 @@ describe('API TESTS', function () {
       })
     })
   })
-
   describe('GET /api/validate', function () {
     describe('Invoke with invalid token and get 401 "Unauthorized" returned', function () {
       let resp

@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt-nodejs')
+
 const db = (function () {
   const _url = 'mongodb://localhost:27017'
   const _dbName = 'catholink'
@@ -39,8 +41,11 @@ const db = (function () {
       const initialUsers = [
         {
           _id: 1,
-          email: 'kevin@mail.com',
-          password: 'secret'
+          firstName: 'Joe',
+          surname: 'Blow',
+          email: 'catholink.connect@gmail.com',
+          password: bcrypt.hashSync('secret'),
+          status: 'firstUser'
         }
       ]
       try {

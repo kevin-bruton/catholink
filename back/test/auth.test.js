@@ -2,9 +2,12 @@
 /* eslint no-unused-expressions: "off" */
 const axios = require('axios')
 const db = require('@db')
+const bcrypt = require('bcrypt-nodejs')
+const passwordUser1 = 'roker'
+const passwordUser2 = 'joker'
 const users = [
-  { _id: '8888888', email: 'kev@mail.com', password: 'rocker', testDoc: true },
-  { _id: '999999', email: 'joker@mail.com', password: 'joker', testDoc: true }
+  { _id: '8888888', email: 'kev@mail.com', password: bcrypt.hashSync(passwordUser1), testDoc: true },
+  { _id: '999999', email: 'joker@mail.com', password: bcrypt.hashSync(passwordUser2), testDoc: true }
 ]
 
 describe('AUTH TESTS', function () {
@@ -34,7 +37,7 @@ describe('AUTH TESTS', function () {
     let resp
     beforeAll(async function () {
       try {
-        resp = await axios.post('http://localhost:5000/auth', { email: users[0].email, password: users[0].password })
+        resp = await axios.post('http://localhost:5000/auth', { email: users[0].email, password: passwordUser1 })
       } catch (err) {
         resp = err.response
       }

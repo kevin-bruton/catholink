@@ -37,7 +37,7 @@ async function sendEmail(to, subject, message) {
     const res = await gmail.users.messages.send({userId: 'me', requestBody: {raw: encodedMessage}})
     return res.data && res.data.labelIds && res.data.labelIds[0]
   } catch (err) {
-    console.log(`COULDN'T SEND EMAIL:`, err)
+    console.log(`COULDN'T SEND EMAIL:`, err.message)
     return {error: 'ERROR_SENDING_EMAIL'}
   }
 }

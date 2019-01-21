@@ -10,7 +10,7 @@
     "start": "nodemon server",
     "start-db": "mongod --dbpath=./db-data",
     "test": "jest",
-    "tester": "jest -t=signup",
+    "tester": "jest -t=api",
     "lint": "node ./node_modules/eslint/bin/eslint .",
     "postinstall": "node scripts/route-aliases",
     "aliases": "node scripts/route-aliases"

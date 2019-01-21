@@ -2,16 +2,16 @@
 /* eslint no-unused-expressions: "off" */
 const axios = require('axios')
 const db = require('@db')
+const bcrypt = require('bcrypt-nodejs')
 
 const newUser = {
     firstName: 'Joe',
     surname: 'Blow',
     email: 'catholink@mail.com',
-    password: '123456'
+    password: bcrypt.hashSync('123456')
 }
 const code = '1234'
 
- 
 describe('signup/validate endpoint', async () => {
   let res
    beforeAll(async () => {
@@ -46,8 +46,8 @@ describe('signup/validate endpoint', async () => {
   })
 
   afterAll(async () => {
-    // await db.signup.deleteOne({email: newUser.email})
-    // await db.users.deleteOne({email: newUser.email})
+    await db.signup.deleteOne({email: newUser.email})
+    await db.users.deleteOne({email: newUser.email})
     await db.close()
   })
 })
