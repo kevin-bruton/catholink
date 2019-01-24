@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { headers } from './headers'
-import {backendHost} from './config'
 
 export {
   get,
@@ -10,6 +9,7 @@ export {
   signUpValidate
 }
 
+const backendHost = process.env.REACT_APP_API_MODE === 'VCR' ? 'http://localhost:5500' : 'http://localhost:5000'
 const apiUrl = `${backendHost}/api`
 const authUrl = `${backendHost}/auth`
 const signUpUrl = `${backendHost}/signup`

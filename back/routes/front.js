@@ -18,4 +18,8 @@ frontRouter.use(requestLanguage({
 
 frontRouter.use(express.static(frontDir))
 
+frontRouter.get('/*', (req, res) => {
+  res.sendFile(path.join(frontDir + '/index.html'))
+})
+
 module.exports = frontRouter

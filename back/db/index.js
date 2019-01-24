@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt-nodejs')
 
 const db = (function () {
-  const _url = 'mongodb://localhost:27017'
+  const _url = process.env.CATHOLINK_MONGODB_URI
   const _dbName = 'catholink'
   let _mongoConnection
   let _dbConnection

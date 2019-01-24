@@ -34,8 +34,8 @@ export const literals = getLangLiterals({
     es: `Intenta rellenando el formulario de registro otra vez.`
   },
   notValidatedLine3: {
-    en: `If you think this is an error, please contact us via email (catholink@yandex.com) with your sign up details.`,
-    es: `Si consideras que esto es un error, notifíquenos via email (cahtolink@yandex.com) con los detalles introducidos en el registro.`
+    en: `If you think this is an error, please contact us via email (catholink.connect@gmail.com) with your sign up details.`,
+    es: `Si consideras que esto es un error, notifíquenos via email (cahtolink.connect@gmail.com) con los detalles introducidos en el registro.`
   },
   goToSignUp: {
     en: `Go to sign up`,

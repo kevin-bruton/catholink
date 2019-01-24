@@ -7,6 +7,10 @@ module.exports = {
 }
 
 async function sendEmail(to, subject, message) {
+  if (process.env.CATHOLINK_SERVER_MODE === 'DEV') {
+    return 'SENT'
+  }
+
   try {
     gmail = gmail || await gmailClient()
   } catch (err) {

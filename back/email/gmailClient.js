@@ -2,6 +2,9 @@ const fs = require('fs')
 const readline = require('readline')
 const {google} = require('googleapis')
 
+const GOOGLE_CREDENTIALS = JSON.parse(process.env.CATHOLINK_GOOGLE_CREDENTIALS)
+const GOOGLE_TOKEN = JSON.parse(process.env.CATHOLINK_GOOGLE_TOKEN)
+
 module.exports = {
   gmailClient
 }
@@ -13,31 +16,13 @@ const SCOPES = [
   'https://www.googleapis.com/auth/gmail.compose',
   'https://www.googleapis.com/auth/gmail.send'
 ]
-// The file token.json stores the user's access and refresh tokens, and is
-// created automatically when the authorization flow completes for the first
-// time.
-const TOKEN_PATH = '../../catholink2/token.json'
-const CREDENTIALS_PATH = '../../catholink2/credentials.json'
 
 async function gmailClient () {
-  const credentials = getCredentials()
-  if (!credentials) return
+  if (!GOOGLE_CREDENTIALS) return
 
-  const oAuth2Client = await setCredentials(credentials)
+  const oAuth2Client = await setCredentials(GOOGLE_CREDENTIALS)
   
   return google.gmail({version: 'v1', auth: oAuth2Client});
-}
-
-function getCredentials () {
-  let content
-  try {
-    content = fs.readFileSync(CREDENTIALS_PATH)
-    content = JSON.parse(content)
-  } catch (err) {
-    console.log('Error loading client secret file:', err)
-    return false
-  }
-  return content
 }
 
 async function setCredentials(credentials) {
@@ -45,7 +30,7 @@ async function setCredentials(credentials) {
   const oAuth2Client = new google.auth.OAuth2(
       client_id, client_secret, redirect_uris[0]);
   
-  let token = getToken()
+  let token = GOOGLE_TOKEN
   if (!token) {
     try {
       token = await getNewToken(oAuth2Client)
@@ -56,17 +41,6 @@ async function setCredentials(credentials) {
   }
   oAuth2Client.setCredentials(token)
   return oAuth2Client
-}
-
-function getToken() {
-  let token
-  try {
-    token = fs.readFileSync(TOKEN_PATH) 
-  } catch (err) {
-    console.log(`Couldn't obtain saved token`)
-    return false
-  }
-  return JSON.parse(token)
 }
 
 /**
@@ -94,12 +68,14 @@ function getNewToken(oAuth2Client) {
             reject(err)
           }
           // Store the token to disk for later program executions
+          const TOKEN_PATH = '../../catholink2/token.json'
           fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
             if (err) {
               console.error('Error saving token:', err)
               reject(err)
             }
-            console.log('Token stored to', TOKEN_PATH);
+            console.log('Token stored to', TOKEN_PATH)
+            process.env.CATHOLINK_GOOGLE_TOKEN = token
             resolve(token)
           });
         })
