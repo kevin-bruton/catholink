@@ -4,6 +4,8 @@
   "description": "Catholics in Connection",
   "main": "index.js",
   "scripts": {
+    "start": "node back/server.js",
+    "start-db": "mongod --dbpath=./back/db-data",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Kevin Bruton",
