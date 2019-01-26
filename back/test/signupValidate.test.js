@@ -15,8 +15,8 @@ const code = '1234'
 describe('signup/validate endpoint', async () => {
   let res
    beforeAll(async () => {
-    await db.init()
-    await db.signup.insertOne(Object.assign(newUser, {status: 'emailSent', code}))
+    await db.open()
+    await db.signup().insertOne(Object.assign(newUser, {status: 'emailSent', code}))
   })
 
   it('when a valid code is sent: it returns status 200 and no errors', async () => {
@@ -30,7 +30,7 @@ describe('signup/validate endpoint', async () => {
   })
 
   it('when a valid code is sent: it adds user to registered users collection', async () => {
-    const found = await (await db.users.find({email: newUser.email})).toArray()
+    const found = await (await db.users().find({email: newUser.email})).toArray()
     expect(found.length).toEqual(1)
   })
 
@@ -46,8 +46,8 @@ describe('signup/validate endpoint', async () => {
   })
 
   afterAll(async () => {
-    await db.signup.deleteOne({email: newUser.email})
-    await db.users.deleteOne({email: newUser.email})
+    await db.signup().deleteOne({email: newUser.email})
+    await db.users().deleteOne({email: newUser.email})
     await db.close()
   })
 })

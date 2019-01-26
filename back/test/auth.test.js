@@ -12,8 +12,8 @@ const users = [
 
 describe('AUTH TESTS', function () {
   beforeAll(async function () {
-    await db.init()
-    await db.users.insertMany(users)
+    await db.open()
+    await db.users().insertMany(users)
   })
 
   describe('Invoke POST /auth with invalid credentials and get error message', function () {
@@ -54,7 +54,7 @@ describe('AUTH TESTS', function () {
   })
 
   afterAll(async function () {
-    await db.users.deleteMany({ testDoc: true })
+    await db.users().deleteMany({ testDoc: true })
     await db.close()
   })
 })

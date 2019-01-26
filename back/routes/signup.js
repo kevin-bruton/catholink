@@ -52,9 +52,9 @@ router.get('/validate', async (req, res) => {
   let found
   console.log('Validation request received with code:', code)
   try {
-    found = await (await db.signup.find({$and: [{code}, {status: {$not: /registered/}}]})).toArray()
+    found = await (await db.signup().find({$and: [{code}, {status: {$not: /registered/}}]})).toArray()
   } catch (err) {
-    console.log('ERROR trying to find code db.signup.find:', err)
+    console.log('ERROR trying to find code db.signup().find:', err)
     return res.status(503).json({error: 'DB failure'})
   }
   if (!found.length) {
@@ -70,10 +70,10 @@ router.get('/validate', async (req, res) => {
 
 async function registerUser (user) {
   try {
-    await db.signup.updateOne({email: user.email}, {$set:{status: 'registered'}})
-    await db.users.insertOne({firstName: user.firstName, surname: user.surname, email: user.email, password: user.hashedPassword, status: 'active'})
+    await db.signup().updateOne({email: user.email}, {$set:{status: 'registered'}})
+    await db.users().insertOne({firstName: user.firstName, surname: user.surname, email: user.email, password: user.hashedPassword, status: 'active'})
   } catch (err) {
-    console.log('ERROR trying in registerUser trying db.signup.updateOne and db.user.insertOne', err)
+    console.log('ERROR trying in registerUser trying db.signup().updateOne and db.user.insertOne', err)
     return {error: 'DB failure'}
   }
   return true
@@ -82,9 +82,9 @@ async function registerUser (user) {
 async function userRegistered (email) {
   let found
   try {
-    found = await (await db.users.find({email})).toArray()
+    found = await (await db.users().find({email})).toArray()
   } catch (err) {
-    console.log(`ERROR db.users.find ${email}: ${err}`)
+    console.log(`ERROR db.users().find ${email}: ${err}`)
     return {error: 'Server error'}
   }
   return !!found.length
@@ -93,9 +93,9 @@ async function userRegistered (email) {
 async function hasStartedSignUp (email) {
   let found
   try {
-    found = await (await db.signup.find({email})).toArray()
+    found = await (await db.signup().find({email})).toArray()
   } catch (err) {
-      console.log(`ERROR db.signup.find ${email}: ${err}`)
+      console.log(`ERROR db.signup().find ${email}: ${err}`)
       return {error: 'Server error'}
   }
   return !!found[0]
@@ -103,7 +103,7 @@ async function hasStartedSignUp (email) {
 
 async function restartSignUp (firstName, surname, email, hashedPassword, code) {
   try {
-    const res = await db.signup.updateOne({email}, {$set: {firstName, surname, hashedPassword, code, status: 'signUpStarted'}})
+    const res = await db.signup().updateOne({email}, {$set: {firstName, surname, hashedPassword, code, status: 'signUpStarted'}})
     console.log('Updated a user in signup. ModifiedCount:', res.modifiedCount)
     return true
   } catch (err) {
@@ -114,7 +114,7 @@ async function restartSignUp (firstName, surname, email, hashedPassword, code) {
 
 async function startSignUp (firstName, surname, email, hashedPassword, code) {
   try {
-    const res = await db.signup.insertOne({firstName, surname, email, hashedPassword, code, status: 'signUpStarted', numEmailsSent: 0})
+    const res = await db.signup().insertOne({firstName, surname, email, hashedPassword, code, status: 'signUpStarted', numEmailsSent: 0})
     console.log('Inserted a new user in signup:')
     console.log('res.insertedCount:', res.insertedCount)
     return true
@@ -126,7 +126,7 @@ async function startSignUp (firstName, surname, email, hashedPassword, code) {
 
 async function recordEmailFailureStatus (email) {
   try {
-    await db.signup.updateOne({email}, {$set: {status: 'emailSendingFailure'}})
+    await db.signup().updateOne({email}, {$set: {status: 'emailSendingFailure'}})
   } catch (err) {
     console.log(`ERROR trying to updateOne in db.signup: ${err}`)
   }
@@ -134,7 +134,7 @@ async function recordEmailFailureStatus (email) {
 
 async function recordEmailSentStatus (email) {
   try {
-    await db.signup.updateOne({email}, {$set:{status: 'emailSent'}, $inc:{numEmailsSent:1}})
+    await db.signup().updateOne({email}, {$set:{status: 'emailSent'}, $inc:{numEmailsSent:1}})
   } catch (err) {
     console.log(`ERROR -recordEmailSentStatus- trying to updateOne in db.signup: ${err}`)
   }

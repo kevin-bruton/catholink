@@ -22,7 +22,7 @@ app.use('/api', apiRouter)
 app.use('/', frontRouter)
 
 ;(async () => {
-  await db.init()
+  await db.open()
   console.log('DB connection open')
   const PORT = 5000
 

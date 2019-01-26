@@ -13,7 +13,7 @@ const newUser = {
 
 describe('signup/init endpoint', () => {
   beforeAll(async () => {
-    await db.init()
+    await db.open()
   })
 
   describe('signup/init for first time', async () => {
@@ -23,7 +23,7 @@ describe('signup/init endpoint', () => {
     })
 
     it('adds new user in signup collection with firstName, surname, email, hashedPassword, and validation code', async () => {
-      const found = (await db.signup.find({email: newUser.email})).toArray()
+      const found = (await db.signup().find({email: newUser.email})).toArray()
       const userAdded = (await found)[0]
       //console.log(userAdded)
       expect(userAdded.firstName).toEqual(newUser.firstName)
@@ -36,7 +36,7 @@ describe('signup/init endpoint', () => {
     })
 
     it('sends and email with the validation link to the user', async () => {
-      const cursor = await db.signup.find({email: newUser.email})
+      const cursor = await db.signup().find({email: newUser.email})
       const data = await cursor.toArray()
       expect(data[0].status).toEqual('emailSent')
     })
@@ -47,14 +47,14 @@ describe('signup/init endpoint', () => {
     })
 
     afterAll(async () => {
-      return db.signup.deleteOne({email: newUser.email})
+      return db.signup().deleteOne({email: newUser.email})
     })
   })
 
   describe('signup/init for registered user', async () => {
     let res
     beforeAll(async () => {
-      await db.users.insertOne(newUser)
+      await db.users().insertOne(newUser)
       try {
         res = await axios.post('http://localhost:5000/signup/init', newUser)
       } catch (err) {
@@ -68,20 +68,20 @@ describe('signup/init endpoint', () => {
     })
 
     afterAll(async () => {
-      await db.users.deleteOne({email: newUser.email})
-      await db.signup.deleteOne({email: newUser.email})
+      await db.users().deleteOne({email: newUser.email})
+      await db.signup().deleteOne({email: newUser.email})
     })
   })
 
   describe('signup/init unregistered user who has already attempted signup', () => {
     let res
     beforeAll(async () => {
-      await db.signup.insertOne(Object.assign(newUser, {status: 'failed', numEmailsSent: 1}))
+      await db.signup().insertOne(Object.assign(newUser, {status: 'failed', numEmailsSent: 1}))
       res = await axios.post('http://localhost:5000/signup/init', newUser)
     })
 
     it('sends new email', async () => {
-      const data = await (await db.signup.find({email: newUser.email})).toArray()
+      const data = await (await db.signup().find({email: newUser.email})).toArray()
       expect(data[0].status).toEqual('emailSent')
       expect(data[0].numEmailsSent).toEqual(2)
     })
@@ -92,7 +92,7 @@ describe('signup/init endpoint', () => {
     })
 
     afterAll(async () => {
-      await db.signup.deleteOne({email: newUser.email})
+      await db.signup().deleteOne({email: newUser.email})
     })
   })
 
