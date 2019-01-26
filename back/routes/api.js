@@ -4,6 +4,7 @@ const express = require('express')
 const router = express.Router()
 const { getRequest } = require('@request')
 const { getGospel, setGospel } = require('@gospel')
+const { userSearch } = require('@db/userSearch')
 
 router.use(authorizeApi)
 
@@ -17,8 +18,14 @@ router.get('/validate', (req, res) => {
   res.status(200).end()
 })
 
-router.get('/user', (req, res, next) => {
+router.get('/user', (req, res) => {
   res.send()
+})
+
+router.get('/search', async (req, res) => {
+  console.log('search', req.query.text)
+  const searchResults = await userSearch(req.query.text)
+  res.send({searchResults})
 })
 
 router.post('/gospel', async (req, res) => {

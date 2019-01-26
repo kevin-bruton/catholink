@@ -3,6 +3,7 @@ export const statusType = {
   ALERT: 'ALERT',
   USER: 'USER',
   GOSPEL: 'GOSPEL',
+  SEARCH_TEXT: 'SEARCH_TEXT',
   DUMMY: 'DUMMY'
 }
 

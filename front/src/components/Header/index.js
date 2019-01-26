@@ -3,7 +3,7 @@ import styles from './styles.scss'
 import { Link } from 'react-router-dom'
 import { literals } from './literals'
 import brandname from '../../assets/brandname.svg'
-import {ProfileBtn} from '@components/ProfileBtn'
+import {ProfileBtn, SearchBox} from '@components'
 import {getStatus, statusType, subscribeStatus, unsubscribeStatus, loginStatus} from '@status'
 
 export class Header extends Component {
@@ -30,17 +30,21 @@ export class Header extends Component {
   }
 
   render () {
+    const loggedIn = (this.state.login === loginStatus.SUCCESSFUL)
     return (
       <header id='Header' className={styles.header}>
         <div className='columns'>
           <div className='column'>
-            <Link to='/'><img src={brandname} align='left' width='100' alt='Brand name' /></Link>
+            <span className='field is-grouped'>
+              <Link to='/'><img src={brandname} align='left' width='100' alt='Brand name' /></Link>
+              {loggedIn && <SearchBox />}
+            </span>
           </div>
           <div className='column'>
             <h1 className={styles.descriptiveTitle}>{literals.descriptiveTitle}</h1>
           </div>
           <div className='column'>
-            {(this.state.login === loginStatus.SUCCESSFUL) && <ProfileBtn />}
+            {loggedIn && <ProfileBtn />}
           </div>
         </div>
       </header>
