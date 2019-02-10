@@ -5,5 +5,6 @@ module.exports = [
   { name: '@auth', target: 'auth' },
   { name: '@db', target: 'db' },
   { name: '@request', target: 'request' },
-  { name: '@gospel', target: 'gospel' }
+  { name: '@gospel', target: 'gospel' },
+  { name: '@helpers', target: 'helpers' }
 ]

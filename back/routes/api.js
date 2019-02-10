@@ -4,7 +4,9 @@ const express = require('express')
 const router = express.Router()
 const { getRequest } = require('@request')
 const { getGospel, setGospel } = require('@gospel')
-const { userSearch } = require('@db/userSearch')
+const { getUserByName, getUserByProfileId } = require('@db/users/search')
+const { updateProfile } = require('@db/users/profile')
+const atob = require('atob')
 
 router.use(authorizeApi)
 
@@ -22,9 +24,20 @@ router.get('/user', (req, res) => {
   res.send()
 })
 
+router.post('/profile/update', async (req, res) => {
+  await updateProfile(req.body.email, req.body.profile)
+  res.status(200).end()
+})
+
+router.get('/profile/:profileId', async (req, res) => {
+  const profileId = req.params.profileId
+  const user = await getUserByProfileId(profileId)
+  res.send(user)
+})
+
 router.get('/search', async (req, res) => {
   console.log('search', req.query.text)
-  const searchResults = await userSearch(req.query.text)
+  const searchResults = await getUserByName(req.query.text)
   res.send({searchResults})
 })
 
@@ -55,7 +68,7 @@ async function authorizeApi (req, res, next) {
         console.log('authorizeApi: Token verified\n')
         return next()
       } catch (err) {
-        console.log('authorizeApi: Token not verified\n')
+        console.log('authorizeApi: Could not verify this token: ' + token + '\n')
         return res.status(401).send({ error: 'Unauthorized' })
       }
     }

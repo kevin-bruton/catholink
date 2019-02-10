@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styles from './styles.scss'
 import { Route, Switch, withRouter } from 'react-router-dom'
-import { Home, Login, About, Header, NavMenu, WidgetPanel, PublicityPanel, SignUp, SearchResults } from '@components'
+import { Home, Login, About, Header, NavMenu, WidgetPanel, PublicityPanel, SignUp, SearchResults, Profile } from '@components'
 import { PrivateRoute } from './PrivateRoute'
 import { SignUpValidate } from '../SignUpValidate';
 
@@ -21,6 +21,7 @@ export class CathApp extends Component {
               <PrivateRoute path='/home' component={Home} />
               <PrivateRoute path='/about' component={About} />
               <PrivateRoute path='/searchresults' component={SearchResults} />
+              <PrivateRoute path='/profile/:profileId' component={Profile} />
               <Route path='/login' component={Login} />
               <Route path='/signup' component={SignUp} />
               <Route path='/signupvalidate' component={SignUpValidate} />

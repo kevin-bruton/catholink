@@ -16,7 +16,7 @@ describe('signup/validate endpoint', async () => {
   let res
    beforeAll(async () => {
     await db.open()
-    await db.signup().insertOne(Object.assign(newUser, {status: 'emailSent', code}))
+    await db.signUp().insertOne(Object.assign(newUser, {status: 'emailSent', code}))
   })
 
   it('when a valid code is sent: it returns status 200 and no errors', async () => {
@@ -46,7 +46,7 @@ describe('signup/validate endpoint', async () => {
   })
 
   afterAll(async () => {
-    await db.signup().deleteOne({email: newUser.email})
+    await db.signUp().deleteOne({email: newUser.email})
     await db.users().deleteOne({email: newUser.email})
     await db.close()
   })

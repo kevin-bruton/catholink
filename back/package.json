@@ -19,6 +19,7 @@
   "author": "Kevin Bruton",
   "license": "ISC",
   "dependencies": {
+    "atob": "^2.1.2",
     "axios": "^0.18.0",
     "babel-plugin-rewire": "^1.2.0",
     "bcrypt-nodejs": "0.0.3",

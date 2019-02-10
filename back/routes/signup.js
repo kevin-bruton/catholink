@@ -2,9 +2,11 @@ const express = require('express')
 const router = express.Router()
 const cookieParser = require('cookie-parser')
 const db = require('@db')
+const {profileIdExists} = require('@db/users/search')
 const bcrypt = require('bcrypt-nodejs')
 const {sendEmail} = require('../email')
 const {getLiterals} = require('../email/signupLiterals')
+const {generateCode, standardize, removeSpaces} = require('@helpers')
 
 router.use(cookieParser())
 
@@ -25,7 +27,8 @@ router.post('/init', async (req, res) => {
     if (startedSignUp.error) {
       return res.status(503).json(startedSignUp.error)
     }
-    const code = generateCode()
+    const codeLength = 50
+    const code = generateCode(codeLength)
     let signUpNowStarted
     if (startedSignUp) { // Sign up process started previously
       signUpNowStarted = await restartSignUp (firstName, surname, email, hashedPassword, code)
@@ -52,9 +55,9 @@ router.get('/validate', async (req, res) => {
   let found
   console.log('Validation request received with code:', code)
   try {
-    found = await (await db.signup().find({$and: [{code}, {status: {$not: /registered/}}]})).toArray()
+    found = await (await db.signUp().find({$and: [{code}, {status: {$not: /registered/}}]})).toArray()
   } catch (err) {
-    console.log('ERROR trying to find code db.signup().find:', err)
+    console.log('ERROR trying to find code db.signUp().find:', err)
     return res.status(503).json({error: 'DB failure'})
   }
   if (!found.length) {
@@ -69,14 +72,42 @@ router.get('/validate', async (req, res) => {
 })
 
 async function registerUser (user) {
+  const profileId = await getProfileId(user)
   try {
-    await db.signup().updateOne({email: user.email}, {$set:{status: 'registered'}})
-    await db.users().insertOne({firstName: user.firstName, surname: user.surname, email: user.email, password: user.hashedPassword, status: 'active'})
+    await db.signUp().updateOne({email: user.email}, {$set:{status: 'registered'}})
+    await db.users().insertOne({
+      firstName: user.firstName,
+      surname: user.surname,
+      email: user.email,
+      profileId,
+      joinDate: (new Date()).getTime(),
+      groups: [],
+      posts: [],
+      address1: '',
+      address2: '',
+      mobile: '',
+      telephone: '',
+      photoUrl: '',
+      workPlace: '',
+      password: user.hashedPassword,
+      status: 'active'
+    })
   } catch (err) {
-    console.log('ERROR trying in registerUser trying db.signup().updateOne and db.user.insertOne', err)
+    console.log('ERROR trying in registerUser trying db.signUp().updateOne and db.user.insertOne', err)
     return {error: 'DB failure'}
   }
   return true
+}
+
+async function getProfileId (user) {
+  const codeLength = 8
+  const nameStr = standardize(removeSpaces(`${user.firstName}.${user.surname}`)).toLowerCase()
+  let profileId, profileIdAlreadyExists = false
+  do {
+    profileId = `${nameStr}-${generateCode(codeLength)}`
+    profileIdAlreadyExists = await profileIdExists(profileId)
+  } while (profileIdAlreadyExists)
+  return profileId
 }
 
 async function userRegistered (email) {
@@ -93,9 +124,9 @@ async function userRegistered (email) {
 async function hasStartedSignUp (email) {
   let found
   try {
-    found = await (await db.signup().find({email})).toArray()
+    found = await (await db.signUp().find({email})).toArray()
   } catch (err) {
-      console.log(`ERROR db.signup().find ${email}: ${err}`)
+      console.log(`ERROR db.signUp().find ${email}: ${err}`)
       return {error: 'Server error'}
   }
   return !!found[0]
@@ -103,7 +134,7 @@ async function hasStartedSignUp (email) {
 
 async function restartSignUp (firstName, surname, email, hashedPassword, code) {
   try {
-    const res = await db.signup().updateOne({email}, {$set: {firstName, surname, hashedPassword, code, status: 'signUpStarted'}})
+    const res = await db.signUp().updateOne({email}, {$set: {firstName, surname, hashedPassword, code, status: 'signUpStarted'}})
     console.log('Updated a user in signup. ModifiedCount:', res.modifiedCount)
     return true
   } catch (err) {
@@ -114,7 +145,7 @@ async function restartSignUp (firstName, surname, email, hashedPassword, code) {
 
 async function startSignUp (firstName, surname, email, hashedPassword, code) {
   try {
-    const res = await db.signup().insertOne({firstName, surname, email, hashedPassword, code, status: 'signUpStarted', numEmailsSent: 0})
+    const res = await db.signUp().insertOne({firstName, surname, email, hashedPassword, code, status: 'signUpStarted', numEmailsSent: 0})
     console.log('Inserted a new user in signup:')
     console.log('res.insertedCount:', res.insertedCount)
     return true
@@ -126,7 +157,7 @@ async function startSignUp (firstName, surname, email, hashedPassword, code) {
 
 async function recordEmailFailureStatus (email) {
   try {
-    await db.signup().updateOne({email}, {$set: {status: 'emailSendingFailure'}})
+    await db.signUp().updateOne({email}, {$set: {status: 'emailSendingFailure'}})
   } catch (err) {
     console.log(`ERROR trying to updateOne in db.signup: ${err}`)
   }
@@ -134,7 +165,7 @@ async function recordEmailFailureStatus (email) {
 
 async function recordEmailSentStatus (email) {
   try {
-    await db.signup().updateOne({email}, {$set:{status: 'emailSent'}, $inc:{numEmailsSent:1}})
+    await db.signUp().updateOne({email}, {$set:{status: 'emailSent'}, $inc:{numEmailsSent:1}})
   } catch (err) {
     console.log(`ERROR -recordEmailSentStatus- trying to updateOne in db.signup: ${err}`)
   }
@@ -159,12 +190,6 @@ ${message.line2}<br>
 ${message.bye}<br>
 ${message.signature}
 `
-}
-
-function generateCode () {
-  const length = 50
-  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-  return Array(length).join().split(',').map(function() { return chars.charAt(Math.floor(Math.random() * chars.length)); }).join('')
 }
 
 module.exports = router

@@ -12,7 +12,7 @@ router.post('/', async (req, res, next) => {
   console.log(`Authenticating user with email: ${req.body.email};\npassword: ${req.body.password}`)
   let found
   try {
-    found = await (await db.users.find({email})).toArray()
+    found = await (await db.users().find({email})).toArray()
     console.log(found)
   } catch (err) {
     console.log(`ERROR: ${err}`)
@@ -21,7 +21,7 @@ router.post('/', async (req, res, next) => {
   if (found.length) {
     if (email === found[0].email && bcrypt.compareSync(clearPassword, found[0].password)) {
       console.log(' -> Authenticated!\n')
-      return res.json({user: btoa(JSON.stringify({email, firstName: found[0].firstName, surname: found[0].surname})), token: jwt.sign(found[0], jwtSecret)})
+      return res.json({user: btoa(JSON.stringify({email, firstName: found[0].firstName, surname: found[0].surname, profileId: found[0].profileId})), token: jwt.sign(found[0], jwtSecret)})
     }
   }
   const message = 'Invalid credentials'

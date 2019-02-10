@@ -57,7 +57,7 @@ export class ProfileBtn extends Component {
             <div className='content'>
               <div className='menu'>
                 <div className={'menu-list ' + styles.profileMenuItems}>
-                  <div><a>{literals.settings}</a></div>
+                  <div onClick={this.toggleShowProfileMenu}><Link to={`/profile/${this.state.user.profileId}`}>{literals.viewProfile}</Link></div>
                   <div><Link to='/login' onClick={this.toggleShowProfileMenu}>{literals.logout}</Link></div>
                 </div>
               </div>

@@ -16,5 +16,9 @@ export const literals = getLangLiterals({
   noResultsFound: {
     en: `No results found`,
     es: `No encontramos ningun resultado`
+  },
+  viewProfile: {
+    en: `View Profile`,
+    es: `Ver perfil`
   }
 })

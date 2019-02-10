@@ -5,9 +5,9 @@ export const literals = getLangLiterals({
     en: 'My Profile',
     es: 'Mi perfil'
   },
-  settings: {
-    en: 'Settings',
-    es: 'Configuración'
+  viewProfile: {
+    en: 'View Profile',
+    es: 'Ver perfil'
   },
   logout: {
     en: 'Logout',

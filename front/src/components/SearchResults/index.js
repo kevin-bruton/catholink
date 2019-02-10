@@ -1,5 +1,5 @@
 import React from 'react'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {get as getRequest} from '@services/request'
 import {subscribeStatus, unsubscribeStatus, getStatus, statusType} from '@status'
 
@@ -49,7 +49,13 @@ export class SearchResults extends React.Component {
                   ? <table className='table'>
                       <thead><tr><th>{literals.firstName}</th><th>{literals.surname}</th></tr></thead>
                       <tbody>
-                        {this.state.searchResults.map((person, index) => <tr key={index}><td>{person.firstName}</td><td>{person.surname}</td></tr>)}
+                        {this.state.searchResults.map((person, index) => 
+                          <tr key={index}>
+                            <td>{person.firstName}</td>
+                            <td>{person.surname}</td>
+                            <td><Link to={`/profile/${person.profileId}`}><button className='button is-link is-small'>{literals.viewProfile}</button></Link></td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   : '---- ' + literals.noResultsFound + ' ----'}
