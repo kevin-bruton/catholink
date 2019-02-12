@@ -7,6 +7,7 @@ const { getGospel, setGospel } = require('@gospel')
 const { getUserByName, getUserByProfileId } = require('@db/users/search')
 const { updateProfile } = require('@db/users/profile')
 const atob = require('atob')
+const dummyGospel = require('@gospel/dummy')
 
 router.use(authorizeApi)
 
@@ -47,9 +48,13 @@ router.post('/gospel', async (req, res) => {
   let gospel = getGospel()
   if (!gospel.text) {
     console.log('Gospel not found. Fetching...')
-    const data = await getRequest(`https://publication.evangelizo.ws/${lang}/days/${req.body.date}`)
-    const gospelIdx = data.data.readings.length - 1
-    gospel = { text: (data.data || {}).readings[gospelIdx].text, title: data.data.readings[gospelIdx].title }
+    if (process.env.CATHOLINK_SERVER_MODE === 'DEV') {
+      gospel = dummyGospel
+    } else {
+      const data = await getRequest(`https://publication.evangelizo.ws/${lang}/days/${req.body.date}`)
+      const gospelIdx = data.data.readings.length - 1
+      gospel = { text: (data.data || {}).readings[gospelIdx].text, title: data.data.readings[gospelIdx].title }
+    }
     console.log('Going to set gospel')
     setGospel(gospel)
   } else console.log('Gospel found. Dont have to fetch')

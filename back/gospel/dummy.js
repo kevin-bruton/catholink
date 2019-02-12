@@ -1,0 +1,4 @@
+module.exports = {
+  text: "[[Mt 10,17]]Jesus said to His disciples: \"Beware of men, for they will hand you over to courts and scourge you in their synagogues,\n[[Mt 10,18]]and you will be led before governors and kings for my sake as a witness before them and the pagans.\n[[Mt 10,19]]When they hand you over, do not worry about how you are to speak or what you are to say. You will be given at that moment what you are to say.\n[[Mt 10,20]]For it will not be you who speak but the Spirit of your Father speaking through you.\n[[Mt 10,21]]Brother will hand over brother to death, and the father his child; children will rise up against parents and have them put to death.\n[[Mt 10,22]]You will be hated by all because of my name, but whoever endures to the end will be saved.\"",
+  title: "Holy Gospel of Jesus Christ according to Saint Matthew"
+}
