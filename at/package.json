@@ -1,0 +1,16 @@
+{
+  "name": "acceptance-tests",
+  "version": "1.0.0",
+  "description": "Acceptance Tests",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js -p profile"
+  },
+  "author": "Kevin Bruton",
+  "license": "ISC",
+  "dependencies": {
+    "cucumber": "^5.1.0",
+    "cucumber-pretty": "^1.5.0",
+    "jest": "^24.1.0"
+  }
+}
