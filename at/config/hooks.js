@@ -5,7 +5,7 @@ setDefaultTimeout(15 * 1000)
 
 Before({tags: "@web", timeout: 60 * 1000}, async function () {
   // This hook will be executed before scenarios tagged with @web
-  web = await remote({
+  global.web = await remote({
     logLevel: 'error',
     path: '/wd/hub',
     capabilities: {
@@ -15,5 +15,5 @@ Before({tags: "@web", timeout: 60 * 1000}, async function () {
 })
 
 After({tags: "@web"}, async function () {
-  await web.deleteSession()
+  await global.web.deleteSession()
 })

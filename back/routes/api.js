@@ -5,7 +5,7 @@ const router = express.Router()
 const { getRequest } = require('@request')
 const { getGospel, setGospel } = require('@gospel')
 const { getUserByName, getUserByProfileId } = require('@db/users/search')
-const { updateProfile } = require('@db/users/profile')
+const { updateProfile, updateAvatar } = require('@db/users/profile')
 const atob = require('atob')
 const dummyGospel = require('@gospel/dummy')
 
@@ -27,6 +27,12 @@ router.get('/user', (req, res) => {
 
 router.post('/profile/update', async (req, res) => {
   await updateProfile(req.body.email, req.body.profile)
+  res.status(200).end()
+})
+
+router.post('/profile/avatar', async (req, res) => {
+  console.log('Received request to update avatar...')
+  await updateAvatar(req.body.email, req.body.avatar)
   res.status(200).end()
 })
 
