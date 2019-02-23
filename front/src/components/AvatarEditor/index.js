@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import AvatarEdit from 'react-avatar-edit'
 import {post as postRequest} from '@services/request'
 import { literals } from './literals';
@@ -54,7 +53,7 @@ export class AvatarEditor extends React.Component {
           <div className='box'>
             <h2 className='title is-4'>{literals.title}</h2>
             <div className='columns'>
-              <div className='column'>
+              <div id='avatarEdit' className='column'>
                 <AvatarEdit
                   width={200}
                   height={200}
@@ -65,7 +64,7 @@ export class AvatarEditor extends React.Component {
                 />
               </div>
               <div className='column'>
-                {this.state.preview && <img src={this.state.preview} alt="Preview" />}
+                {this.state.preview && <img id='avatarPreview' src={this.state.preview} alt="Preview" />}
               </div>
             </div>
             <div>

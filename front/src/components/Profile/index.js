@@ -1,8 +1,7 @@
 import styles from './styles.scss'
 import React from 'react'
-// import { Link } from 'react-router-dom'
 import {get as getRequest, post as postRequest} from '@services/request'
-import {subscribeStatus, unsubscribeStatus, getStatus, statusType} from '@status'
+import {getStatus, statusType} from '@status'
 import {AvatarEditor} from '@components/AvatarEditor'
 
 import { literals } from './literals'
@@ -68,21 +67,21 @@ export class Profile extends React.Component {
     const AVATAR_EDITOR_MODAL =
       <AvatarEditor email={this.state.currentUser.email} photo={this.state.avatar} closeEvent={this.toggleShowAvatarEditorModal} />
     const SHOW_AVATAR =
-      <a onClick={this.toggleShowAvatarEditorModal}>
+      <a id='showAvatar' onClick={this.toggleShowAvatarEditorModal}>
         <div className={'box ' + styles.limitWidth}>
-          <img src={this.state.avatar} />
+          <img src={this.state.avatar} alt='avatar' />
         </div>
         <i className={'far fa-edit ' + styles.separate} />
       </a>
     const ADD_AVATAR =
-      <div onClick={this.toggleShowAvatarEditorModal}>
+      <a id='addAvatar' onClick={this.toggleShowAvatarEditorModal}>
         <div className={'box ' + styles.limitWidth}>
           <i className='fas fa-user fa-4x' alt='users foto' />
         </div>
         <i className={'fas fa-edit ' + styles.separate} />
-      </div>
+      </a>
     const CURRENT_USER_DATA =
-      <div>
+      <div id='currentUserProfile'>
         <h2 className='title is-4'>{literals.myProfile}</h2>
         { this.state.showAvatarEditorModal ? AVATAR_EDITOR_MODAL : this.state.avatar ? SHOW_AVATAR : ADD_AVATAR }
         <table className='table'>
@@ -103,7 +102,7 @@ export class Profile extends React.Component {
         <button className={`button is-link ${styles.separate} ${(this.state.changed ? '' : styles.hide)}`} onClick={this.save} >{literals.save}</button>
       </div>
     const OTHER_USER_DATA =
-      <div>
+      <div id='otherUserProfile'>
         <h2 className='title is-4'>{literals.profileOf(`${this.state.userProfile.firstName} ${this.state.userProfile.surname}`)}</h2>
         <p>---- Have to display other user data here ----</p>
       </div>

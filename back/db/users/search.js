@@ -34,7 +34,7 @@ const getUserByEmail = async email => {
 const getUserByProfileId = async profileId => {
   try {
     const found = await (await db.users().find({profileId}).project({_id: 0, password: 0}).toArray())
-    console.log('Search by profileId', profileId, '& found:', found)
+    console.log('Search by profileId', profileId, '& found')
     return !!found.length && found[0]
   } catch (err) {
     console.log('ERROR trying to get user by profileId db.users().find', err)

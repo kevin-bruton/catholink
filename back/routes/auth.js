@@ -9,11 +9,10 @@ const btoa = require('btoa')
 router.post('/', async (req, res, next) => {
   const clearPassword = req.body.password
   const email = req.body.email
-  console.log(`Authenticating user with email: ${req.body.email};\npassword: ${req.body.password}`)
+  console.log(`Authenticating user with email: ${req.body.email}; password: ${req.body.password}`)
   let found
   try {
     found = await (await db.users().find({email})).toArray()
-    console.log(found)
   } catch (err) {
     console.log(`ERROR: ${err}`)
     return res.json({ error: 'Server error' })
@@ -21,7 +20,8 @@ router.post('/', async (req, res, next) => {
   if (found.length) {
     if (email === found[0].email && bcrypt.compareSync(clearPassword, found[0].password)) {
       console.log(' -> Authenticated!\n')
-      return res.json({user: btoa(JSON.stringify({email, firstName: found[0].firstName, surname: found[0].surname, profileId: found[0].profileId})), token: jwt.sign(found[0], jwtSecret)})
+      const basicUserInfo = {email, firstName: found[0].firstName, surname: found[0].surname, profileId: found[0].profileId}
+      return res.json({user: btoa(JSON.stringify(basicUserInfo)), token: jwt.sign(basicUserInfo, jwtSecret)})
     }
   }
   const message = 'Invalid credentials'
