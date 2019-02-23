@@ -11,6 +11,7 @@
   "dependencies": {
     "@wdio/selenium-standalone-service": "^5.4.14",
     "@wdio/sync": "^5.4.14",
+    "atob": "^2.1.2",
     "cucumber": "^5.1.0",
     "cucumber-pretty": "^1.5.0",
     "jest": "^24.1.0",
