@@ -27,9 +27,9 @@ export class CathApp extends Component {
               <Route path='/signupvalidate' component={SignUpValidate} />
             </Switch>
           </div>
-          <div className='column is-2'>
+          {/* <div className='column is-2'>
             <PublicityPanel />
-          </div>
+          </div> */}
         </div>
       </div>
     )

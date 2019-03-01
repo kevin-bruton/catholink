@@ -5,8 +5,7 @@ const router = express.Router()
 const { getRequest } = require('@request')
 const { getGospel, setGospel } = require('@gospel')
 const { getUserByName, getUserByProfileId } = require('@db/users/search')
-const { updateProfile, updateAvatar } = require('@db/users/profile')
-const atob = require('atob')
+const { updateVisibility, updateProfile, updateAvatar } = require('@db/users/profile')
 const dummyGospel = require('@gospel/dummy')
 
 router.use(authorizeApi)
@@ -23,6 +22,11 @@ router.get('/validate', (req, res) => {
 
 router.get('/user', (req, res) => {
   res.send()
+})
+
+router.post('/visibility/update', async (req, res) => {
+  await updateVisibility(req.body.email, req.body.visibility)
+  res.status(200).end()
 })
 
 router.post('/profile/update', async (req, res) => {

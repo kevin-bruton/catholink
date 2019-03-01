@@ -1,5 +1,17 @@
 const db = require('@db')
 
+const updateVisibility = async (email, visibility) => {
+  try {
+    console.log('Trying to update visibility with email', email)
+    email && visibility && await db.users().updateOne({email}, {$set: {visibility}})
+    console.log('OK\n')
+    return {}
+  } catch (err) {
+    console.log('ERROR trying to update user profile visibility settings db.users().updateOne', err)
+    return {error: 'DB failure'}
+  }
+}
+
 const updateProfile = async (email, profile) => {
   try {
     console.log('Trying to update profile with email', email, '\n  and profile', profile)
@@ -25,6 +37,7 @@ const updateAvatar = async (email, avatar) => {
 }
 
 module.exports = {
+  updateVisibility,
   updateProfile,
   updateAvatar
 }

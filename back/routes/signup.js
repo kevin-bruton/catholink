@@ -89,8 +89,18 @@ async function registerUser (user) {
       telephone: '',
       photoUrl: '',
       workPlace: '',
+      parish: '',
       password: user.hashedPassword,
-      status: 'active'
+      status: 'active',
+      visibility: {
+        profile: 'public',
+        parish: 'members',
+        workPlace: 'members',
+        email: 'contacts',
+        address: 'private',
+        mobile: 'private',
+        telephone: 'private',
+      }
     })
   } catch (err) {
     console.log('ERROR trying in registerUser trying db.signUp().updateOne and db.user.insertOne', err)

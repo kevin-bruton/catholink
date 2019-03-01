@@ -5,9 +5,21 @@ export const literals = getLangLiterals({
     en: 'My Profile',
     es: 'Mi perfil'
   },
+  profile: {
+    en: 'Profile',
+    es: 'Perfil'
+  },
+  parish: {
+    en: 'Parish',
+    es: 'Parroquia'
+  },
   email: {
     en: 'Email',
     es: 'Correo electrónico'
+  },
+  address: {
+    en: 'Address',
+    es: 'Dirección'
   },
   address1: {
     en: 'Address line 1',
@@ -45,24 +57,32 @@ export const literals = getLangLiterals({
     en: 'Upload new profile photo',
     es: 'Subir una nueva foto de perfil'
   },
-  Private: {
+  private: {
     en: 'Private',
     es: 'Privado'
   },
-  Contacts: {
+  contacts: {
     en: 'My Contacts',
     es: 'Mis contactos'
   },
-  Members: {
+  members: {
     en: 'Members',
     es: 'Miembros'
   },
-  Public: {
+  public: {
     en: 'Anyone',
     es: 'Cualquiera'
   },
   privacyOptions: {
     en: 'Select the level of visibility you want to give to each item',
     es: 'Seleccione el nivel de visibilidad que quieras fijar para cada ítem'
+  },
+  myInfo: {
+    en: 'My Info',
+    es: 'Mis datos'
+  },
+  visibilitySettings: {
+    en: 'My visibility settings',
+    es: 'Configuración de visibilidad'
   }
 })
