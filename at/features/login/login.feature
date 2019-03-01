@@ -6,9 +6,9 @@ Feature: login
     Then I am on the "Home" page
 
   Scenario: Login as a user with a condition
-    When I login as user with condition "Registered"
+    When I login as user with "ProfilePhotoSet"
     Then I am on the "Home" page
 
   Scenario: Login as a user with more than one condition
-    When I login as user with conditions "Registered, NoProfilePhotoSet"
+    When I login as user with "Registered, NoProfilePhotoSet"
     Then I am on the "Home" page

@@ -1,52 +1,24 @@
 const atob = require('atob')
+const users = require('./userList')
 
 module.exports = {
+  getRegisteredUser,
   getUserWithName,
-  getUserWithCondition,
   getUserWithConditions
 }
 
 const possibleConditions = [
-  'Registered',
   'ProfilePhotoSet',
   'NoProfilePhotoSet',
   'WorkplaceNotSet'
 ]
 
-const users = [
-  {
-    name: 'test1',
-    firstName: 'Kevin',
-    surname: 'Bruton',
-    email: 'kevin.jose.bs@gmail.com',
-    password: 'R2lsYmVyMDA=',
-    profileId: 'kevin.bruton-xz8ty5j8',
-    conditions: [
-      'Registered',
-      'ProfilePhotoSet'
-    ]
-  },
-  {
-    name: 'test2',
-    firstName: 'Joe',
-    surname: 'Blow',
-    email: 'joe.blow@gmail.com',
-    password: 'R2lsYmVyMDA=',
-    profileId: 'joe.blow-xz8ty5j8',
-    conditions: [
-      'Registered',
-      'NoProfilePhotoSet',
-      'WorkplaceNotSet'
-    ]
-  }
-]
+function getRegisteredUser () {
+  return transform(users.find(user => user.conditions.includes('Registered')))
+}
 
 function getUserWithName (name) {
   return transform(users.find(user => user.name === name))
-}
-
-function getUserWithCondition (condition) {
-  return transform(users.find(user => user.conditions.includes(condition)))
 }
 
 function getUserWithConditions (conditions) {

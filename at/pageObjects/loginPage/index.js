@@ -1,19 +1,19 @@
 module.exports = {
+  login,
   loginAsUserWithName,
-  loginAsUserWithCondition,
   loginAsUserWithConditions,
 }
 
-const {getUserWithName, getUserWithCondition, getUserWithConditions} = require('../../users')
+const {getRegisteredUser, getUserWithName, getUserWithConditions} = require('../../users')
 const {checkOnHomePage} = require('../homePage')
 
-async function loginAsUserWithName (name) {
-  const user = getUserWithName(name)
+async function login () {
+  const user = getRegisteredUser()
   await loginAsUser(user)
 }
 
-async function loginAsUserWithCondition (condition) {
-  const user = getUserWithCondition(condition)
+async function loginAsUserWithName (name) {
+  const user = getUserWithName(name)
   await loginAsUser(user)
 }
 

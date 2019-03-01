@@ -12,6 +12,7 @@ Before({tags: "@web", timeout: 60 * 1000}, async function () {
         browserName: 'chrome'
     }
   })
+  global.web.maximizeWindow()
 })
 
 After({tags: "@web"}, async function () {
