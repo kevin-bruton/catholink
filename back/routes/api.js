@@ -4,7 +4,7 @@ const express = require('express')
 const router = express.Router()
 const { getRequest } = require('@request')
 const { getGospel, setGospel } = require('@gospel')
-const { getUserByName, getUserByProfileId } = require('@db/users/search')
+const { userSearch, getUserByProfileId } = require('@db/users/search')
 const { updateVisibility, updateProfile, updateAvatar } = require('@db/users/profile')
 const dummyGospel = require('@gospel/dummy')
 
@@ -47,8 +47,7 @@ router.get('/profile/:profileId', async (req, res) => {
 })
 
 router.get('/search', async (req, res) => {
-  console.log('search', req.query.text)
-  const searchResults = await getUserByName(req.query.text)
+  const searchResults = await userSearch({requestingUser: req.requestingUser, searchText: req.query.text})
   res.send({searchResults})
 })
 
@@ -79,7 +78,8 @@ async function authorizeApi (req, res, next) {
     const token = bearer.slice('Bearer '.length)
     if (token) {
       try {
-        jwt.verify(token, privateKey)
+        const decoded = jwt.verify(token, privateKey)
+        req.requestingUser = decoded.email
         console.log('authorizeApi: Token verified\n')
         return next()
       } catch (err) {

@@ -3,7 +3,7 @@ import styles from './styles.scss'
 import { Route, Switch, withRouter } from 'react-router-dom'
 import { Home, Login, About, Header, NavMenu, WidgetPanel, PublicityPanel, SignUp, SearchResults, Profile } from '@components'
 import { PrivateRoute } from './PrivateRoute'
-import { SignUpValidate } from '../SignUpValidate';
+import { SignUpValidate } from '../SignUpValidate'
 
 export class CathApp extends Component {
   render () {

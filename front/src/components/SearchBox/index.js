@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { literals } from './literals'
-import {getStatus, statusType, subscribeStatus, unsubscribeStatus, loginStatus, setStatus} from '@status'
+import {getStatus, statusType, subscribeStatus, unsubscribeStatus, loginStatus} from '@status'
 
 export class SearchBox extends Component {
   constructor (props) {
@@ -34,19 +34,19 @@ export class SearchBox extends Component {
   }
 
   searchClicked () {
-    setStatus(statusType.SEARCH_TEXT, this.state.searchText)
+    document.querySelector('body').dispatchEvent(new window.CustomEvent('search', {detail: this.state.searchText}))
   }
 
   render () {
     return (
-      <div className="field has-addons">
-        <div className="control">
-          <input className="input" type="text" name='searchText' placeholder={literals.search} onChange={this.searchTextChange}/>
+      <div className='field has-addons'>
+        <div className='control'>
+          <input className='input' type='text' name='searchText' placeholder={literals.search} onChange={this.searchTextChange}/>
         </div>
-        <div className="control">
+        <div className='control'>
           <Link to={'/searchresults?text=' + this.state.searchText}>
-            <span className="button is-link is-dark" onClick={this.searchClicked}>
-              <i className='fas fa-search'></i>
+            <span className='button is-link is-dark' onClick={this.searchClicked}>
+              <i className='fas fa-search' />
             </span>
           </Link>
         </div>

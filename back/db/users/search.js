@@ -7,8 +7,8 @@ const getUserByName = async searchText => {
       .find(
         {$or:
           [
-            {"firstName" : {$regex: new RegExp(searchText)}},
-            {"surname": {$regex: new RegExp(searchText)}}
+            {firstName: {$regex: new RegExp(searchText)}},
+            {surname: {$regex: new RegExp(searchText)}}
           ]
         }
       )
@@ -18,6 +18,35 @@ const getUserByName = async searchText => {
     console.log('ERROR trying to find searchText db.users().find:', err)
     return {error: 'DB failure'}
   }
+  return found
+}
+
+const userSearch = async (search) => {
+  console.log('requestingUser:', search.requestingUser, 'searchText:', search.searchText)
+  // requestingUser is the email of the requesting user
+  // get users with visibility.profile public,
+  // and users with visibility.profile members,
+  // and users with visibility.profile contacts that contains requestingUser
+  let found
+  try {
+    found = await (await db.users()
+      .find(
+        {$and: [
+          {$or: [
+            {'visibility.profile': 'public'},
+            {'visibility.profile': 'members'},
+            {$and: [{'visibility.profile': 'contacts'}, {contacts: search.requestingUser}]}
+          ]},
+          {$or: [{firstName: {$regex: new RegExp(search.searchText)}}, {surname: {$regex: new RegExp(search.searchText)}}]}
+        ]}
+      )
+      .project({_id: 0, password: 0, avatar: 0}))
+      .toArray()
+  } catch (err) {
+    console.log('ERROR trying to find searchText db.users().find:', err)
+    return {error: 'DB failure'}
+  }
+  console.log(found)
   return found
 }
 
@@ -53,6 +82,7 @@ const profileIdExists = async profileId => {
 
 module.exports = {
   getUserByName,
+  userSearch,
   getUserByEmail,
   getUserByProfileId,
   profileIdExists

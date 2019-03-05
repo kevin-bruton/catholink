@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import {get as getRequest} from '@services/request'
-import {subscribeStatus, unsubscribeStatus, getStatus, statusType} from '@status'
 
 import { literals } from './literals'
 
@@ -12,14 +11,22 @@ export class SearchResults extends React.Component {
       searchText: null,
       searchResults: []
     }
+    this.body = document.querySelector('body')
     this.searchTextChange = this.searchTextChange.bind(this)
+    this.locationChange = this.locationChange.bind(this)
   }
 
   componentDidMount () {
-    this.setState({searchText: getStatus(statusType.SEARCH_TEXT)}, async () => {
-      subscribeStatus(statusType.SEARCH_TEXT, 'SearchResults', this.searchTextChange)
-      await this.getSearchResults()
-    })
+    this.body.addEventListener('search', this.locationChange, false)
+    this.setState({searchText: window.location.search.split('=')[1]}, this.getSearchResults)
+  }
+
+  componentWillUnmount () {
+    this.body.removeEventListener('search', this.locationChange)
+  }
+
+  locationChange (e) {
+    this.setState({searchText: e.detail}, this.getSearchResults)
   }
 
   async getSearchResults () {
@@ -27,17 +34,12 @@ export class SearchResults extends React.Component {
     this.setState({searchResults: resp.searchResults})
   }
 
-  componentWillUnmount () {
-    unsubscribeStatus(statusType.SEARCH_TEXT, 'SearchResults')
-  }
-
   searchTextChange (newValue) {
-    this.setState({searchText: newValue}, async () => {
-      await this.getSearchResults()
-    })
+    this.setState({searchText: newValue}, this.getSearchResults)
   }
 
   render () {
+    console.log('rerender')
     return (
       <div id='SearchResultsPage' className='col-md-6 col-md-offset-3'>
         <h2 id='pageTitle' className='title is-3 '>{literals.searchResults + (this.state.searchText ? ' "' + this.state.searchText + '"' : '')}</h2>
@@ -47,17 +49,17 @@ export class SearchResults extends React.Component {
               <div className='has-text-centered'>
                 {this.state.searchResults.length
                   ? <table className='table'>
-                      <thead><tr><th>{literals.firstName}</th><th>{literals.surname}</th></tr></thead>
-                      <tbody>
-                        {this.state.searchResults.map((person, index) => 
-                          <tr key={index}>
-                            <td>{person.firstName}</td>
-                            <td>{person.surname}</td>
-                            <td><Link to={`/profile/${person.profileId}`}><button className='button is-link is-small'>{literals.viewProfile}</button></Link></td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
+                    <thead><tr><th>{literals.firstName}</th><th>{literals.surname}</th></tr></thead>
+                    <tbody>
+                      {this.state.searchResults.map((person, index) =>
+                        <tr key={index}>
+                          <td>{person.firstName}</td>
+                          <td>{person.surname}</td>
+                          <td><Link to={`/profile/${person.profileId}`}><button className='button is-link is-small'>{literals.viewProfile}</button></Link></td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
                   : '---- ' + literals.noResultsFound + ' ----'}
               </div>
             </div>
