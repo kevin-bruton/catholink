@@ -31,9 +31,9 @@ router.post('/init', async (req, res) => {
     const code = generateCode(codeLength)
     let signUpNowStarted
     if (startedSignUp) { // Sign up process started previously
-      signUpNowStarted = await restartSignUp (firstName, surname, email, hashedPassword, code)
+      signUpNowStarted = await restartSignUp(firstName, surname, email, hashedPassword, code)
     } else {
-      signUpNowStarted = await startSignUp (firstName, surname, email, hashedPassword, code)
+      signUpNowStarted = await startSignUp(firstName, surname, email, hashedPassword, code)
     }
     if (signUpNowStarted) {
       const sentEmail = await sendEmail(email, getSubject(lang), getMessage(lang, firstName, code))
@@ -74,7 +74,7 @@ router.get('/validate', async (req, res) => {
 async function registerUser (user) {
   const profileId = await getProfileId(user)
   try {
-    await db.signUp().updateOne({email: user.email}, {$set:{status: 'registered'}})
+    await db.signUp().updateOne({email: user.email}, {$set: {status: 'registered'}})
     await db.users().insertOne({
       firstName: user.firstName,
       surname: user.surname,
@@ -112,7 +112,8 @@ async function registerUser (user) {
 async function getProfileId (user) {
   const codeLength = 8
   const nameStr = standardize(removeSpaces(`${user.firstName}.${user.surname}`)).toLowerCase()
-  let profileId, profileIdAlreadyExists = false
+  let profileId
+  let profileIdAlreadyExists = false
   do {
     profileId = `${nameStr}-${generateCode(codeLength)}`
     profileIdAlreadyExists = await profileIdExists(profileId)
@@ -136,8 +137,8 @@ async function hasStartedSignUp (email) {
   try {
     found = await (await db.signUp().find({email})).toArray()
   } catch (err) {
-      console.log(`ERROR db.signUp().find ${email}: ${err}`)
-      return {error: 'Server error'}
+    console.log(`ERROR db.signUp().find ${email}: ${err}`)
+    return {error: 'Server error'}
   }
   return !!found[0]
 }
@@ -162,7 +163,7 @@ async function startSignUp (firstName, surname, email, hashedPassword, code) {
   } catch (err) {
     console.log(`ERROR trying to insertOne in db.signup: ${err}`)
     return false
-  } 
+  }
 }
 
 async function recordEmailFailureStatus (email) {
@@ -181,16 +182,16 @@ async function recordEmailSentStatus (email) {
   }
 }
 
-function getSubject(lang) {
+function getSubject (lang) {
   let subject
-  switch(lang) {
+  switch (lang) {
     case 'es': subject = 'Bienvenido a Catholink'; break
     default: subject = 'Welcome to Catholink'; break
   }
   return subject
 }
 
-function getMessage(lang, firstName, code) {
+function getMessage (lang, firstName, code) {
   const message = getLiterals(lang)
   return `
 ${message.greeting} ${firstName}!<br><br>

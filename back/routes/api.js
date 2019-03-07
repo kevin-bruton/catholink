@@ -4,7 +4,7 @@ const express = require('express')
 const router = express.Router()
 const { getRequest } = require('@request')
 const { getGospel, setGospel } = require('@gospel')
-const { userSearch, getUserByProfileId } = require('@db/users/search')
+const { userSearch, getMyProfile, getAnothersProfile } = require('@db/users/search')
 const { updateVisibility, updateProfile, updateAvatar } = require('@db/users/profile')
 const dummyGospel = require('@gospel/dummy')
 
@@ -25,29 +25,31 @@ router.get('/user', (req, res) => {
 })
 
 router.post('/visibility/update', async (req, res) => {
-  await updateVisibility(req.body.email, req.body.visibility)
+  await updateVisibility(req.profileId, req.body.visibility)
   res.status(200).end()
 })
 
 router.post('/profile/update', async (req, res) => {
-  await updateProfile(req.body.email, req.body.profile)
+  await updateProfile(req.profileId, req.body.profile)
   res.status(200).end()
 })
 
 router.post('/profile/avatar', async (req, res) => {
   console.log('Received request to update avatar...')
-  await updateAvatar(req.body.email, req.body.avatar)
+  await updateAvatar(req.profileId, req.body.avatar)
   res.status(200).end()
 })
 
 router.get('/profile/:profileId', async (req, res) => {
-  const profileId = req.params.profileId
-  const user = await getUserByProfileId(profileId)
-  res.send(user)
+  const requestedProfileId = req.params.profileId
+  const profile = (requestedProfileId === req.profileId)
+    ? await getMyProfile(requestedProfileId)
+    : await getAnothersProfile(req.profileId, requestedProfileId)
+  res.send(profile)
 })
 
 router.get('/search', async (req, res) => {
-  const searchResults = await userSearch({requestingUser: req.requestingUser, searchText: req.query.text})
+  const searchResults = await userSearch({requestingUser: req.profileId, searchText: req.query.text})
   res.send({searchResults})
 })
 
@@ -79,7 +81,8 @@ async function authorizeApi (req, res, next) {
     if (token) {
       try {
         const decoded = jwt.verify(token, privateKey)
-        req.requestingUser = decoded.email
+        req.email = decoded.email
+        req.profileId = decoded.profileId
         console.log('authorizeApi: Token verified\n')
         return next()
       } catch (err) {

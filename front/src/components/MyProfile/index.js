@@ -1,6 +1,6 @@
+import {get as getRequest, post as postRequest} from '@services/request'
 import styles from './styles.scss'
 import React from 'react'
-import {get as getRequest, post as postRequest} from '@services/request'
 import {getStatus, statusType} from '@status'
 import {AvatarEditor} from '@components/AvatarEditor'
 
@@ -11,9 +11,12 @@ export class MyProfile extends React.Component {
     super(props)
     this.state = {
       currentUser: getStatus(statusType.USER),
-      userProfile: this.props.userProfile,
-      avatar: this.props.avatar,
-      visibility: this.props.visibility,
+      userProfile: null,
+      avatar: null,
+      contacts: [],
+      groups: [],
+      posts: [],
+      visibility: null,
       editable: false,
       dataChanged: false,
       visibilityChanged: false,
@@ -28,11 +31,11 @@ export class MyProfile extends React.Component {
     this.radioSelected = this.radioSelected.bind(this)
     this.selectTab = this.selectTab.bind(this)
   }
-  
-  componentDidUpdate(prevProps) {
-    ;(this.props.avatar !== prevProps.avatar) && this.setState({avatar: this.props.avatar})
-    ;(this.props.visibility !== prevProps.visibility) && this.setState({visibility: this.props.visibility})
-    ;(this.props.userProfile !== prevProps.userProfile) && this.setState({userProfile: this.props.userProfile})
+
+  async componentDidMount () {
+    const profile = await getRequest(`profile/${this.state.currentUser.profileId}`)
+    const {visibility, avatar, contacts, posts, groups, ...userProfile} = profile
+    this.setState({visibility, avatar, contacts, posts, groups, userProfile})
   }
 
   toggleEditable () {
@@ -40,7 +43,7 @@ export class MyProfile extends React.Component {
   }
 
   textFieldChanged (e) {
-    this.setState({dataChanged: true, userProfile: Object.assign(this.state.userProfile,{[e.target.name]: e.target.value})})
+    this.setState({dataChanged: true, userProfile: Object.assign({}, this.state.userProfile, {[e.target.name]: e.target.value})})
   }
 
   radioSelected (e) {
@@ -49,7 +52,7 @@ export class MyProfile extends React.Component {
 
   async saveData () {
     this.setState({dataChanged: false, editable: false})
-    await postRequest('profile/update', {email: this.state.currentUser.email, profile: this.state.userProfile})
+    await postRequest('profile/update', {profile: this.state.userProfile})
   }
 
   async saveVisibility () {
@@ -69,8 +72,8 @@ export class MyProfile extends React.Component {
 
   render () {
     const privacyOptions = ['public', 'members', 'contacts', 'private']
-    const fields = Object.keys(this.state.userProfile)
-    const visibilityFields = Object.keys(this.state.visibility)
+    const fields = this.state.userProfile && Object.keys(this.state.userProfile)
+    const visibilityFields = this.state.visibility && Object.keys(this.state.visibility)
     const AVATAR_EDITOR_MODAL =
       <AvatarEditor email={this.state.currentUser.email} photo={this.state.avatar} closeEvent={this.toggleShowAvatarEditorModal} />
     const SHOW_AVATAR =
@@ -85,7 +88,7 @@ export class MyProfile extends React.Component {
       <div id='InfoTab'>
         <table className='table is-fullwidth'>
           <tbody>
-            {fields.map(field =>
+            {fields && fields.map(field =>
               <tr key={field}>
                 <td>{literals[field]}:</td>
                 <td>
@@ -100,7 +103,7 @@ export class MyProfile extends React.Component {
         <button className='button is-link' onClick={this.toggleEditable}>{literals.edit}</button> 
         <button className={`button is-link ${styles.separate} ${(this.state.dataChanged ? '' : styles.hide)}`} onClick={this.saveData} >{literals.save}</button>
       </div>
-    const VISIBILITY_TAB =  
+    const VISIBILITY_TAB =
       <div id='VisibilityTab'>
         <div className='columns'>
           <div className='column is-half is-offset-one-quarter'>
@@ -108,12 +111,12 @@ export class MyProfile extends React.Component {
             <table className='table' align='center'>
               <thead>
                 <tr>
-                  <th></th>
+                  <th />
                   {privacyOptions.map(privacyOption => <th key={privacyOption} className='is-size-7'>{literals[privacyOption]}</th>)}
                 </tr>
               </thead>
               <tbody>
-                {visibilityFields.map(field =>
+                {visibilityFields && visibilityFields.map(field =>
                   <tr key={field}>
                     <td>{literals[field]}:</td>
                     {privacyOptions.map(privacyOption =>

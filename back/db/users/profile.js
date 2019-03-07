@@ -1,9 +1,9 @@
 const db = require('@db')
 
-const updateVisibility = async (email, visibility) => {
+const updateVisibility = async (profileId, visibility) => {
   try {
-    console.log('Trying to update visibility with email', email)
-    email && visibility && await db.users().updateOne({email}, {$set: {visibility}})
+    console.log('Trying to update visibility with email', profileId)
+    profileId && visibility && await db.users().updateOne({profileId}, {$set: {visibility}})
     console.log('OK\n')
     return {}
   } catch (err) {
@@ -12,10 +12,10 @@ const updateVisibility = async (email, visibility) => {
   }
 }
 
-const updateProfile = async (email, profile) => {
+const updateProfile = async (profileId, profile) => {
   try {
-    console.log('Trying to update profile with email', email, '\n  and profile', profile)
-    email && profile && await db.users().updateOne({email}, {$set: profile})
+    console.log('Trying to update profile with profileId', profileId, '\n  and profile', profile)
+    profileId && profile && await db.users().updateOne({profileId}, {$set: profile})
     console.log('OK\n')
     return {}
   } catch (err) {
@@ -24,10 +24,10 @@ const updateProfile = async (email, profile) => {
   }
 }
 
-const updateAvatar = async (email, avatar) => {
+const updateAvatar = async (profileId, avatar) => {
   try {
-    console.log('Trying to update avatar with email', email)
-    email && avatar && await db.users().updateOne({email}, {$set: {avatar: avatar}})
+    console.log('Trying to update avatar with profileId', profileId)
+    profileId && avatar && await db.users().updateOne({profileId}, {$set: {avatar: avatar}})
     console.log('OK\n')
     return {}
   } catch (err) {

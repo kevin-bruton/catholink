@@ -39,7 +39,6 @@ export class SearchResults extends React.Component {
   }
 
   render () {
-    console.log('rerender')
     return (
       <div id='SearchResultsPage' className='col-md-6 col-md-offset-3'>
         <h2 id='pageTitle' className='title is-3 '>{literals.searchResults + (this.state.searchText ? ' "' + this.state.searchText + '"' : '')}</h2>

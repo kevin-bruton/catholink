@@ -1,6 +1,16 @@
 const db = require('@db')
 
-const getUserByName = async searchText => {
+module.exports = {
+  getUserByName,
+  userSearch,
+  getUserByEmail,
+  getUserByProfileId,
+  profileIdExists,
+  getMyProfile,
+  getAnothersProfile
+}
+
+async function getUserByName (searchText) {
   let found
   try {
     found = await (await db.users()
@@ -21,8 +31,7 @@ const getUserByName = async searchText => {
   return found
 }
 
-const userSearch = async (search) => {
-  console.log('requestingUser:', search.requestingUser, 'searchText:', search.searchText)
+async function userSearch (search) {
   // requestingUser is the email of the requesting user
   // get users with visibility.profile public,
   // and users with visibility.profile members,
@@ -46,11 +55,10 @@ const userSearch = async (search) => {
     console.log('ERROR trying to find searchText db.users().find:', err)
     return {error: 'DB failure'}
   }
-  console.log(found)
   return found
 }
 
-const getUserByEmail = async email => {
+async function getUserByEmail (email) {
   try {
     const found = await (await db.users().find({email}).project({_id: 0, password: 0}))
     return !!found.length && found[0]
@@ -60,30 +68,69 @@ const getUserByEmail = async email => {
   }
 }
 
-const getUserByProfileId = async profileId => {
+async function getUserByProfileId (profileId) {
   try {
     const found = await (await db.users().find({profileId}).project({_id: 0, password: 0}).toArray())
     console.log('Search by profileId', profileId, '& found')
     return !!found.length && found[0]
   } catch (err) {
-    console.log('ERROR trying to get user by profileId db.users().find', err)
+    console.log('ERROR trying to get user by profileId ' + profileId + ' db.users().find', err)
     return {error: 'DB failure'}
   }
 }
 
-const profileIdExists = async profileId => {
+async function getMyProfile (profileId) {
+  const profile = await getUserByProfileId(profileId)
+  const {email, joinDate, address1, address2, mobile, telephone, workPlace, avatar, visibility, posts, groups, contacts} = profile
+  return {email, joinDate, address1, address2, mobile, telephone, workPlace, avatar, visibility, posts, groups, contacts}
+}
+
+async function getAnothersProfile (requestersProfileId, requestedProfileId) {
+  function isVisible (isContact, field) {
+    return profile.visibility[field] === 'public'
+      ? true
+      : profile.visibility[field] === 'members'
+        ? true
+        : (profile.visibility[field] === 'contacts ' && isContact)
+  }
+  const profile = await getUserByProfileId(requestedProfileId)
+  if (profile.error) return profile
+  const isContact = profile.contacts.includes(requestersProfileId)
+  const profileIsVisible = isVisible(isContact, 'profile')
+  if (!profileIsVisible) {
+    return {error: 'Not visible'}
+  }
+  let visibleProfile = {
+    firstName: profile.firstName,
+    surname: profile.surname,
+    avatar: profile.avatar
+  }
+  if (isVisible(isContact, 'email')) {
+    visibleProfile = Object.assign({}, visibleProfile, {email: profile.email})
+  }
+  if (isVisible(isContact, 'address')) {
+    visibleProfile = Object.assign({}, visibleProfile, {address1: profile.address1, address2: profile.address2})
+  }
+  if (isVisible(isContact, 'mobile')) {
+    visibleProfile = Object.assign({}, visibleProfile, {mobile: profile.mobile})
+  }
+  if (isVisible(isContact, 'telephone')) {
+    visibleProfile = Object.assign({}, visibleProfile, {telephone: profile.telephone})
+  }
+  if (isVisible(isContact, 'parish')) {
+    visibleProfile = Object.assign({}, visibleProfile, {parish: profile.parish})
+  }
+  if (isVisible(isContact, 'workPlace')) {
+    visibleProfile = Object.assign({}, visibleProfile, {workPlace: profile.workPlace})
+  }
+  return visibleProfile
+}
+
+async function profileIdExists (profileId) {
   try {
     const found = await (await db.users().findOne({profileId}))
     return Boolean(found)
   } catch (err) {
     return false
   }
-} 
-
-module.exports = {
-  getUserByName,
-  userSearch,
-  getUserByEmail,
-  getUserByProfileId,
-  profileIdExists
 }

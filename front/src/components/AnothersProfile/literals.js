@@ -40,5 +40,9 @@ export const literals = getLangLiterals({
   workPlace: {
     en: 'Work place',
     es: 'Lugar de trabajo'
+  },
+  parish: {
+    en: 'Parish',
+    es: 'Parroquia'
   }
 })
