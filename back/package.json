@@ -31,7 +31,8 @@
     "express-request-language": "^1.1.15",
     "googleapis": "^36.0.0",
     "jsonwebtoken": "^8.3.0",
-    "mongodb": "^3.1.4"
+    "mongodb": "^3.1.4",
+    "socket.io": "^2.2.0"
   },
   "devDependencies": {
     "cors": "^2.8.4",

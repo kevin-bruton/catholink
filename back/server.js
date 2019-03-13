@@ -1,4 +1,4 @@
-const express = require('express')
+const app = require('express')()
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const db = require('./db')
@@ -6,11 +6,11 @@ const apiRouter = require('./routes/api')
 const frontRouter = require('./routes/front')
 const authRouter = require('./routes/auth')
 const signUpRouter = require('./routes/signup')
-
-const app = express()
+const socket = require('./socket')
 
 // For development:
 app.use(cors())
+const http = socket(app)
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -26,7 +26,7 @@ app.use('/', frontRouter)
   console.log('DB connection open')
   const PORT = 5000
 
-  const server = app.listen(PORT, () => console.log(`Server is running on PORT ${PORT}...`))
+  const server = http.listen(PORT, () => console.log(`Server is running on PORT ${PORT}...`))
 
   process.on('SIGINT', function () {
     console.log('DB connection closed')

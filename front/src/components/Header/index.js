@@ -3,7 +3,7 @@ import styles from './styles.scss'
 import { Link } from 'react-router-dom'
 import { literals } from './literals'
 import brandname from '../../assets/brandname.svg'
-import {ProfileBtn, SearchBox} from '@components'
+import {MessagesBtn, ProfileBtn, SearchBox} from '@components'
 import {getStatus, statusType, subscribeStatus, unsubscribeStatus, loginStatus} from '@status'
 
 export class Header extends Component {
@@ -43,9 +43,13 @@ export class Header extends Component {
           <div className='column'>
             <h1 className={styles.descriptiveTitle}>{literals.descriptiveTitle}</h1>
           </div>
+          <div className='column is-1'>
+            {loggedIn && <MessagesBtn />}
+          </div>
           <div className='column'>
             {loggedIn && <ProfileBtn />}
           </div>
+          <div className='column is-1' />
         </div>
       </header>
     )

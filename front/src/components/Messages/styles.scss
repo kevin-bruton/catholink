@@ -1,0 +1,52 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: 20% auto;
+  grid-gap: 1px;
+  padding: 1px;
+  margin: 40px 40px 10px 10px;
+  background-color: #a3a3a3;
+  border-radius: 10px;
+}
+
+.gridContainer > div {
+  text-align: center;
+  font-size: 1rem;
+  padding: 3px 3px;
+  background-color: #f7f7f7;
+}
+
+.gridContainer > .contactSearch {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.gridContainer > .contact {
+  grid-column: 1;
+  padding: 10px 0;
+}
+
+.gridContainer > .contactMessagingTitle {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.gridContainer > .messagesView {
+  grid-column: 2;
+  grid-row-start: 2;
+  display: grid;
+  grid-template-rows: auto 20px;
+}
+
+.messageTyper {
+  align-self: end;
+  justify-self: stretch;
+  padding: 0 5px;
+}
+
+.inputter {
+  width: 100%;
+}
+
+.separateTop {
+  margin-top: 1rem;
+}

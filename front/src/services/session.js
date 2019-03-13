@@ -1,3 +1,4 @@
+/* global atob */
 import { auth, get } from './request'
 import {statusType, setStatus} from '@status'
 

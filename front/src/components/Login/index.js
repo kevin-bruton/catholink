@@ -3,6 +3,7 @@ import { Redirect, Link } from 'react-router-dom'
 import styles from './styles.scss'
 
 import * as session from '@services/session'
+import {disconnectSocket} from '@services/socket'
 import { spinner } from '../../assets/spinner'
 import { literals } from './literals'
 import {loginStatus, statusType, subscribeStatus, unsubscribeStatus, setStatus} from '@status'
@@ -31,6 +32,7 @@ export class Login extends React.Component {
     session.logout()
     setStatus(statusType.LOGIN, loginStatus.LOGOUT)
     subscribeStatus(statusType.LOGIN, 'LoginPage', this.loginUpdated)
+    disconnectSocket()
   }
 
   componentWillUnmount () {   

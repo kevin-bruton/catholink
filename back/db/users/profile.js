@@ -1,6 +1,13 @@
 const db = require('@db')
 
-const updateVisibility = async (profileId, visibility) => {
+module.exports = {
+  updateVisibility,
+  updateProfile,
+  updateAvatar,
+  getMyContacts
+}
+
+async function updateVisibility (profileId, visibility) {
   try {
     console.log('Trying to update visibility with email', profileId)
     profileId && visibility && await db.users().updateOne({profileId}, {$set: {visibility}})
@@ -12,7 +19,7 @@ const updateVisibility = async (profileId, visibility) => {
   }
 }
 
-const updateProfile = async (profileId, profile) => {
+async function updateProfile (profileId, profile) {
   try {
     console.log('Trying to update profile with profileId', profileId, '\n  and profile', profile)
     profileId && profile && await db.users().updateOne({profileId}, {$set: profile})
@@ -24,7 +31,7 @@ const updateProfile = async (profileId, profile) => {
   }
 }
 
-const updateAvatar = async (profileId, avatar) => {
+async function updateAvatar (profileId, avatar) {
   try {
     console.log('Trying to update avatar with profileId', profileId)
     profileId && avatar && await db.users().updateOne({profileId}, {$set: {avatar: avatar}})
@@ -36,8 +43,13 @@ const updateAvatar = async (profileId, avatar) => {
   }
 }
 
-module.exports = {
-  updateVisibility,
-  updateProfile,
-  updateAvatar
+async function getMyContacts (profileId) {
+  try {
+    console.log('Getting contacts for user with profileId ', profileId)
+    const resp = await db.users().find({profileId}).project({_id: 0, contacts: 1}).toArray()
+    return resp[0].contacts
+  } catch (err) {
+    console.log('DB ERROR: trying to get contacts for user with profileId', profileId, ':', err)
+    return {error: 'DB ERROR'}
+  }
 }

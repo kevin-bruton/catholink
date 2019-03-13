@@ -5,7 +5,7 @@ const router = express.Router()
 const { getRequest } = require('@request')
 const { getGospel, setGospel } = require('@gospel')
 const { userSearch, getMyProfile, getAnothersProfile } = require('@db/users/search')
-const { updateVisibility, updateProfile, updateAvatar } = require('@db/users/profile')
+const { updateVisibility, updateProfile, updateAvatar, getMyContacts } = require('@db/users/profile')
 const dummyGospel = require('@gospel/dummy')
 
 router.use(authorizeApi)
@@ -38,6 +38,11 @@ router.post('/profile/avatar', async (req, res) => {
   console.log('Received request to update avatar...')
   await updateAvatar(req.profileId, req.body.avatar)
   res.status(200).end()
+})
+
+router.get('/profile/contacts', async (req, res) => {
+  const contacts = await getMyContacts(req.profileId)
+  res.send(contacts)
 })
 
 router.get('/profile/:profileId', async (req, res) => {
