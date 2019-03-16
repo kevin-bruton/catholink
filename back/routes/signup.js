@@ -22,7 +22,7 @@ router.post('/init', async (req, res) => {
   if (userIsRegistered) {
     return res.status(409).json({error: 'User is already registered'})
   } else { // The user isn't registered already: proceed to sign up process
-    const lang = req.cookies.language ? (req.cookies.language).substring(0,2) : 'en'
+    const lang = req.cookies.language ? (req.cookies.language).substring(0, 2) : 'en'
     const startedSignUp = await hasStartedSignUp(email)
     if (startedSignUp.error) {
       return res.status(503).json(startedSignUp.error)

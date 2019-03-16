@@ -7,6 +7,10 @@ let _dbConnection
 
 const open = async () => {
   try {
+    if (!_url) {
+      console.log(`Environment Variable 'CATHOLINK_MONGODB_URL' not defined. Exiting...`)
+      process.exit()
+    }
     _mongoConnection = await mongo.connect(_url, { useNewUrlParser: true })
   } catch (err) {
     console.log(err.stack)

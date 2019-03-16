@@ -19,6 +19,7 @@ async function loginAsUserWithName (name) {
 
 async function loginAsUserWithConditions (conditions) {
   const user = getUserWithConditions(conditions)
+  console.log('GOING TO LOGIN AS THIS USER:', user)
   await loginAsUser(user)
 }
 
@@ -33,7 +34,7 @@ async function goToLoginPage () {
   await web.url(frontDevUrl)
 }
 
-async function fillInLoginForm (email, password) {
+async function  fillInLoginForm (email, password) {
   const emailInput = await web.$('[name=email]')
   await emailInput.setValue(email)
 

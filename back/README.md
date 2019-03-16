@@ -11,3 +11,14 @@ jest-snapshot/build/utils.js
 jest-util/build/get_console_output.js
 // jest-validate/build/errors.js
 // jest-validate/build/utils.js
+
+Have to set the following environment variables:
+
+CATHOLINK_MONGODB_URI
+Value: http://localhost:27017
+
+CATHOLINK_GOOGLE_CREDENTIALS_PATH
+Value: path and filename of file where google credentials are stored
+
+CATHOLINK_GOOGLE_TOKEN_PATH
+Value: path and filename of file where google token is stored

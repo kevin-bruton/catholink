@@ -2,8 +2,14 @@ const fs = require('fs')
 const readline = require('readline')
 const {google} = require('googleapis')
 
-const GOOGLE_CREDENTIALS = JSON.parse(process.env.CATHOLINK_GOOGLE_CREDENTIALS)
-const GOOGLE_TOKEN = JSON.parse(process.env.CATHOLINK_GOOGLE_TOKEN)
+const googleCredentialsPath = process.env.CATHOLINK_GOOGLE_CREDENTIALS_PATH
+const googleTokenPath = process.env.CATHOLINK_GOOGLE_TOKEN_PATH
+if (!googleCredentialsPath || !googleTokenPath) {
+  console.log(`The environment variables 'CATHOLINK_GOOGLE_CREDENTIALS_PATH' and 'CATHOLINK_GOOGLE_TOKEN_PATH' must be set. Exiting...`)
+  process.exit()
+}
+const GOOGLE_CREDENTIALS = JSON.parse(fs.readFileSync(googleCredentialsPath))
+const GOOGLE_TOKEN = JSON.parse(fs.readFileSync(googleTokenPath))
 
 module.exports = {
   gmailClient
@@ -21,15 +27,15 @@ async function gmailClient () {
   if (!GOOGLE_CREDENTIALS) return
 
   const oAuth2Client = await setCredentials(GOOGLE_CREDENTIALS)
-  
-  return google.gmail({version: 'v1', auth: oAuth2Client});
+
+  return google.gmail({version: 'v1', auth: oAuth2Client})
 }
 
-async function setCredentials(credentials) {
-  const {client_secret, client_id, redirect_uris} = credentials.installed;
+async function setCredentials (credentials) {
+  const {clientSecret, clientId, redirectUris} = credentials.installed
   const oAuth2Client = new google.auth.OAuth2(
-      client_id, client_secret, redirect_uris[0]);
-  
+    clientId, clientSecret, redirectUris[0])
+
   let token = GOOGLE_TOKEN
   if (!token) {
     try {
@@ -49,38 +55,38 @@ async function setCredentials(credentials) {
  * @param {google.auth.OAuth2} oAuth2Client The OAuth2 client to get token for.
  * @param {getEventsCallback} callback The callback for the authorized client.
  */
-function getNewToken(oAuth2Client) {
+function getNewToken (oAuth2Client) {
   const authUrl = oAuth2Client.generateAuthUrl({
     access_type: 'offline',
-    scope: SCOPES,
-  });
-  console.log('Authorize this app by visiting this url:', authUrl);
+    scope: SCOPES
+  })
+  console.log('Authorize this app by visiting this url:', authUrl)
   const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout,
-  });
+    output: process.stdout
+  })
   return new Promise((resolve, reject) => {
     rl.question('Enter the code from that page here: ', (code) => {
-      rl.close();
-        oAuth2Client.getToken(code, (err, token) => {
+      rl.close()
+      oAuth2Client.getToken(code, (err, token) => {
+        if (err) {
+          console.error('Error retrieving access token', err)
+          reject(err)
+        }
+        // Store the token to disk for later program executions
+        const TOKEN_PATH = '../../catholink2/token.json'
+        fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
           if (err) {
-            console.error('Error retrieving access token', err);
+            console.error('Error saving token:', err)
             reject(err)
           }
-          // Store the token to disk for later program executions
-          const TOKEN_PATH = '../../catholink2/token.json'
-          fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
-            if (err) {
-              console.error('Error saving token:', err)
-              reject(err)
-            }
-            console.log('Token stored to', TOKEN_PATH)
-            process.env.CATHOLINK_GOOGLE_TOKEN = token
-            resolve(token)
-          });
+          console.log('Token stored to', TOKEN_PATH)
+          process.env.CATHOLINK_GOOGLE_TOKEN = token
+          resolve(token)
         })
-      });
-  });
+      })
+    })
+  })
 }
 
 /**
@@ -88,20 +94,20 @@ function getNewToken(oAuth2Client) {
  *
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-function listLabels(auth) {
-  const gmail = google.gmail({version: 'v1', auth});
+function listLabels (auth) {
+  const gmail = google.gmail({version: 'v1', auth})
   gmail.users.labels.list({
-    userId: 'me',
+    userId: 'me'
   }, (err, res) => {
-    if (err) return console.log('The API returned an error: ' + err);
-    const labels = res.data.labels;
+    if (err) return console.log('The API returned an error: ' + err)
+    const labels = res.data.labels
     if (labels.length) {
-      console.log('Labels:');
+      console.log('Labels:')
       labels.forEach((label) => {
-        console.log(`- ${label.name}`);
-      });
+        console.log(`- ${label.name}`)
+      })
     } else {
-      console.log('No labels found.');
+      console.log('No labels found.')
     }
-  });
+  })
 }

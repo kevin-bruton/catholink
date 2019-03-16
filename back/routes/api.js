@@ -77,8 +77,6 @@ router.post('/gospel', async (req, res) => {
   res.send(gospel)
 })
 
-module.exports = router
-
 async function authorizeApi (req, res, next) {
   const bearer = req.get('Authorization')
   if (bearer) {
@@ -100,3 +98,5 @@ async function authorizeApi (req, res, next) {
   console.log('authorizeApi: No bearer\n')
   return res.status(401).send({ error: 'Unauthorized' })
 }
+
+module.exports = router

@@ -66,7 +66,7 @@ export class SignUp extends React.Component {
     error.surnameEmpty = !surname
     error.emailEmpty = !email
     error.passwordEmpty = !password
-    error.passwordRepeatEmpty =!passwordRepeat
+    error.passwordRepeatEmpty = !passwordRepeat
     error.passwordsNotEqual = (password !== passwordRepeat)
     this.setState({error})
     return (!error.firstNameEmpty && !error.surnameEmpty && !error.emailEmpty && !error.passwordEmpty && !error.passwordRepeatEmpty && !error.passwordsNotEqual)
@@ -130,7 +130,7 @@ export class SignUp extends React.Component {
               </div>
               <div className='field' id='signUpBtn'>
                 <div className={'control' + styles.flexbox}>
-                  <button id='loginBtn' className={'button is-link ' + styles.flexitem} disabled={(this.signUpRequest === SIGNUP.REQUESTED)} >
+                  <button id='signUpBtn' className={'button is-link ' + styles.flexitem} disabled={(this.signUpRequest === SIGNUP.REQUESTED)} >
                     {this.state.signUpRequest === SIGNUP.REQUESTED ? <img alt='' src={spinner} /> : literals.signUp}
                   </button>
                 </div>
@@ -138,22 +138,22 @@ export class SignUp extends React.Component {
             </form>
           </div>
         </div>
-        <div id="signUpResultModal"
+        <div id='signUpResultModal'
           className={'modal' + ((this.state.signUpRequest === SIGNUP.SUCCESSFUL || this.state.signUpRequest === SIGNUP.FAILED) ? ' is-active' : '')}>
-          <div className='modal-background'></div>
+          <div className='modal-background' />
           <div className='modal-content'>
             <div className='box'>
               <div className='content'>
                 {
                   this.state.signUpRequest === SIGNUP.SUCCESSFUL &&
-                    <p className='centre'>                
+                    <p className='centre'>
                       {literals.emailSent1}<br />
                       {literals.emailSent2}<br />
                       {literals.emailSent3}
                     </p>
                 }{
                   this.state.signUpRequest === SIGNUP.FAILED &&
-                    <p className='centre'>                
+                    <p className='centre'>
                       {literals.emailNotSent1}<br />
                       {literals.emailNotSent2}<br />
                       {literals.emailNotSent3}

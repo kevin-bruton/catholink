@@ -38,23 +38,23 @@ export class SignUpValidate extends React.Component {
   render () {
     const RESULT = {
       REQUESTED: <span id='requestedMessage'>
-          <h1 className='is-size-3'>{literals.validating}</h1>
-          <img alt='' src={spinner} />
-        </span>,
+        <h1 className='is-size-3'>{literals.validating}</h1>
+        <img alt='' src={spinner} />
+      </span>,
       VALIDATED: <span id='validatedMessage'>
-          <h1 className='is-size-3'>{literals.emailValidatedHeading}</h1>
-          <p>{literals.emailValidatedLine1}</p>
-          <p>{literals.emailValidatedLine2}</p>
-          <p>{literals.emailValidatedLine3}</p>
-          <br /><Link to='/Login'><button className={'button is-link '}>{literals.goToLogin}</button></Link>
-        </span>,
+        <h1 className='is-size-3'>{literals.emailValidatedHeading}</h1>
+        <p>{literals.emailValidatedLine1}</p>
+        <p>{literals.emailValidatedLine2}</p>
+        <p>{literals.emailValidatedLine3}</p>
+        <br /><Link to='/Login'><button className={'button is-link '}>{literals.goToLogin}</button></Link>
+      </span>,
       NOT_VALIDATED: <span id='notValidatedMessage'>
-          <h1 className='is-size-3'>{literals.notValidatedHeading}</h1>
-          <p>{literals.notValidatedLine1}</p>
-          <p>{literals.notValidatedLine2}</p>
-          <p>{literals.notValidatedLine3}</p>
-          <br /><Link to='/SignUp'><button className={'button is-link '}>{literals.goToSignUp}</button></Link>
-        </span>
+        <h1 className='is-size-3'>{literals.notValidatedHeading}</h1>
+        <p>{literals.notValidatedLine1}</p>
+        <p>{literals.notValidatedLine2}</p>
+        <p>{literals.notValidatedLine3}</p>
+        <br /><Link to='/SignUp'><button className={'button is-link '}>{literals.goToSignUp}</button></Link>
+      </span>
     }
     return (
       <div id='SignUpValidatePage' className='col-md-6 col-md-offset-3'>
