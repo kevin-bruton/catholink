@@ -100,7 +100,7 @@ export class MyProfile extends React.Component {
             )}
           </tbody>
         </table>
-        <button className='button is-link' onClick={this.toggleEditable}>{literals.edit}</button> 
+        <button className='button is-link' onClick={this.toggleEditable}>{literals.edit}</button>
         <button className={`button is-link ${styles.separate} ${(this.state.dataChanged ? '' : styles.hide)}`} onClick={this.saveData} >{literals.save}</button>
       </div>
     const VISIBILITY_TAB =

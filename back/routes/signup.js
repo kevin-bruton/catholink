@@ -92,6 +92,7 @@ async function registerUser (user) {
       parish: '',
       password: user.hashedPassword,
       status: 'active',
+      contacts: [],
       visibility: {
         profile: 'public',
         parish: 'members',
@@ -99,7 +100,7 @@ async function registerUser (user) {
         email: 'contacts',
         address: 'private',
         mobile: 'private',
-        telephone: 'private',
+        telephone: 'private'
       }
     })
   } catch (err) {

@@ -1,4 +1,5 @@
 import { actions } from './actions'
+import {statusType} from './constants'
 
 export {
   getStatus,
@@ -7,7 +8,10 @@ export {
   unsubscribeStatus
 }
 
-let store = {}
+// Initial values for store
+let store = {
+  [statusType.MESSAGES]: []
+}
 let listeners = {}
 
 function getStatus (type) {
@@ -28,6 +32,6 @@ function setStatus (type, value, ...data) {
     ? actions[type](value, ...data)
     : value
 
-  store = Object.assign(store, { [type]: newValue })
+  store = Object.assign({}, store, { [type]: newValue })
   listeners[type] && Object.keys(listeners[type]).forEach(name => listeners[type][name](newValue))
 }

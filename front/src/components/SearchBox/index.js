@@ -41,7 +41,7 @@ export class SearchBox extends Component {
     return (
       <div className='field has-addons'>
         <div className='control'>
-          <input className='input' type='text' name='searchText' placeholder={literals.search} onChange={this.searchTextChange}/>
+          <input className='input' type='text' name='searchText' placeholder={literals.search} onChange={this.searchTextChange} />
         </div>
         <div className='control'>
           <Link to={'/searchresults?text=' + this.state.searchText}>

@@ -8,5 +8,13 @@ export default getLangLiterals({
   send: {
     en: 'Send',
     es: 'Enviar'
+  },
+  contactSearch: {
+    en: 'Search contacts',
+    es: 'Buscar contacto'
+  },
+  noContactSelected: {
+    en: 'Select a contact to see their messages',
+    es: 'Seleccione un contacto para ver sus mensajes'
   }
 })

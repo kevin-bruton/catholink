@@ -1,7 +1,6 @@
 {
   "cucumberautocomplete.steps": [
-      "at/steps/**/*.js",
-      "at/node_modules/qa-lib/src/step_definitions/*.js"
+      "at/steps/**/*.js"
   ],
   "cucumberautocomplete.syncfeatures": "features/**/*.feature",
   "cucumberautocomplete.strictGherkinCompletion": true,

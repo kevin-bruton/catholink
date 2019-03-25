@@ -15,12 +15,18 @@ module.exports = function (app) {
       } else {
         connections[profileId][socket.id] = socket
       }
+      console.log('Users connected:', Object.keys(connections))
     })
 
-    socket.on('PRIVATE MESSAGE', (from, msg) => {
-      console.log('I received a private message by ', from, ' saying ', msg)
-      console.log('CONNECTIONS:')
-      console.log(connections)
+    socket.on('PRIVATE_MESSAGE', (messageStr, sendResponse) => {
+      console.log('I received a private message:', messageStr)
+      const message = JSON.parse(messageStr)
+      message.status = 'sent'
+      sendMessageToConnected(message, connections)
+        .then(updatedMessage => {
+          // saveUpdatedMessageToDB()
+        })
+      sendResponse('sent')
     })
 
     socket.on('disconnect', () => {
@@ -29,4 +35,26 @@ module.exports = function (app) {
     })
   })
   return http
+}
+
+async function sendMessageToConnected (message, connections) {
+  const to = message.to
+  let updatedMessage
+  console.log('Users connected:', Object.keys(connections))
+  console.log('Send message to', to)
+  const socketsToSendOn = connections[to]
+  for (let i = 0; i < Object.keys(socketsToSendOn).length; i++) {
+    updatedMessage = await sendMessage(socketsToSendOn[Object.keys(socketsToSendOn)[i]], 'MESSAGE_TO_CLIENT', message)
+  }
+  return updatedMessage
+}
+
+function sendMessage (socket, eventName, message) {
+  return new Promise(resolve => {
+    socket.emit(eventName, JSON.stringify(message), clientResponse =>
+      clientResponse === 'OK'
+        ? resolve(Object.assign({}, message, {status: 'received'}))
+        : resolve(Object.assign({}, message, {status: 'failed'}))
+    )
+  })
 }

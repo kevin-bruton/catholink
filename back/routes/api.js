@@ -6,6 +6,7 @@ const { getRequest } = require('@request')
 const { getGospel, setGospel } = require('@gospel')
 const { userSearch, getMyProfile, getAnothersProfile } = require('@db/users/search')
 const { updateVisibility, updateProfile, updateAvatar, getMyContacts } = require('@db/users/profile')
+const {getUserMessages} = require('@db/messages')
 const dummyGospel = require('@gospel/dummy')
 
 router.use(authorizeApi)
@@ -51,6 +52,12 @@ router.get('/profile/:profileId', async (req, res) => {
     ? await getMyProfile(requestedProfileId)
     : await getAnothersProfile(req.profileId, requestedProfileId)
   res.send(profile)
+})
+
+router.get('/messages', async (req, res) => {
+  const maxNumMessagesPerContact = 25
+  const messages = await getUserMessages(req.profileId, maxNumMessagesPerContact)
+  res.send(JSON.stringify(messages))
 })
 
 router.get('/search', async (req, res) => {

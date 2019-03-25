@@ -26,11 +26,13 @@ const connection = () => _dbConnection
 // Direct access to collections:
 const signUp = () => _dbConnection.collection('signup')
 const users = () => _dbConnection.collection('users')
+const messages = () => _dbConnection.collection('messages')
 
 module.exports = {
   open,
   close,
   connection,
   signUp,
-  users
+  users,
+  messages
 }

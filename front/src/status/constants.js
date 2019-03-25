@@ -4,6 +4,7 @@ export const statusType = {
   USER: 'USER',
   GOSPEL: 'GOSPEL',
   SEARCH_TEXT: 'SEARCH_TEXT',
+  MESSAGES: 'MESSAGES',
   DUMMY: 'DUMMY'
 }
 

@@ -32,10 +32,10 @@ export class Login extends React.Component {
     session.logout()
     setStatus(statusType.LOGIN, loginStatus.LOGOUT)
     subscribeStatus(statusType.LOGIN, 'LoginPage', this.loginUpdated)
-    disconnectSocket()
+    this.state.login === loginStatus.LOGOUT && disconnectSocket()
   }
 
-  componentWillUnmount () {   
+  componentWillUnmount () {
     unsubscribeStatus(statusType.LOGIN, 'LoginPage')
   }
 
