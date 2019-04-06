@@ -6,7 +6,7 @@ import * as session from '@services/session'
 import {disconnectSocket} from '@services/socket'
 import { spinner } from '../../assets/spinner'
 import { literals } from './literals'
-import {loginStatus, statusType, subscribeStatus, unsubscribeStatus, setStatus} from '@status'
+import {loginStatus, storeCategory, subscribeStoreChanges, unsubscribeStoreChanges, setStoreValue} from '@store'
 
 export class Login extends React.Component {
   constructor (props) {
@@ -30,13 +30,13 @@ export class Login extends React.Component {
 
   componentDidMount () {
     session.logout()
-    setStatus(statusType.LOGIN, loginStatus.LOGOUT)
-    subscribeStatus(statusType.LOGIN, 'LoginPage', this.loginUpdated)
+    setStoreValue(storeCategory.LOGIN, loginStatus.LOGOUT)
+    subscribeStoreChanges(storeCategory.LOGIN, 'LoginPage', this.loginUpdated)
     this.state.login === loginStatus.LOGOUT && disconnectSocket()
   }
 
   componentWillUnmount () {
-    unsubscribeStatus(statusType.LOGIN, 'LoginPage')
+    unsubscribeStoreChanges(storeCategory.LOGIN, 'LoginPage')
   }
 
   handleBlur (e) {
@@ -62,7 +62,7 @@ export class Login extends React.Component {
 
   inputValidated () {
     const {email, password, error} = this.state
-    
+
     if (!email) {
       error.emailEmpty = true
       this.setState({error})
@@ -78,9 +78,9 @@ export class Login extends React.Component {
     const {email, password} = this.state
     try {
       await session.login(email, password)
-      setStatus(statusType.LOGIN, loginStatus.SUCCESSFUL)
+      setStoreValue(storeCategory.LOGIN, loginStatus.SUCCESSFUL)
     } catch (err) {
-      setStatus(statusType.LOGIN, loginStatus.FAILED)
+      setStoreValue(storeCategory.LOGIN, loginStatus.FAILED)
     }
   }
 

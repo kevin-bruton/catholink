@@ -2,7 +2,7 @@ import React from 'react'
 import { post } from '@request'
 import { usersLanguage } from '@helpers/usersLanguage'
 import { literals } from './literals'
-import {getStatus, setStatus, statusType} from '@status'
+import {getStoreValue, setStoreValue, storeCategory} from '@store'
 
 export class Home extends React.Component {
   constructor (props) {
@@ -13,10 +13,10 @@ export class Home extends React.Component {
     }
   }
   async componentDidMount () {
-    let gospel = getStatus(statusType.GOSPEL)
+    let gospel = getStoreValue(storeCategory.GOSPEL)
     if (gospel === undefined) {
       gospel = await this.getGospel()
-      setStatus(statusType.GOSPEL, gospel)
+      setStoreValue(storeCategory.GOSPEL, gospel)
     }
     this.setState({ gospel })
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { literals } from './literals'
-import {getStatus, statusType, subscribeStatus, unsubscribeStatus, loginStatus} from '@status'
+import {getStoreValue, storeCategory, subscribeStoreChanges, unsubscribeStoreChanges, loginStatus} from '@store'
 
 export class SearchBox extends Component {
   constructor (props) {
@@ -16,13 +16,13 @@ export class SearchBox extends Component {
   }
 
   componentDidMount () {
-    this.setState({login: getStatus(statusType.LOGIN)}, () =>
-      subscribeStatus(statusType.LOGIN, 'SearchBox', this.loginStatusChange)
+    this.setState({login: getStoreValue(storeCategory.LOGIN)}, () =>
+      subscribeStoreChanges(storeCategory.LOGIN, 'SearchBox', this.loginStatusChange)
     )
   }
 
   componentWillUnmount () {
-    unsubscribeStatus(statusType.LOGIN, 'SearchBox')
+    unsubscribeStoreChanges(storeCategory.LOGIN, 'SearchBox')
   }
 
   loginStatusChange (newValue) {

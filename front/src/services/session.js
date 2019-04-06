@@ -1,6 +1,6 @@
 /* global atob */
 import { auth, get } from './request'
-import {statusType, setStatus} from '@status'
+import {storeCategory, setStoreValue} from '@store'
 
 export {
   login,
@@ -13,7 +13,7 @@ async function login (email, password) {
   if (resp.token) {
     window.localStorage.setItem('user', resp.user)
     window.localStorage.setItem('token', resp.token)
-    setStatus(statusType.USER, JSON.parse(atob(resp.user)))
+    setStoreValue(storeCategory.USER, JSON.parse(atob(resp.user)))
     return resp
   } else {
     return Promise.reject(new Error('Login failure'))
@@ -25,7 +25,7 @@ async function validateSession () {
   try {
     await get('validate')
     validated = true
-    setStatus(statusType.USER, JSON.parse(atob(window.localStorage.getItem('user'))))
+    setStoreValue(storeCategory.USER, JSON.parse(atob(window.localStorage.getItem('user'))))
   } catch (err) {
   }
   return validated

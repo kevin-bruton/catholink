@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {getSocket} from '@services/socket'
-import {getStatus, statusType, subscribeStatus} from '@status'
+import {getStoreValue, storeCategory, subscribeStoreChanges} from '@store'
 import {get as getRequest} from '@services/request'
 import styles from './styles.scss'
 import literals from './literals'
@@ -12,11 +12,11 @@ export class Messages extends Component {
       contacts: null,
       contactFilterText: '',
       selectedContact: null,
-      messageText: null,
-      messages: getStatus(statusType.MESSAGES)
+      messageText: '',
+      messages: getStoreValue(storeCategory.MESSAGES)
     }
-    this.currentUser = getStatus(statusType.USER)
-    subscribeStatus(statusType.MESSAGES, 'messagesComponent', messages => this.setState({messages}))
+    this.currentUser = getStoreValue(storeCategory.USER)
+    subscribeStoreChanges(storeCategory.MESSAGES, 'messagesComponent', this.updateMessages)
 
     this.sendMsg = this.sendMsg.bind(this)
     this.contactSearch = this.contactSearch.bind(this)

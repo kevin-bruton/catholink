@@ -1,4 +1,4 @@
-export const statusType = {
+export const storeCategory = {
   LOGIN: 'LOGIN',
   ALERT: 'ALERT',
   USER: 'USER',

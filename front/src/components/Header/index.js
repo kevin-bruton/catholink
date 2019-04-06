@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { literals } from './literals'
 import brandname from '../../assets/brandname.svg'
 import {MessagesBtn, ProfileBtn, SearchBox} from '@components'
-import {getStatus, statusType, subscribeStatus, unsubscribeStatus, loginStatus} from '@status'
+import {getStoreValue, storeCategory, subscribeStoreChanges, unsubscribeStoreChanges, loginStatus} from '@store'
 
 export class Header extends Component {
   constructor (props) {
@@ -16,13 +16,13 @@ export class Header extends Component {
   }
 
   componentDidMount () {
-    this.setState({login: getStatus(statusType.LOGIN)}, () =>
-      subscribeStatus(statusType.LOGIN, 'Header', this.loginStatusChange)
+    this.setState({login: getStoreValue(storeCategory.LOGIN)}, () =>
+      subscribeStoreChanges(storeCategory.LOGIN, 'Header', this.loginStatusChange)
     )
   }
 
   componentWillUnmount () {
-    unsubscribeStatus(statusType.LOGIN, 'Header')
+    unsubscribeStoreChanges(storeCategory.LOGIN, 'Header')
   }
 
   loginStatusChange (newValue) {

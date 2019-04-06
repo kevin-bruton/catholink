@@ -1,29 +1,29 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import {validateSession} from '@services'
-import {setStatus, subscribeStatus, unsubscribeStatus, statusType, loginStatus} from '@status'
+import {setStoreValue, subscribeStoreChanges, unsubscribeStoreChanges, storeCategory, loginStatus} from '@store'
 
 export class PrivateRoute extends React.Component {
   constructor (props) {
     super(props)
     this.state = {loggedIn: undefined}
-    this.loginStatusChange = this.loginStatusChange.bind(this)
+    this.loginStoreChange = this.loginStoreChange.bind(this)
   }
 
   async componentDidMount () {
     const loggedIn = await validateSession()
     this.setState({loggedIn})
     loggedIn === true
-      ? setStatus(statusType.LOGIN, loginStatus.SUCCESSFUL)
-      : setStatus(statusType.LOGIN, loginStatus.FAILURE)
-    subscribeStatus(statusType.LOGIN, 'PrivateRoute', this.loginStatusChange)
+      ? setStoreValue(storeCategory.LOGIN, loginStatus.SUCCESSFUL)
+      : setStoreValue(storeCategory.LOGIN, loginStatus.FAILURE)
+    subscribeStoreChanges(storeCategory.LOGIN, 'PrivateRoute', this.loginStoreChange)
   }
 
   componentWillUnmount () {
-    unsubscribeStatus(statusType.LOGIN, 'PrivateRoute')
+    unsubscribeStoreChanges(storeCategory.LOGIN, 'PrivateRoute')
   }
 
-  loginStatusChange (newLoginStatus) {
+  loginStoreChange (newLoginStatus) {
     newLoginStatus === loginStatus.SUCCESSFUL
       ? this.setState({loggedIn: true})
       : this.setState({loggedIn: false})

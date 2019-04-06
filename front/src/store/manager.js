@@ -1,33 +1,34 @@
 import { actions } from './actions'
-import {statusType} from './constants'
+import {storeCategory} from './constants'
 
 export {
-  getStatus,
-  setStatus,
-  subscribeStatus,
-  unsubscribeStatus
+  getStoreValue,
+  setStoreValue,
+  sendEvent,
+  subscribeStoreChanges,
+  unsubscribeStoreChanges
 }
 
 // Initial values for store
 let store = {
-  [statusType.MESSAGES]: []
+  [storeCategory.MESSAGES]: []
 }
 let listeners = {}
 
-function getStatus (type) {
+function getStoreValue (type) {
   return store[type]
 }
 
-function subscribeStatus (type, name, listener) {
+function subscribeStoreChanges (type, name, listener) {
   listeners[type] = listeners[type] || {}
   listeners[type][name] = listener
 }
 
-function unsubscribeStatus (type, name) {
+function unsubscribeStoreChanges (type, name) {
   delete listeners[type][name]
 }
 
-function setStatus (type, value, ...data) {
+function setStoreValue (type, value, ...data) {
   const newValue = actions[type]
     ? actions[type](value, ...data)
     : value

@@ -1,5 +1,5 @@
 import io from 'socket.io-client'
-import {setStatus, statusType} from '@status'
+import {setStoreValue, storeCategory} from '@store'
 import {get as getRequest} from '@services/request'
 
 export {
@@ -15,7 +15,7 @@ function connectSocket (profileId) {
   socket.on('connect', () => console.log('socketio connected', socket.id))
   socket.emit('PROFILE_ID', profileId)
   getRequest('messages').then(messages =>
-    (messages.error) || setStatus(statusType.MESSAGES, messages)
+    (messages.error) || setStoreValue(storeCategory.MESSAGES, messages)
   )
 }
 

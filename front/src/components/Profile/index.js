@@ -1,5 +1,5 @@
 import React from 'react'
-import {getStatus, statusType} from '@status'
+import {getStoreValue, storeCategory} from '@store'
 import {AnothersProfile} from '@components/AnothersProfile'
 import {MyProfile} from '@components/MyProfile'
 
@@ -12,7 +12,7 @@ export class Profile extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      currentUser: getStatus(statusType.USER),
+      currentUser: getStoreValue(storeCategory.USER),
       profileId: this.props.match.params.profileId
     }
   }

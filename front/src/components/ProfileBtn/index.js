@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
 import styles from './styles.scss'
 import {literals} from './literals'
-import {statusType, getStatus} from '@status'
+import {storeCategory, getStoreValue} from '@store'
 
 export class ProfileBtn extends Component {
   constructor (props) {
     super(props)
     this.state = {
       showProfileMenu: false,
-      user: getStatus(statusType.USER)
+      user: getStoreValue(storeCategory.USER)
     }
     this.toggleShowProfileMenu = this.toggleShowProfileMenu.bind(this)
     this.clickEv = this.clickEv.bind(this)

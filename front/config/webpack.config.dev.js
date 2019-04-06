@@ -95,7 +95,7 @@ module.exports = {
       '@helpers': path.resolve(__dirname, '..', 'src/helpers'),
       '@services': path.resolve(__dirname, '..', 'src/services'),
       '@request': path.resolve(__dirname, '..', 'src/services/request'),
-      '@status': path.resolve(__dirname, '..', 'src/status'),
+      '@store': path.resolve(__dirname, '..', 'src/store'),
       '@assets': path.resolve(__dirname, '..', 'src/assets')
     },
     plugins: [

@@ -1,7 +1,7 @@
 import {get as getRequest, post as postRequest} from '@services/request'
 import styles from './styles.scss'
 import React from 'react'
-import {getStatus, statusType} from '@status'
+import {getStoreValue, storeCategory} from '@store'
 import {AvatarEditor} from '@components/AvatarEditor'
 
 import { literals } from './literals'
@@ -10,7 +10,7 @@ export class MyProfile extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      currentUser: getStatus(statusType.USER),
+      currentUser: getStoreValue(storeCategory.USER),
       userProfile: null,
       avatar: null,
       contacts: [],

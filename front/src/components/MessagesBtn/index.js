@@ -2,19 +2,19 @@ import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
 import styles from './styles.scss'
 import {literals} from './literals'
-import {statusType, getStatus, subscribeStatus} from '@status'
+import {storeCategory, getStoreValue, subscribeStoreChanges} from '@store'
 import {connectSocket} from '@services/socket'
 
 export class MessagesBtn extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      numMessages: getStatus(statusType.MESSAGES).reduce((acc, cur) => cur.status === 'read' ? acc : acc + 1, 0)
+      numMessages: getStoreValue(storeCategory.MESSAGES).reduce((acc, cur) => cur.status === 'read' ? acc : acc + 1, 0)
     }
     this.updateNumMessages = this.updateNumMessages.bind(this)
-    const currentUser = getStatus(statusType.USER)
+    const currentUser = getStoreValue(storeCategory.USER)
     connectSocket(currentUser.profileId)
-    subscribeStatus(statusType.MESSAGES, 'MessageBtn', this.updateNumMessages)
+    subscribeStoreChanges(storeCategory.MESSAGES, 'MessageBtn', this.updateNumMessages)
   }
 
   updateNumMessages (messages) {
