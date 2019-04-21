@@ -4,6 +4,7 @@ import { getStoreValue, storeCategory, subscribeStoreChanges, sendStoreEvent, ev
 import { get as getRequest } from '@services/request'
 import styles from './styles.scss'
 import literals from './literals'
+import '../MyLit'
 
 export class Messages extends Component {
   constructor (props) {
