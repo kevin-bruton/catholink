@@ -18,16 +18,8 @@ export class MessagesBtn extends Component {
   }
 
   updateNumMessages (messages) {
-    console.log(messages)
     const numMessages = Object.keys(messages).reduce((acc, cur) => acc + messages[cur].reduce((acc, cur) => cur.status === 'read' ? acc : acc + 1, 0), 0)
-    console.log(`numMessages=${numMessages}`)
     this.setState({numMessages})
-  }
-
-  componentDidMount () {
-    // getSocket().on('MESSAGE_TO_CLIENT', () => {
-    //   this.setState({numMessages: this.state.numMessages + 1})
-    // })
   }
 
   render () {

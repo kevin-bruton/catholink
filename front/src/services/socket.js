@@ -1,5 +1,5 @@
 import io from 'socket.io-client'
-import {setStoreValue, storeCategory} from '@store'
+import {setStoreValue, storeCategory, sendStoreEvent, eventType} from '@store'
 import {get as getRequest} from '@services/request'
 
 export {
@@ -17,6 +17,17 @@ function connectSocket (profileId) {
   getRequest('messages').then(messages =>
     (messages.error) || setStoreValue(storeCategory.MESSAGES, messages)
   )
+  socket.on('MSG_TO_CLIENT', (messageStr, sendResponse) => {
+    sendStoreEvent(eventType.MSG_RECEIVED, JSON.parse(messageStr))
+    sendResponse('OK')
+    console.log('MSG_TO_CLIENT. Message received from server:', messageStr)
+  })
+  socket.on('MSG_STATUS_UPDATE', (messageStr, sendResponse) => {
+    const message = JSON.parse(messageStr)
+    console.log('MSG_STATUS_UPDATE. Message update received from server:', message.text, 'New status:', message.status)
+    sendStoreEvent(eventType.MSG_STATUS_UPDATE, message)
+    sendResponse('OK')
+  })
 }
 
 function getSocket () {
