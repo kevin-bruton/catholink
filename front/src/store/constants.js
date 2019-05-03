@@ -11,7 +11,8 @@ export const storeCategory = {
 export const eventType = {
   MSG_TO_SERVER: 'MSG_TO_SERVER',
   MSG_RECEIVED: 'MSG_RECEIVED',
-  MSG_STATUS_UPDATE: 'MSG_STATUS_UPDATE'
+  MSG_STATUS_UPDATE: 'MSG_STATUS_UPDATE',
+  MSGS_STATUS_READ: 'MSGS_STATUS_READ'
 }
 
 export const messageStatus = {

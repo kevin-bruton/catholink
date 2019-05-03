@@ -35,12 +35,13 @@ export class Messages extends Component {
   messagesUpdated (messages) {
     console.log('RECEIVED CHANGES IN MESSAGES IN MESSAGES COMPONENT FROM STORE. MESSAGES:', messages)
     // send status update to server if there are any messages not read yet
-    const updatedMessages = this.updateMessagesToReadForSelectedContact(messages)
-    this.setState({messages: updatedMessages})
+    this.updateReadMessages()
+    this.setState({messages})
   }
 
-  updateMessagesToReadForSelectedContact (messages) {
-    const selectedContact = this.state.selectedContact
+  updateReadMessages () {
+    sendStoreEvent(eventType.MSGS_STATUS_READ, this.state.selectedContact)
+    /* const selectedContact = this.state.selectedContact
     messages[selectedContact] && (messages = messages[selectedContact].map(message => {
       if (message.from === selectedContact && message.status !== messageStatus.READ) {
         console.log('SENDING MSG_STATUS_UPDATE_TO_SERVER WITH MESSAGE WITH STATUS READ:', message)
@@ -50,30 +51,16 @@ export class Messages extends Component {
       }
       return message
     }))
-    return messages
+    return messages */
   }
 
   sendMsg (e) {
     e.preventDefault()
-    console.log('trying to send message...')
-    const dateTime = (new Date()).getTime()
-    const message = {
-      _id: `${this.currentUser.profileId}_${this.state.selectedContact}_${dateTime}`,
-      text: this.state.messageText,
-      status: messageStatus.NOT_SENT,
-      dateTime,
+    sendStoreEvent(eventType.MSG_TO_SERVER, {
+      to: this.state.selectedContact,
       from: this.currentUser.profileId,
-      to: this.state.selectedContact
-    }
-    sendStoreEvent(eventType.MSG_TO_SERVER, message)
-    getSocket().emit('MSG_TO_SERVER', JSON.stringify(message),
-      serverResponse => {
-        console.log('Sent Message to server. Server response:', serverResponse, 'Message:', message)
-        if (serverResponse === 'OK') {
-          message.status = messageStatus.SENT
-          sendStoreEvent(eventType.MSG_STATUS_UPDATE, message)
-        }
-      })
+      text: this.state.messageText
+    })
     this.setState({messageText: ''})
   }
 
@@ -87,7 +74,7 @@ export class Messages extends Component {
 
   contactSelect (e) {
     console.log('contactSelect:', e.target.name)
-    this.setState({ selectedContact: e.target.name }, () => this.updateMessagesToReadForSelectedContact(this.state.messages))
+    this.setState({ selectedContact: e.target.name }, this.updateReadMessages)
     // Call messages endpoint to get messages between the two contacts
   }
 

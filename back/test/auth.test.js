@@ -1,19 +1,26 @@
 /* global describe it beforeAll afterAll expect */
 /* eslint no-unused-expressions: "off" */
 const axios = require('axios')
-const db = require('@db')
-const bcrypt = require('bcrypt-nodejs')
-const passwordUser1 = 'roker'
-const passwordUser2 = 'joker'
-const users = [
-  { _id: '8888888', email: 'kev@mail.com', password: bcrypt.hashSync(passwordUser1), testDoc: true },
-  { _id: '999999', email: 'joker@mail.com', password: bcrypt.hashSync(passwordUser2), testDoc: true }
-]
+const db = require('../db')
+const server = require('./spawn-server')
 
 describe('AUTH TESTS', function () {
+  const testUserEmail = 'testing@mail.com'
+  let validUser
   beforeAll(async function () {
     await db.open()
-    await db.users().insertMany(users)
+    await server.start()
+  })
+
+  afterAll(async function () {
+    await db.users().deleteMany({ testDoc: true })
+    server.stop()
+    await db.close()
+  })
+
+  it('there is already a test user registered (gone through signup-init and signup-validate)', async () => {
+    validUser = (await (await db.users().find({email: testUserEmail})).toArray())[0]
+    expect(validUser).toBeTruthy()
   })
 
   describe('Invoke POST /auth with invalid credentials and get error message', function () {
@@ -37,7 +44,7 @@ describe('AUTH TESTS', function () {
     let resp
     beforeAll(async function () {
       try {
-        resp = await axios.post('http://localhost:5000/auth', { email: users[0].email, password: passwordUser1 })
+        resp = await axios.post('http://localhost:5000/auth', { email: validUser.email, password: validUser.password })
       } catch (err) {
         resp = err.response
       }
@@ -51,10 +58,5 @@ describe('AUTH TESTS', function () {
     it('should return an authorization token', function () {
       expect(resp.data.token).toBeTruthy()
     })
-  })
-
-  afterAll(async function () {
-    await db.users().deleteMany({ testDoc: true })
-    await db.close()
   })
 })

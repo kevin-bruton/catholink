@@ -96,7 +96,7 @@ function setStoreValue (type, value, ...data) {
  * @param {object} data - The data we are sending with the event
  */
 function sendStoreEvent (type, data) {
-  callListeners(listenerType.EVENT, type, data)
+  // callListeners(listenerType.EVENT, type, data)
   console.log('Store got event:', type, 'With data:', data)
   actOnEvent(type, data)
 }

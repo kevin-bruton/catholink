@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node back/server.js",
-    "start-db": "mongod --dbpath=./back/db-data",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start-db": "mongod --dbpath=./back/db-data --auth",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd front && node scripts/build.js",
+    "postinstall": "cd front && npm install && cd ../back && npm install && cd ..",
+    "heroku-start": "cd front && node scripts/build && cd ../back && node server"
   },
   "author": "Kevin Bruton",
   "license": "ISC",
@@ -15,7 +18,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "cd front && node scripts/test"
+      "pre-commit": ""
     }
   }
 }

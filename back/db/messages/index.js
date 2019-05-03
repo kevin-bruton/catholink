@@ -1,4 +1,5 @@
-const db = require('@db')
+const db = require('@db/')
+const log = require('@log/')
 
 module.exports = {
   getUserMessages,
@@ -14,7 +15,7 @@ module.exports = {
 async function getUserMessages (profileId, limit) {
   const groupedMessages = {}
   try {
-    console.log(`Trying to get messages for user with profileId ${profileId}, limiting to ${limit} messages per contact`, profileId)
+    log(`Trying to get messages for user with profileId ${profileId}, limiting to ${limit} messages per contact`, profileId)
     const messages = await db.messages().find({
       $or: [
         {to: profileId},
@@ -34,7 +35,7 @@ async function getUserMessages (profileId, limit) {
     })
     return groupedMessages
   } catch (err) {
-    console.log('DB ERROR: trying to get messages for user with profileId', profileId, ':', err)
+    log('DB ERROR: trying to get messages for user with profileId', profileId, ':', err)
     return {error: 'DB ERROR'}
   }
 }
@@ -46,12 +47,12 @@ async function getUserMessages (profileId, limit) {
  */
 async function updateStatus (messageId, newStatus) {
   try {
-    console.log(`Update status for message with id ${messageId}`)
+    log(`Update status for message with id ${messageId}`)
     await db.messages().updateOne({_id: messageId}, {$set: {status: newStatus}})
-    console.log('OK\n')
+    log('OK\n')
     return {}
   } catch (err) {
-    console.log(`DB ERROR trying to update message status. messageId: ${messageId}; newStatus: ${newStatus}`, err)
+    log(`DB ERROR trying to update message status. messageId: ${messageId}; newStatus: ${newStatus}`, err)
     return {error: 'DB failure'}
   }
 }
@@ -62,12 +63,12 @@ async function updateStatus (messageId, newStatus) {
  */
 async function saveMessage (message) {
   try {
-    console.log(`Insert new message in messages collection`)
+    log(`Insert new message in messages collection`)
     await db.messages().insertOne(message)
-    console.log('OK\n')
+    log('OK\n')
     return {}
   } catch (err) {
-    console.log(`DB ERROR trying to insert a new message. messageId: ${message._id}`, err)
+    log(`DB ERROR trying to insert a new message. messageId: ${message._id}`, err)
     return {error: 'DB failure'}
   }
 }
