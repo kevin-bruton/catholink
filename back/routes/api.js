@@ -71,7 +71,7 @@ router.post('/gospel', async (req, res) => {
   let gospel = getGospel()
   if (!gospel.text) {
     console.log('Gospel not found. Fetching...')
-    if (process.env.CATHOLINK_SERVER_MODE === 'DEV') {
+    if (process.env.CAT_SERVER_MODE === 'DEV') {
       gospel = dummyGospel
     } else {
       const data = await getRequest(`https://publication.evangelizo.ws/${lang}/days/${req.body.date}`)

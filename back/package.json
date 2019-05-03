@@ -8,9 +8,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node server",
-    "start-dev": "cross-env CATHOLINK_SERVER_MODE=DEV nodemon server",
+    "start-dev": "cross-env CAT_SERVER_MODE=DEV nodemon server",
     "start-db": "mongod --dbpath=./db-data",
-    "test": "cross-env CATHOLINK_SERVER_MODE=DEV jest",
+    "test": "cross-env CAT_SERVER_MODE=DEV jest",
     "tester": "jest -t=api",
     "lint": "node ./node_modules/eslint/bin/eslint .",
     "postinstall": "node scripts/route-aliases",

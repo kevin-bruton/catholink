@@ -1,7 +1,7 @@
 How to change jest color reporting from red to magenta:
 Change .red to .magenta in:
 
-D:\catholink\back\node_modules\jest\node_modules\jest-cli\build\reporters
+D:\cat\back\node_modules\jest\node_modules\jest-cli\build\reporters
 // jest-matcher-utils/build/index.js
 jest-message-utils/build/index.js
 jest-resolve/build/index.js
@@ -14,11 +14,11 @@ jest-util/build/get_console_output.js
 
 Have to set the following environment variables:
 
-CATHOLINK_MONGODB_URI
+CAT_MONGODB_URI
 Value: http://localhost:27017
 
-CATHOLINK_GOOGLE_CREDENTIALS_PATH
+CAT_GOOGLE_CREDENTIALS_PATH
 Value: path and filename of file where google credentials are stored
 
-CATHOLINK_GOOGLE_TOKEN_PATH
+CAT_GOOGLE_TOKEN_PATH
 Value: path and filename of file where google token is stored

@@ -1,7 +1,6 @@
 const db = require('./index')
 
 describe('db', () => {
-  let dbConn
   afterAll(() => {
     db.close()
   })

@@ -5,10 +5,10 @@ const db = require('@db')
 const password = require('../../../catholink')
 
 const newUser = {
-    firstName: 'Joe',
-    surname: 'Blow',
-    email: 'catholink@mail.com',
-    password
+  firstName: 'Joe',
+  surname: 'Blow',
+  email: 'catholink@mail.com',
+  password
 }
 
 describe('signup/init endpoint', () => {
@@ -16,7 +16,7 @@ describe('signup/init endpoint', () => {
     await db.open()
   })
 
-  describe('signup/init for first time', async () => {
+  describe('signup/init for first time', () => {
     let res
     beforeAll(async () => {
       res = await axios.post('http://localhost:5000/signup/init', newUser)
@@ -25,7 +25,7 @@ describe('signup/init endpoint', () => {
     it('adds new user in signup collection with firstName, surname, email, hashedPassword, and validation code', async () => {
       const found = (await db.signUp().find({email: newUser.email})).toArray()
       const userAdded = (await found)[0]
-      //console.log(userAdded)
+      // console.log(userAdded)
       expect(userAdded.firstName).toEqual(newUser.firstName)
       expect(userAdded.surname).toEqual(newUser.surname)
       expect(userAdded.email).toEqual(newUser.email)
@@ -51,7 +51,7 @@ describe('signup/init endpoint', () => {
     })
   })
 
-  describe('signup/init for registered user', async () => {
+  describe('signup/init for registered user', () => {
     let res
     beforeAll(async () => {
       await db.users().insertOne(newUser)

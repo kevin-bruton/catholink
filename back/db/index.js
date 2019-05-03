@@ -1,6 +1,6 @@
 const mongo = require('mongodb').MongoClient
 
-const _url = process.env.CATHOLINK_MONGODB_URI
+const _url = process.env.CAT_MONGODB_URI
 const _dbName = 'catholink'
 let _mongoConnection
 let _dbConnection
@@ -8,7 +8,7 @@ let _dbConnection
 const open = async () => {
   try {
     if (!_url) {
-      console.log(`Environment Variable 'CATHOLINK_MONGODB_URL' not defined. Exiting...`)
+      console.log(`Environment Variable 'CAT_MONGODB_URL' not defined. Exiting...`)
       process.exit()
     }
     _mongoConnection = await mongo.connect(_url, { useNewUrlParser: true })

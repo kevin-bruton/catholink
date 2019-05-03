@@ -2,10 +2,10 @@ const fs = require('fs')
 const readline = require('readline')
 const {google} = require('googleapis')
 
-const googleCredentialsPath = process.env.CATHOLINK_GOOGLE_CREDENTIALS_PATH
-const googleTokenPath = process.env.CATHOLINK_GOOGLE_TOKEN_PATH
+const googleCredentialsPath = process.env.CAT_GOOGLE_CREDENTIALS_PATH
+const googleTokenPath = process.env.CAT_GOOGLE_TOKEN_PATH
 if (!googleCredentialsPath || !googleTokenPath) {
-  console.log(`The environment variables 'CATHOLINK_GOOGLE_CREDENTIALS_PATH' and 'CATHOLINK_GOOGLE_TOKEN_PATH' must be set. Exiting...`)
+  console.log(`The environment variables 'CAT_GOOGLE_CREDENTIALS_PATH' and 'CAT_GOOGLE_TOKEN_PATH' must be set. Exiting...`)
   process.exit()
 }
 const GOOGLE_CREDENTIALS = JSON.parse(fs.readFileSync(googleCredentialsPath))
@@ -74,14 +74,14 @@ function getNewToken (oAuth2Client) {
           reject(err)
         }
         // Store the token to disk for later program executions
-        const TOKEN_PATH = '../../catholink2/token.json'
+        const TOKEN_PATH = '../../cat2/token.json'
         fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
           if (err) {
             console.error('Error saving token:', err)
             reject(err)
           }
           console.log('Token stored to', TOKEN_PATH)
-          process.env.CATHOLINK_GOOGLE_TOKEN = token
+          process.env.CAT_GOOGLE_TOKEN = token
           resolve(token)
         })
       })

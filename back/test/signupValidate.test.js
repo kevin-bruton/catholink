@@ -5,16 +5,16 @@ const db = require('@db')
 const bcrypt = require('bcrypt-nodejs')
 
 const newUser = {
-    firstName: 'Joe',
-    surname: 'Blow',
-    email: 'catholink@mail.com',
-    password: bcrypt.hashSync('123456')
+  firstName: 'Joe',
+  surname: 'Blow',
+  email: 'catholink@mail.com',
+  password: bcrypt.hashSync('123456')
 }
 const code = '1234'
 
-describe('signup/validate endpoint', async () => {
+describe('signup/validate endpoint', () => {
   let res
-   beforeAll(async () => {
+  beforeAll(async () => {
     await db.open()
     await db.signUp().insertOne(Object.assign(newUser, {status: 'emailSent', code}))
   })
