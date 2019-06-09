@@ -1,12 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const cookieParser = require('cookie-parser')
-const db = require('@db')
+const db = require('@db/')
 const {profileIdExists} = require('@db/users/search')
 const bcrypt = require('bcrypt-nodejs')
 const {sendEmail} = require('../email')
 const {getLiterals} = require('../email/signupLiterals')
-const {generateCode, standardize, removeSpaces} = require('@helpers')
+const {generateCode, standardize, removeSpaces} = require('@helpers/')
 
 router.use(cookieParser())
 

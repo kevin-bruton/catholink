@@ -1,3 +1,15 @@
+const HookRequirePath = require('hook-require-path')
+const hookRequirePath = new HookRequirePath()
+hookRequirePath.addRule('@', '.')
+hookRequirePath.addRule('@routers', './routers')
+hookRequirePath.addRule('@config', './config')
+hookRequirePath.addRule('@auth', './auth')
+hookRequirePath.addRule('@db', './db')
+hookRequirePath.addRule('@request', './request')
+hookRequirePath.addRule('@gospel', './gospel')
+hookRequirePath.addRule('@helpers', './helpers')
+hookRequirePath.install()
+
 const app = require('express')()
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -40,4 +52,6 @@ app.use('/', frontRouter)
       process.kill(process.pid, 'SIGUSR2')
     })
   })
+
+  process.title = 'catholink'
 })()

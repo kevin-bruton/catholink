@@ -13,7 +13,6 @@
     "test": "cross-env CAT_SERVER_MODE=DEV jest",
     "tester": "jest -t=api",
     "lint": "node ./node_modules/eslint/bin/eslint .",
-    "postinstall": "node scripts/route-aliases",
     "aliases": "node scripts/route-aliases"
   },
   "author": "Kevin Bruton",
@@ -30,6 +29,7 @@
     "express": "^4.16.3",
     "express-request-language": "^1.1.15",
     "googleapis": "^36.0.0",
+    "hook-require-path": "^1.1.0",
     "jsonwebtoken": "^8.3.0",
     "mongodb": "^3.1.4",
     "socket.io": "^2.2.0"

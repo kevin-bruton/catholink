@@ -14,11 +14,46 @@ jest-util/build/get_console_output.js
 
 Have to set the following environment variables:
 
-CAT_MONGODB_URI
-Value: http://localhost:27017
+CAT_SERVER_MODE (optional)
+If set to 'DEV' then external services are not invoked ie. google email sending
 
-CAT_GOOGLE_CREDENTIALS_PATH
-Value: path and filename of file where google credentials are stored
+CAT_ENV_DIR
+Its value should be the path of the directory where configuration values are found.
+It should contain the following files:
 
-CAT_GOOGLE_TOKEN_PATH
-Value: path and filename of file where google token is stored
+- conf.js
+It should export an object with this structure:
+module.exports = {
+  JWT: {
+    PRIVATE_KEY: '',
+    PUBLIC_KEY: ''
+  },
+  MONGO: {
+    DEV: {
+      USER: '',
+      PWD: '',
+      HOST: '',
+      DB: ''
+    },
+    PRO: {
+      USER: '',
+      PWD: '',
+      HOST: '',
+      DB: ''
+    }
+  },
+  GOOGLE_CREDENTIALS: {}
+}
+
+- env.js
+It should export an object with this structure, indicating 'DEV' or 'PRO':
+module.exports = {
+  ENV: 'DEV'
+}
+
+- google-token.json
+It should contain the Google token which can be refreshed by the application when necessary
+
+ENVIRONMENTS:
+- DEV: Mongo local
+- PRO(rasp): Mongo Cloud

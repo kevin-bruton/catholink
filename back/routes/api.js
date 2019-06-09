@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken')
-const privateKey = require('@auth/jwt-secret').privateKey
 const express = require('express')
+const privateKey = require('@/app-config').JWT.PRIVATE_KEY
 const router = express.Router()
-const { getRequest } = require('@request')
-const { getGospel, setGospel } = require('@gospel')
+const { getRequest } = require('@request/')
+const { getGospel, setGospel } = require('@gospel/')
 const { userSearch, getMyProfile, getAnothersProfile } = require('@db/users/search')
 const { updateVisibility, updateProfile, updateAvatar, getMyContacts } = require('@db/users/profile')
 const {getUserMessages} = require('@db/messages')

@@ -1,15 +1,14 @@
 const fs = require('fs')
+const path = require('path')
 const readline = require('readline')
 const {google} = require('googleapis')
 
-const googleCredentialsPath = process.env.CAT_GOOGLE_CREDENTIALS_PATH
-const googleTokenPath = process.env.CAT_GOOGLE_TOKEN_PATH
-if (!googleCredentialsPath || !googleTokenPath) {
-  console.log(`The environment variables 'CAT_GOOGLE_CREDENTIALS_PATH' and 'CAT_GOOGLE_TOKEN_PATH' must be set. Exiting...`)
+const GOOGLE_CREDENTIALS = require('@/app-config').GOOGLE_CREDENTIALS
+const GOOGLE_TOKEN = JSON.parse(fs.readFileSync(path.join(process.env.CAT_ENV_DIR, 'google-token.json')))
+if (!GOOGLE_CREDENTIALS || !GOOGLE_TOKEN) {
+  console.log(`Could not retrieve GOOGLE_CREDENTIALS or GOOGLE_TOKEN or both. Exiting...`)
   process.exit()
 }
-const GOOGLE_CREDENTIALS = JSON.parse(fs.readFileSync(googleCredentialsPath))
-const GOOGLE_TOKEN = JSON.parse(fs.readFileSync(googleTokenPath))
 
 module.exports = {
   gmailClient
@@ -74,40 +73,16 @@ function getNewToken (oAuth2Client) {
           reject(err)
         }
         // Store the token to disk for later program executions
-        const TOKEN_PATH = '../../cat2/token.json'
+        const TOKEN_PATH = path.join(process.env.CAT_ENV_DIR, 'google-token.json')
         fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
           if (err) {
             console.error('Error saving token:', err)
             reject(err)
           }
           console.log('Token stored to', TOKEN_PATH)
-          process.env.CAT_GOOGLE_TOKEN = token
           resolve(token)
         })
       })
     })
-  })
-}
-
-/**
- * Lists the labels in the user's account.
- *
- * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
- */
-function listLabels (auth) {
-  const gmail = google.gmail({version: 'v1', auth})
-  gmail.users.labels.list({
-    userId: 'me'
-  }, (err, res) => {
-    if (err) return console.log('The API returned an error: ' + err)
-    const labels = res.data.labels
-    if (labels.length) {
-      console.log('Labels:')
-      labels.forEach((label) => {
-        console.log(`- ${label.name}`)
-      })
-    } else {
-      console.log('No labels found.')
-    }
   })
 }

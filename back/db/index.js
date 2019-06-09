@@ -1,22 +1,17 @@
+const {USER, PWD, HOST, DB_NAME} = require('@/app-config').MONGO
 const mongo = require('mongodb').MongoClient
-
-const _url = process.env.CAT_MONGODB_URI
-const _dbName = 'catholink'
+const _url = `mongodb://${USER}:${PWD}@${HOST}/${DB_NAME}`
 let _mongoConnection
 let _dbConnection
 
 const open = async () => {
   try {
-    if (!_url) {
-      console.log(`Environment Variable 'CAT_MONGODB_URL' not defined. Exiting...`)
-      process.exit()
-    }
     _mongoConnection = await mongo.connect(_url, { useNewUrlParser: true })
   } catch (err) {
     console.log(err.stack)
     process.exit()
   }
-  _dbConnection = _mongoConnection.db(_dbName)
+  _dbConnection = _mongoConnection.db(DB_NAME)
 }
 
 const close = () => _mongoConnection.close()
