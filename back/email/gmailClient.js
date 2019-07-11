@@ -3,10 +3,10 @@ const path = require('path')
 const readline = require('readline')
 const {google} = require('googleapis')
 
-const GOOGLE_CREDENTIALS = require('@/app-config').GOOGLE_CREDENTIALS
-const GOOGLE_TOKEN = JSON.parse(fs.readFileSync(path.join(process.env.CAT_ENV_DIR, 'google-token.json')))
+const GOOGLE_CREDENTIALS = JSON.parse(process.env.CAT_GOOGLE_CREDENTIALS)
+const GOOGLE_TOKEN = JSON.parse(process.env.CAT_GOOGLE_TOKEN)
 if (!GOOGLE_CREDENTIALS || !GOOGLE_TOKEN) {
-  console.log(`Could not retrieve GOOGLE_CREDENTIALS or GOOGLE_TOKEN or both. Exiting...`)
+  console.log(`Could not retrieve GOOGLE_CREDENTIALS or GOOGLE_TOKEN or either. Exiting...`)
   process.exit()
 }
 

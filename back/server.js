@@ -10,9 +10,15 @@ hookRequirePath.addRule('@gospel', './gospel')
 hookRequirePath.addRule('@helpers', './helpers')
 hookRequirePath.install()
 
+;(function checkEnvVariablesAreDefined () {
+  if (!process.env.CAT_JWT || !process.env.CAT_MONGO || !process.env.CAT_GOOGLE_CREDENTIALS || !process.env.CAT_GOOGLE_TOKEN) {
+    console.log('One or more environment variables are missing')
+    process.exit()
+  }
+})()
+
 const app = require('express')()
 const bodyParser = require('body-parser')
-const cors = require('cors')
 const db = require('./db')
 const apiRouter = require('./routes/api')
 const frontRouter = require('./routes/front')
@@ -20,8 +26,11 @@ const authRouter = require('./routes/auth')
 const signUpRouter = require('./routes/signup')
 const socket = require('./socket')
 
-// For development:
-app.use(cors())
+if (process.env.CAT_ENV === 'DEV') {
+  const cors = require('cors')
+  app.use(cors())
+}
+
 const http = socket(app)
 
 app.use(bodyParser.urlencoded({ extended: false }))

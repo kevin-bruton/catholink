@@ -1,13 +1,13 @@
 const jwt = require('jsonwebtoken')
 const express = require('express')
-const privateKey = require('@/app-config').JWT.PRIVATE_KEY
+const CAT_JWT = JSON.parse(process.env.CAT_JWT)
 const router = express.Router()
-const { getRequest } = require('@request/')
-const { getGospel, setGospel } = require('@gospel/')
-const { userSearch, getMyProfile, getAnothersProfile } = require('@db/users/search')
-const { updateVisibility, updateProfile, updateAvatar, getMyContacts } = require('@db/users/profile')
-const {getUserMessages} = require('@db/messages')
-const dummyGospel = require('@gospel/dummy')
+const { getRequest } = require('../request/')
+const { getGospel, setGospel } = require('../gospel/')
+const { userSearch, getMyProfile, getAnothersProfile } = require('../db/users/search')
+const { updateVisibility, updateProfile, updateAvatar, getMyContacts } = require('../db/users/profile')
+const {getUserMessages} = require('../db/messages')
+const dummyGospel = require('../gospel/dummy')
 
 router.use(authorizeApi)
 
@@ -90,7 +90,7 @@ async function authorizeApi (req, res, next) {
     const token = bearer.slice('Bearer '.length)
     if (token) {
       try {
-        const decoded = jwt.verify(token, privateKey)
+        const decoded = jwt.verify(token, CAT_JWT.PRIVATE_KEY)
         req.email = decoded.email
         req.profileId = decoded.profileId
         console.log('authorizeApi: Token verified\n')

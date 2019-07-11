@@ -1,6 +1,6 @@
-const {USER, PWD, HOST, DB_NAME} = require('@/app-config').MONGO
 const mongo = require('mongodb').MongoClient
-const _url = `mongodb://${USER}:${PWD}@${HOST}/${DB_NAME}`
+const MONGO_CREDENTIALS = JSON.parse(process.env.CAT_MONGO)
+const _url = `mongodb://${MONGO_CREDENTIALS.USER}:${MONGO_CREDENTIALS.PWD}@${MONGO_CREDENTIALS.HOST}/${MONGO_CREDENTIALS.DB_NAME}`
 let _mongoConnection
 let _dbConnection
 
@@ -9,9 +9,10 @@ const open = async () => {
     _mongoConnection = await mongo.connect(_url, { useNewUrlParser: true })
   } catch (err) {
     console.log(err.stack)
+    console.log('\nCOULD NOT CONNECT TO MONGO... IS IT RUNNING?\n')
     process.exit()
   }
-  _dbConnection = _mongoConnection.db(DB_NAME)
+  _dbConnection = _mongoConnection.db(MONGO_CREDENTIALS.DB_NAME)
 }
 
 const close = () => _mongoConnection.close()

@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const db = require('@db/')
 const bcrypt = require('bcrypt-nodejs')
 const btoa = require('btoa')
-const jwtSecret = process.env.CAT_JWT_PRIVATE_KEY
+const CAT_JWT = JSON.parse(process.env.CAT_JWT)
 
 router.post('/', async (req, res, next) => {
   const clearPassword = req.body.password
@@ -21,7 +21,7 @@ router.post('/', async (req, res, next) => {
     if (email === found[0].email && bcrypt.compareSync(clearPassword, found[0].password)) {
       console.log(' -> Authenticated!\n')
       const basicUserInfo = {email, firstName: found[0].firstName, surname: found[0].surname, profileId: found[0].profileId}
-      return res.json({user: btoa(JSON.stringify(basicUserInfo)), token: jwt.sign(basicUserInfo, jwtSecret)})
+      return res.json({user: btoa(JSON.stringify(basicUserInfo)), token: jwt.sign(basicUserInfo, CAT_JWT.PRIVATE_KEY)})
     }
   }
   const message = 'Invalid credentials'
