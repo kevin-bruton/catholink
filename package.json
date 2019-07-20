@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node back/server.js",
     "start-db": "mongod --dbpath=./back/db-data --auth",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-start": "cd front && node scripts/build.js && cd ../back && node server.js",
+    "postinstall": "cd front && npm install && cd ../back && npm install"
   },
   "author": "Kevin Bruton",
   "license": "ISC",
