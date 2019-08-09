@@ -7,7 +7,9 @@
     "start": "node back/server.js",
     "start-db": "mongod --dbpath=./back/db-data --auth",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "cd front && node scripts/build.js"
+    "build": "cd front && node scripts/build.js",
+    "build-start": "cd front && npm i && node scripts/build.js && cd ../back && npm i && node server.js",
+    "postinstall": "cd front && npm install && cd ../back && npm install"
   },
   "author": "Kevin Bruton",
   "license": "ISC",
@@ -16,8 +18,10 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "cd front && node scripts/test"
+      "pre-commit": ""
     }
   },
-  "dependencies": {}
+  "engines": {
+    "node": ">=8.00"
+  }
 }
