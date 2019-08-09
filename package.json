@@ -20,8 +20,5 @@
     "hooks": {
       "pre-commit": ""
     }
-  },
-  "engines": {
-    "node": ">=8.00"
   }
 }
