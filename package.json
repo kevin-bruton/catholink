@@ -8,8 +8,8 @@
     "start-db": "mongod --dbpath=./back/db-data --auth",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "cd front && node scripts/build.js",
-    "build-start": "cd front && npm i && node scripts/build.js && cd ../back && npm i && node server.js",
-    "postinstall": "cd front && npm install && cd ../back && npm install"
+    "postinstall": "cd front && npm install && cd ../back && npm install && cd ..",
+    "heroku-start": "cd front && node scripts/build && cd ../back && node server"
   },
   "author": "Kevin Bruton",
   "license": "ISC",

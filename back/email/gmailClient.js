@@ -73,6 +73,9 @@ function getNewToken (oAuth2Client) {
           reject(err)
         }
         // Store the token to disk for later program executions
+        console.log(process.env.CAT_ENV_DIR
+          ? 'Trying to store new Google token to directory set in env variable CAT_ENV_DIR'
+          : `Can't set new Google token to directory because env varialbe CAT_ENV_DIR isn't set`)
         const TOKEN_PATH = path.join(process.env.CAT_ENV_DIR, 'google-token.json')
         fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
           if (err) {
