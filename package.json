@@ -9,7 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "cd front && node scripts/build.js",
     "build-start": "cd front && npm i && node scripts/build.js && cd ../back && npm i && node server.js",
-    "postinstall": "cd front && npm install && cd ../back && npm install"
+    "postinstall": "cd front && npm install && cd ../back && npm install",
+    "heroku-start": "cd front && node scripts/build"
   },
   "author": "Kevin Bruton",
   "license": "ISC",
