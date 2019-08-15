@@ -153,7 +153,7 @@ async function restartSignUp (firstName, surname, email, hashedPassword, code) {
   } catch (err) {
     log(`ERROR trying to updateOne in db.signup: ${err}`)
     return false
-  } 
+  }
 }
 
 async function startSignUp (firstName, surname, email, hashedPassword, code) {
@@ -178,7 +178,7 @@ async function recordEmailFailureStatus (email) {
 
 async function recordEmailSentStatus (email) {
   try {
-    await db.signUp().updateOne({email}, {$set:{status: 'emailSent'}, $inc:{numEmailsSent:1}})
+    await db.signUp().updateOne({email}, {$set: {status: 'emailSent'}, $inc: {numEmailsSent: 1}})
   } catch (err) {
     log(`ERROR -recordEmailSentStatus- trying to updateOne in db.signup: ${err}`)
   }
@@ -199,7 +199,7 @@ function getMessage (lang, firstName, code) {
 ${message.greeting} ${firstName}!<br><br>
 &nbsp;&nbsp;&nbsp;&nbsp;${message.line1}<br>
 ${message.line2}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://localhost:5000/signupvalidate?code=${code}">${message.validate}</a><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="${process.env.CAT_DOMAIN}/signupvalidate?code=${code}">${message.validate}</a><br><br>
 ${message.bye}<br>
 ${message.signature}
 `

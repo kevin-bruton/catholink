@@ -8,7 +8,7 @@ describe('API TESTS', function () {
       let resp
       beforeAll(async function () {
         try {
-          resp = await axios.get('http://localhost:5000/api')
+          resp = await axios.get(`${process.env.CAT_DOMAIN}/api`)
         } catch (err) { resp = err.response }
       })
       it('should return status 401 Unauthorized', function () {
@@ -23,7 +23,7 @@ describe('API TESTS', function () {
       let resp
       beforeAll(async function () {
         try {
-          resp = await axios.get('http://localhost:5000/api', { headers: { Authorization: 'Bearer 123456' } })
+          resp = await axios.get(`${process.env.CAT_DOMAIN}/api`, { headers: { Authorization: 'Bearer 123456' } })
           console.log(resp)
         } catch (err) { resp = err.response }
       })
@@ -39,14 +39,14 @@ describe('API TESTS', function () {
       let resp, token
       beforeAll(async function () {
         try {
-          resp = await axios.post('http://localhost:5000/auth', { email: 'kevin@mail.com', password: 'secret' })
+          resp = await axios.post(`${process.env.CAT_DOMAIN}/api`, { email: 'kevin@mail.com', password: 'secret' })
           token = resp.data.token
         } catch (err) {
           resp = err.response
           return
         }
         try {
-          resp = await axios.get('http://localhost:5000/api', { headers: { Authorization: `Bearer ${token}` } })
+          resp = await axios.get(`${process.env.CAT_DOMAIN}/api`, { headers: { Authorization: `Bearer ${token}` } })
         } catch (err) { resp = err.response }
       })
       it('should return status 200 ok', function () {
@@ -62,7 +62,7 @@ describe('API TESTS', function () {
       let resp
       beforeAll(async function () {
         try {
-          resp = await axios.get('http://localhost:5000/api', { headers: { Authorization: 'Bearer 123456' } })
+          resp = await axios.get(`${process.env.CAT_DOMAIN}/api`, { headers: { Authorization: 'Bearer 123456' } })
           console.log(resp)
         } catch (err) { resp = err.response }
       })
@@ -79,13 +79,13 @@ describe('API TESTS', function () {
       beforeAll(async function () {
         // jest.setTimeout(30000)
         try {
-          resp = await axios.post('http://localhost:5000/auth/', { email: 'kevin@mail.com', password: 'secret' })
+          resp = await axios.post(`${process.env.CAT_DOMAIN}/api`, { email: 'kevin@mail.com', password: 'secret' })
           token = resp.data.token
         } catch (err) {
           resp = err.response
         }
         try {
-          resp = await axios.get('http://localhost:5000/api/validate', { headers: { Authorization: `Bearer ${token}` } })
+          resp = await axios.get(`${process.env.CAT_DOMAIN}/api`, { headers: { Authorization: `Bearer ${token}` } })
         } catch (err) { resp = err.response }
       })
       it('should return status 200 ok', function () {

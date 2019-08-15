@@ -12,7 +12,7 @@ hookRequirePath.addRule('@log', './log')
 hookRequirePath.install()
 
 ;(function checkEnvVariablesAreDefined () {
-  if (!process.env.CAT_JWT || !process.env.CAT_MONGO || !process.env.CAT_GOOGLE_CREDENTIALS || !process.env.CAT_GOOGLE_TOKEN) {
+  if (!process.env.CAT_JWT || !process.env.CAT_MONGO || !process.env.CAT_GOOGLE_CREDENTIALS || !process.env.CAT_GOOGLE_TOKEN || !process.env.CAT_DOMAIN) {
     log('One or more environment variables are missing')
     process.exit()
   }

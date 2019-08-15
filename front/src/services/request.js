@@ -9,7 +9,7 @@ export {
   signUpValidate
 }
 
-const backendHost = process.env.REACT_APP_API_MODE === 'VCR' ? 'http://localhost:5500' : 'http://localhost:5000'
+const backendHost = process.env.REACT_APP_API_MODE === 'VCR' ? 'http://localhost:5500' : window.location.origin
 const apiUrl = `${backendHost}/api`
 const authUrl = `${backendHost}/auth`
 const signUpUrl = `${backendHost}/signup`

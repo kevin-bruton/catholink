@@ -11,7 +11,7 @@ export {
 let socket
 
 function connectSocket (profileId) {
-  socket = io('http://localhost:5000')
+  socket = io(window.location.origin)
   socket.on('connect', () => console.log('socketio connected', socket.id))
   socket.emit('PROFILE_ID', profileId)
   getRequest('messages').then(messages =>

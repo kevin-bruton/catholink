@@ -25,7 +25,7 @@ describe('signup/validate endpoint', () => {
 
   it('when a valid code is sent: it returns status 200 and no errors', async () => {
     try {
-      res = await axios.get(`http://localhost:5000/signup/validate?code=${initUser.code}`)
+      res = await axios.get(`${process.env.CAT_DOMAIN}/signup/validate?code=${initUser.code}`)
     } catch (err) {
       console.log('ERROR test axios signup/validate', err)
     }
@@ -41,7 +41,7 @@ describe('signup/validate endpoint', () => {
   it(`when an invalid code is sent: it returns 200 with an error message`, async () => {
     const invalidCode = '4321'
     try {
-      res = await axios.get(`http://localhost:5000/signup/validate?code=${invalidCode}`)
+      res = await axios.get(`${process.env.CAT_DOMAIN}/signup/validate?code=${invalidCode}`)
     } catch (err) {
       res = err.response
     }
