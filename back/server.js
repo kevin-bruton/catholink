@@ -11,9 +11,13 @@ hookRequirePath.addRule('@helpers', './helpers')
 hookRequirePath.addRule('@log', './log')
 hookRequirePath.install()
 
+const log = require('./log')
 ;(function checkEnvVariablesAreDefined () {
-  if (!process.env.CAT_JWT || !process.env.CAT_MONGO || !process.env.CAT_GOOGLE_CREDENTIALS || !process.env.CAT_GOOGLE_TOKEN || !process.env.CAT_DOMAIN) {
+  const {CAT_JWT, CAT_MONGO, CAT_GOOGLE_CREDENTIALS, CAT_GOOGLE_TOKEN, CAT_DOMAIN} = process.env
+  if (!CAT_JWT || !CAT_MONGO || !CAT_GOOGLE_CREDENTIALS || !CAT_GOOGLE_TOKEN || !CAT_DOMAIN) {
     log('One or more environment variables are missing')
+    const envVars = {CAT_JWT, CAT_MONGO, CAT_GOOGLE_CREDENTIALS, CAT_GOOGLE_TOKEN, CAT_DOMAIN}
+    Object.keys(envVars).forEach(envVarName => log(envVarName, envVars[envVarName]))
     process.exit()
   }
 })()
@@ -26,7 +30,6 @@ const frontRouter = require('./routes/front')
 const authRouter = require('./routes/auth')
 const signUpRouter = require('./routes/signup')
 const socket = require('./socket')
-const log = require('./log')
 
 if (process.env.CAT_ENV === 'DEV') {
   const cors = require('cors')

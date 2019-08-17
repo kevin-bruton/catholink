@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { getSocket } from '@services/socket'
-import { getStoreValue, storeCategory, subscribeStoreChanges, sendStoreEvent, eventType, messageStatus } from '@store'
+import { getStoreValue, storeCategory, subscribeStoreChanges, sendStoreEvent, eventType } from '@store'
 import { get as getRequest } from '@services/request'
 import styles from './styles.scss'
 import literals from './literals'

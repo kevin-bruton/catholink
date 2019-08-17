@@ -123,10 +123,10 @@ export class SignUp extends React.Component {
               <div className='field' id='passwordRepeat'>
                 <label className={styles.labelAlign + ' label'}>{literals.passwordRepeat}</label>
                 <div className='control'>
-                  <input className={'input' + ((error.passwordRepeatEmpty || error.passwordsNotEqual) ? ' is-danger' : '')} type='password' name='passwordRepeat' onChange={this.handleChange} onBlur={this.handleBlur} />
+                  <input className={'input' + ((this.state.passwordRepeat && this.state.password !== this.state.passwordRepeat) ? ' is-danger' : '')} type='password' name='passwordRepeat' onChange={this.handleChange} onBlur={this.handleBlur} />
                 </div>
                 <p id='passRepeatReqMess' className='help is-danger'>{error.passwordRepeatEmpty && literals.passwordRepeatRequired}</p>
-                <p id='samePassMess' className='help is-danger'>{error.passwordsNotEqual && literals.samePasswordsRequired}</p>
+                <p id='samePassMess' className='help is-danger'>{this.state.password !== this.state.passwordRepeat && this.state.passwordRepeat && literals.samePasswordsRequired}</p>
               </div>
               <div className='field' id='signUpBtn'>
                 <div className={'control' + styles.flexbox}>
