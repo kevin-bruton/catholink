@@ -11,7 +11,13 @@ export {
 let socket
 
 function connectSocket (profileId) {
-  socket = io(window.location.origin)
+  const backendHost = process.env.REACT_APP_API_MODE === 'VCR'
+    ? 'http://localhost:5500'
+    : process.env.REACT_APP_API_MODE === 'DEV'
+      ? 'http://localhost:5000'
+      : window.location.origin
+  console.log(process.env.REACT_APP_API_MODE, 'backend requests to', backendHost)
+  socket = io(backendHost)
   socket.on('connect', () => console.log('socketio connected', socket.id))
   socket.emit('PROFILE_ID', profileId)
   getRequest('messages').then(messages =>
