@@ -16,7 +16,6 @@ function connectSocket (profileId) {
     : process.env.REACT_APP_API_MODE === 'DEV'
       ? 'http://localhost:5000'
       : window.location.origin
-  console.log(process.env.REACT_APP_API_MODE, 'backend requests to', backendHost)
   socket = io(backendHost)
   socket.on('connect', () => console.log('socketio connected', socket.id))
   socket.emit('PROFILE_ID', profileId)
