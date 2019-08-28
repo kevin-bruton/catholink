@@ -31,7 +31,7 @@ const authRouter = require('./routes/auth')
 const signUpRouter = require('./routes/signup')
 const socket = require('./socket')
 
-if (process.env.CAT_ENV === 'DEV') {
+if (process.env.CAT_SERVER_MODE === 'DEV') {
   const cors = require('cors')
   app.use(cors())
 }
