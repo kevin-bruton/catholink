@@ -16,7 +16,9 @@ export class NavMenu extends React.Component {
   }
 
   clickEv (e) {
-    document.querySelector('#NavMenu').contains(e.target) || document.querySelector('#NavIcon').contains(e.target) || this.toggleOpenMenu()
+    (document.querySelector('#NavMenu') && document.querySelector('#NavMenu').contains(e.target))
+      || (document.querySelector('#NavIcon') && document.querySelector('#NavIcon').contains(e.target))
+      || this.toggleOpenMenu()
   }
 
   toggleOpenMenu () {
@@ -45,7 +47,8 @@ export class NavMenu extends React.Component {
       <div className={'media ' + styles.userInfoHeader}>
         <div className='media-left'>
           <figure className='image is-48x48'>
-            <i className='fas fa-user fa-3x' alt='users foto' />
+          {this.state.user.avatar ? <img src={this.state.user.avatar} alt='avatar' /> : <i className='fas fa-user fa-3x' alt='users foto' />}
+            {/* <i className='fas fa-user fa-3x' alt='users foto' /> */}
           </figure>
         </div>
         <div className={'media-content ' + styles.userInfoHeaderContent}>

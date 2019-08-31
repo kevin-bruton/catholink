@@ -49,7 +49,7 @@ export class AvatarEditor extends React.Component {
           <div className='box'>
             <h2 className='title is-4'>{literals.title}</h2>
             <div className='columns'>
-              <div id='avatarEdit' className='column'>
+              <div id='avatarEdit' className={'column ' + styles.selectFileBox}>
                 <AvatarEdit
                   width={200}
                   height={200}
@@ -58,7 +58,8 @@ export class AvatarEditor extends React.Component {
                   label={literals.chooseFile}
                 />
               </div>
-              <div className='column'>
+              <div className={'column' + (this.state.preview ? ' ' + styles.editBox : '')}>
+                <div>{literals.preview}:</div>
                 {this.state.preview && <img id='avatarPreview' src={this.state.preview} alt="Preview" />}
               </div>
             </div>

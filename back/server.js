@@ -32,6 +32,7 @@ const signUpRouter = require('./routes/signup')
 const socket = require('./socket')
 
 if (process.env.CAT_SERVER_MODE === 'DEV') {
+  console.log('CORS enabled')
   const cors = require('cors')
   app.use(cors())
 }
