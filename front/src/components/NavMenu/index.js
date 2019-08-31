@@ -4,8 +4,6 @@ import { literals } from './literals'
 import styles from './styles.scss'
 
 export class NavMenu extends React.Component {
-  clickListener
-
   constructor (props) {
     super(props)
     this.state = {
@@ -25,7 +23,7 @@ export class NavMenu extends React.Component {
       this.setState({menuOpen: false})
       body.removeEventListener('mousedown', this.clickEv, true)
     } else {
-      this.clickListener = body.addEventListener('mousedown', this.clickEv, true)
+      body.addEventListener('mousedown', this.clickEv, true)
       this.setState({menuOpen: true})
     }
   }
