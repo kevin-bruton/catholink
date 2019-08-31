@@ -26,11 +26,12 @@
 
 .nav-menu {
   position: fixed;
-  top: 0px;
+  top: 0;
   left: 0;
+  max-width: 400px;
   background-color: white; /* #F4F4F4; */
   overflow: hidden;
-  transition: all 0.5s;
+  transition: width 0.5s;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   z-index: 100;
 }
@@ -74,4 +75,21 @@
 .linkItems > li > a {
   line-height: 2;
   font-size: 1.2em;
+  white-space: nowrap;
+}
+
+.userInfoHeader {
+  padding: 5px;
+  justify-content: center;
+  border-bottom: 2px solid lightgray;
+  white-space: nowrap;
+}
+
+.userInfoHeaderContent {
+  flex-grow: 0;
+}
+
+.separator {
+  background-color: light-grey;
+  height: 2px;
 }
