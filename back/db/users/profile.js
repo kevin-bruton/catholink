@@ -39,8 +39,9 @@ async function updateAvatar (profileId, avatar) {
     log('OK\n')
     return {}
   } catch (err) {
-    log('ERROR trying to update user avatar db.users().updateOne', err)
-    return {error: 'DB failure'}
+    log('ERROR trying to update user avatar db.users().updateOne')
+    log(err)
+    return {error: '-DB failure'}
   }
 }
 
