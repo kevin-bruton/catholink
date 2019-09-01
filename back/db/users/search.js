@@ -47,7 +47,7 @@ async function userSearch (search) {
             {'visibility.profile': 'members'},
             {$and: [{'visibility.profile': 'contacts'}, {contacts: search.requestingUser}]}
           ]},
-          {$or: [{firstName: {$regex: new RegExp(search.searchText)}}, {surname: {$regex: new RegExp(search.searchText)}}]}
+          {$or: [{firstName: {$regex: new RegExp(search.searchText, 'i')}}, {surname: {$regex: new RegExp(search.searchText, 'i')}}]}
         ]}
       )
       .project({_id: 0, password: 0, avatar: 0}))
