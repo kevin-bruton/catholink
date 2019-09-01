@@ -1,6 +1,10 @@
 import { getLangLiterals } from '@helpers/get-lang-literals'
 
 export default getLangLiterals({
+  title: {
+    en: 'My Messages',
+    es: 'Mis mensajes'
+  },
   typeMessage: {
     en: 'Type your message here',
     es: 'Escriba tu mensaje aquí'

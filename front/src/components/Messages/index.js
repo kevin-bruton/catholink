@@ -121,8 +121,11 @@ export class Messages extends Component {
         {selectedContact ? CONTACT_MESSAGES : literals.noContactSelected}
       </div>
     return (
-      <div id='Messages' className={styles.MessagesPage}>
-        <div className='columns is-variable is-5'>
+      <div id='Messages' className={styles.Messages}>
+        <div className={styles.title}>
+          {literals.title}
+        </div>
+        <div className={'columns is-variable is-5 ' + styles.MessagesPage}>
           <div className={`column is-2 box ${styles.ConversationsBox}`}>
             {CONVERSATIONS_BOX}
           </div>
