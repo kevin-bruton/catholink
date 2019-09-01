@@ -1,30 +1,42 @@
-.nav-icon {
+.navIconBox {
+  display: flex;
+}
+
+.navIcon {
   margin: 10px 5px;
   width: 25px;
 }
 
-.nav-icon .nav-icon-bar {
+.navIcon .navIconBar {
   background-color: white;
   border-radius: 3px;
   content: '';
   height: 3px;
   margin: 5px 0;
-  transition: all 0.5s;
 }
 
-.nav-menu-open .nav-icon-bar.nav-icon-bar1 {
-  transform: translateY(8px) rotate(135deg);
+.closeIcon {
+  margin: 10px 5px;
+  width: 25px;
 }
 
-.nav-menu-open .nav-icon-bar.nav-icon-bar2 {
-  transform: scale(0);
+.closeIcon .closeIconBar {
+  background-color: white;
+  border-radius: 3px;
+  content: '';
+  height: 3px;
+  margin: 5px 0;
 }
 
-.nav-menu-open .nav-icon-bar.nav-icon-bar3 {
-  transform: translateY(-8px) rotate(-135deg);
+.closeIconBar.closeIconBar1 {
+  transform: translateY(4px) rotate(135deg);
 }
 
-.nav-menu {
+.closeIconBar.closeIconBar2 {
+  transform: translateY(-4px) rotate(-135deg);
+}
+
+.navMenu {
   position: fixed;
   top: 0;
   left: 0;
@@ -36,26 +48,26 @@
   z-index: 100;
 }
 
-.nav-menu:not(.nav-menu-open) {
+.navMenu:not(.navMenuOpen) {
   width: 0;
 }
 
-.nav-menu.nav-menu-open {
+.navMenu.navMenuOpen {
   width: 80%;
 }
 
-.nav-menu-title {
+.navMenuTitle {
   display: flex;
   justify-content: space-between;
   background-color: #011c50;
 }
 
-.nav-menu-title-img {
+.navMenuTitleImg {
   height: 40px;
   margin-top: 3px;
 }
 
-.nav-menu-background {
+.navMenuBackground {
   position: fixed;
   left: 0;
   top: 0;
@@ -67,7 +79,7 @@
   transition: opacity 0.5s;
 }
 
-.nav-menu-background.menu-open {
+.navMenuBackground.menuOpen {
   opacity: 0.7;
   z-index: 10;
 }

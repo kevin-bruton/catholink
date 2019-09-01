@@ -1,5 +1,6 @@
 import React from 'react'
 import { NavLink, Link } from 'react-router-dom'
+import { MessagesIcon } from '../MessagesIcon'
 import { literals } from './literals'
 import styles from './styles.scss'
 import {storeCategory, getStoreValue} from '@store'
@@ -32,23 +33,31 @@ export class NavMenu extends React.Component {
     }
   }
   render () {
-    const navMenuBackground = <div id="NavMenuBackground" className={styles['nav-menu-background'] + (this.state.menuOpen ? ' ' + styles['menu-open'] : '')}></div>
-    const navIcon = <nav id="NavIcon" className={styles['nav-icon'] + (this.state.menuOpen ? ' ' + styles['nav-menu-open'] : '')} onClick={this.toggleOpenMenu}>
-        <div className={styles['nav-icon-bar'] + ' ' + styles['nav-icon-bar1']}></div>
-        <div className={styles['nav-icon-bar'] + ' ' + styles['nav-icon-bar2']}></div>
-        <div className={styles['nav-icon-bar'] + ' ' + styles['nav-icon-bar3']}></div>
-      </nav>
-    const navMenuHeader = <div className={styles['nav-menu-title']}>
+    const navMenuBackground = <div id="NavMenuBackground" className={styles.navMenuBackground + (this.state.menuOpen ? ' ' + styles.menuOpen : '')}></div>
+    const navIcon =
+      <div className={styles.navIconBox}>
+        <nav id="NavIcon" className={styles.navIcon} onClick={this.toggleOpenMenu}>
+          <div className={styles.navIconBar + ' ' + styles.navIconBar1}></div>
+          <div className={styles.navIconBar + ' ' + styles.navIconBar2}></div>
+          <div className={styles.navIconBar + ' ' + styles.navIconBar3}></div>
+        </nav>
+        <MessagesIcon />
+      </div>
+    const closeMenuIcon =
+      <div className={styles.closeIcon} onClick={this.toggleOpenMenu}>
+        <div className={styles.closeIconBar + ' ' + styles.closeIconBar1}></div>
+        <div className={styles.closeIconBar + ' ' + styles.closeIconBar2}></div>
+      </div>
+    const navMenuHeader = <div className={styles.navMenuTitle}>
         <div></div>
-        <img className={styles['nav-menu-title-img']} src="/static/media/brandname.8add5242.svg" alt="Catholink title"/>
-        {navIcon}
+        <img className={styles.navMenuTitleImg} src="/static/media/brandname.8add5242.svg" alt="Catholink title"/>
+        {closeMenuIcon}
       </div>
     const userInfoHeader =
       <div className={'media ' + styles.userInfoHeader}>
         <div className='media-left'>
           <figure className='image is-48x48'>
-          {this.state.user.avatar ? <img src={this.state.user.avatar} alt='avatar' /> : <i className='fas fa-user fa-3x' alt='users foto' />}
-            {/* <i className='fas fa-user fa-3x' alt='users foto' /> */}
+            {this.state.user.avatar ? <img src={this.state.user.avatar} alt='avatar' /> : <i className='fas fa-user fa-3x' alt='users foto' />}
           </figure>
         </div>
         <div className={'media-content ' + styles.userInfoHeaderContent}>
@@ -56,7 +65,7 @@ export class NavMenu extends React.Component {
           <p className='subtitle is-6'>{this.state.user.email}</p>
         </div>
       </div>
-    const navMenu = <aside id='NavMenu' role="navigation" className={styles['nav-menu'] + (this.state.menuOpen ? ' ' + styles['nav-menu-open'] : '')}>
+    const navMenu = <aside id='NavMenu' role="navigation" className={styles.navMenu + (this.state.menuOpen ? ' ' + styles.navMenuOpen : '')}>
         {navMenuHeader}
         {userInfoHeader}
         <ul className={styles.linkItems}>
