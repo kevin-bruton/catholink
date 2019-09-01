@@ -23,7 +23,7 @@ describe('signup/init endpoint', () => {
   })
 
   describe('signup/init for first time', () => {
-    let res, userAdded
+    let userAdded
     beforeAll(async () => {
     })
 
@@ -33,7 +33,7 @@ describe('signup/init endpoint', () => {
 
     it('adds new user in signup collection with firstName, surname, email, hashedPassword, and validation code', async () => {
       try {
-        res = await axios.post('http://localhost:5000/signup/init', initUser)
+        await axios.post(`${process.env.CAT_DOMAIN}/signup/init`, initUser)
       } catch (err) {
         console.log('AXIOS ERROR:', err)
       }
@@ -46,7 +46,7 @@ describe('signup/init endpoint', () => {
       expect(userAdded.status).toEqual('emailSent')
       expect(userAdded.numEmailsSent).toEqual(1)
     })
-/* 
+    /*
     it('sends and email with the validation link to the user', async () => {
       expect(userAdded.status).toEqual('emailSent')
     })
@@ -56,7 +56,7 @@ describe('signup/init endpoint', () => {
       expect(res.data.message).toEqual('Validation email sent')
     }) */
   })
-/* 
+/*
   describe('signup/init for registered user', () => {
     let res
     beforeAll(async () => {
@@ -78,7 +78,7 @@ describe('signup/init endpoint', () => {
       expect(res.data.error).toEqual('User is already registered')
     })
   }) */
-/* 
+/*
   describe('signup/init unregistered user who has already attempted signup', () => {
     let res
     beforeAll(async () => {

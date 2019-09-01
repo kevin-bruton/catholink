@@ -8,5 +8,13 @@ export const literals = getLangLiterals({
   messages: {
     en: 'Messages',
     es: 'Mensajes'
+  },
+  viewProfile: {
+    en: 'View Profile',
+    es: 'Ver perfil'
+  },
+  logout: {
+    en: 'Logout',
+    es: 'Cerrar sesión'
   }
 })

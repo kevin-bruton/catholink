@@ -1,4 +1,5 @@
 const db = require('./index')
+const log = require('@log/')
 
 describe('db', () => {
   afterAll(() => {
@@ -12,7 +13,7 @@ describe('db', () => {
   })
   it('can find users in the users collection with the connection', async () => {
     const found = await (await db.connection().collection('users').find({firstName: 'Kevin'})).toArray()
-    console.log(found)
+    log(found)
     expect(found).toHaveLength(1)
   })
   it('can find users accessing the users collection directly', async () => {
@@ -21,7 +22,7 @@ describe('db', () => {
   })
   it('can find users using a projection to limit the fields returned', async () => {
     const found = await (await db.users().find({firstName: 'Kevin'}).project({_id: 0, firstName: 1})).toArray()
-    console.log(found)
+    log(found)
     expect(found._id).toBeUndefined()
   })
 })

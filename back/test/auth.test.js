@@ -27,7 +27,7 @@ describe('AUTH TESTS', function () {
     let resp
     beforeAll(async function () {
       try {
-        resp = await axios.post('http://localhost:5000/auth', { email: 'dummy@mail.com', password: 'dummy' })
+        resp = await axios.post(`${process.env.CAT_DOMAIN}/auth`, { email: 'dummy@mail.com', password: 'dummy' })
       } catch (err) {
         resp = err.response
       }
@@ -44,7 +44,7 @@ describe('AUTH TESTS', function () {
     let resp
     beforeAll(async function () {
       try {
-        resp = await axios.post('http://localhost:5000/auth', { email: validUser.email, password: validUser.password })
+        resp = await axios.post(`${process.env.CAT_DOMAIN}/auth`, { email: validUser.email, password: validUser.password })
       } catch (err) {
         resp = err.response
       }

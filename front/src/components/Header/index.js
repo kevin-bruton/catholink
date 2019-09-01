@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import styles from './styles.scss'
 import { Link } from 'react-router-dom'
-import { literals } from './literals'
+// import { literals } from './literals'
 import brandname from '../../assets/brandname.svg'
-import {MessagesBtn, ProfileBtn, SearchBox} from '@components'
+import {SearchBox, NavMenu} from '@components'
 import {getStoreValue, storeCategory, subscribeStoreChanges, unsubscribeStoreChanges, loginStatus} from '@store'
 
 export class Header extends Component {
@@ -36,18 +36,12 @@ export class Header extends Component {
         <div className='columns'>
           <div className='column'>
             <span className='field is-grouped'>
-              <Link to='/'><img src={brandname} align='left' width='100' alt='Brand name' /></Link>
+              {loggedIn && <NavMenu  />}
+              <Link to='/'><img src={brandname} className={styles.logoImg} align='left' width='100' alt='Brand name' /></Link>
               {loggedIn && <SearchBox />}
             </span>
           </div>
-          <div className='column'>
-            <h1 className={styles.descriptiveTitle}>{literals.descriptiveTitle}</h1>
-          </div>
           <div className='column is-1'>
-            {loggedIn && <MessagesBtn />}
-          </div>
-          <div className='column'>
-            {loggedIn && <ProfileBtn />}
           </div>
           <div className='column is-1' />
         </div>

@@ -1,4 +1,5 @@
 const db = require('@db/')
+const log = require('@log/')
 
 module.exports = {
   getUserByName,
@@ -25,7 +26,7 @@ async function getUserByName (searchText) {
       .project({_id: 0, password: 0}))
       .toArray()
   } catch (err) {
-    console.log('ERROR trying to find searchText db.users().find:', err)
+    log('ERROR trying to find searchText db.users().find:', err)
     return {error: 'DB failure'}
   }
   return found
@@ -52,7 +53,7 @@ async function userSearch (search) {
       .project({_id: 0, password: 0, avatar: 0}))
       .toArray()
   } catch (err) {
-    console.log('ERROR trying to find searchText db.users().find:', err)
+    log('ERROR trying to find searchText db.users().find:', err)
     return {error: 'DB failure'}
   }
   return found
@@ -63,7 +64,7 @@ async function getUserByEmail (email) {
     const found = await (await db.users().find({email}).project({_id: 0, password: 0}))
     return !!found.length && found[0]
   } catch (err) {
-    console.log('ERROR trying to get user by email db.users().find', err)
+    log('ERROR trying to get user by email db.users().find', err)
     return {error: 'DB failure'}
   }
 }
@@ -71,10 +72,10 @@ async function getUserByEmail (email) {
 async function getUserByProfileId (profileId) {
   try {
     const found = await (await db.users().find({profileId}).project({_id: 0, password: 0}).toArray())
-    console.log('Search by profileId', profileId, '& found')
+    log('Search by profileId', profileId, '& found')
     return !!found.length && found[0]
   } catch (err) {
-    console.log('ERROR trying to get user by profileId ' + profileId + ' db.users().find', err)
+    log('ERROR trying to get user by profileId ' + profileId + ' db.users().find', err)
     return {error: 'DB failure'}
   }
 }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { getSocket } from '@services/socket'
-import { getStoreValue, storeCategory, subscribeStoreChanges, sendStoreEvent, eventType, messageStatus } from '@store'
+import { getStoreValue, storeCategory, subscribeStoreChanges, sendStoreEvent, eventType } from '@store'
 import { get as getRequest } from '@services/request'
 import styles from './styles.scss'
 import literals from './literals'
@@ -122,8 +121,11 @@ export class Messages extends Component {
         {selectedContact ? CONTACT_MESSAGES : literals.noContactSelected}
       </div>
     return (
-      <div id='Messages' className={styles.MessagesPage}>
-        <div className='columns is-variable is-5'>
+      <div id='Messages' className={styles.Messages}>
+        <div className={styles.title}>
+          {literals.title}
+        </div>
+        <div className={'columns is-variable is-5 ' + styles.MessagesPage}>
           <div className={`column is-2 box ${styles.ConversationsBox}`}>
             {CONVERSATIONS_BOX}
           </div>

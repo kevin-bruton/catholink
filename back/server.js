@@ -8,11 +8,16 @@ hookRequirePath.addRule('@db', './db')
 hookRequirePath.addRule('@request', './request')
 hookRequirePath.addRule('@gospel', './gospel')
 hookRequirePath.addRule('@helpers', './helpers')
+hookRequirePath.addRule('@log', './log')
 hookRequirePath.install()
 
+const log = require('./log')
 ;(function checkEnvVariablesAreDefined () {
-  if (!process.env.CAT_JWT || !process.env.CAT_MONGO || !process.env.CAT_GOOGLE_CREDENTIALS || !process.env.CAT_GOOGLE_TOKEN) {
-    console.log('One or more environment variables are missing')
+  const {CAT_JWT, CAT_MONGO, CAT_GOOGLE_CREDENTIALS, CAT_GOOGLE_TOKEN, CAT_DOMAIN} = process.env
+  if (!CAT_JWT || !CAT_MONGO || !CAT_GOOGLE_CREDENTIALS || !CAT_GOOGLE_TOKEN || !CAT_DOMAIN) {
+    log('One or more environment variables are missing')
+    const envVars = {CAT_JWT, CAT_MONGO, CAT_GOOGLE_CREDENTIALS, CAT_GOOGLE_TOKEN, CAT_DOMAIN}
+    Object.keys(envVars).forEach(envVarName => log(envVarName, envVars[envVarName]))
     process.exit()
   }
 })()
@@ -26,7 +31,8 @@ const authRouter = require('./routes/auth')
 const signUpRouter = require('./routes/signup')
 const socket = require('./socket')
 
-if (process.env.CAT_ENV === 'DEV') {
+if (process.env.CAT_SERVER_MODE === 'DEV') {
+  console.log('\nIn DEV mode... CORS enabled!\n')
   const cors = require('cors')
   app.use(cors())
 }
@@ -44,19 +50,19 @@ app.use('/', frontRouter)
 
 ;(async () => {
   await db.open()
-  console.log('DB connection open')
+  log('DB connection open')
   const PORT = process.env.PORT || 5000
 
-  const server = http.listen(PORT, () => console.log(`Server is running on PORT ${PORT}...`))
+  const server = http.listen(PORT, () => log(`Server is running on PORT ${PORT}...`))
 
   process.on('SIGINT', function () {
-    console.log('DB connection closed')
+    log('DB connection closed')
     db.close()
     server.close()
   })
   process.once('SIGUSR2', function () {
     db.close()
-    console.log('DB connection closed')
+    log('DB connection closed')
     server.close(function () {
       process.kill(process.pid, 'SIGUSR2')
     })

@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const express = require('express')
+const log = require('@log/')
 const CAT_JWT = JSON.parse(process.env.CAT_JWT)
 const router = express.Router()
 const { getRequest } = require('../request/')
@@ -12,12 +13,12 @@ const dummyGospel = require('../gospel/dummy')
 router.use(authorizeApi)
 
 router.get('/', (req, res, next) => {
-  console.log('Root api route')
+  log('Root api route')
   res.json({ apiVersion: '1.0' })
 })
 
 router.get('/validate', (req, res) => {
-  console.log('Validate')
+  log('Validate')
   res.status(200).end()
 })
 
@@ -36,7 +37,7 @@ router.post('/profile/update', async (req, res) => {
 })
 
 router.post('/profile/avatar', async (req, res) => {
-  console.log('Received request to update avatar...')
+  log('Received request to update avatar...')
   await updateAvatar(req.profileId, req.body.avatar)
   res.status(200).end()
 })
@@ -70,7 +71,7 @@ router.post('/gospel', async (req, res) => {
   const lang = ((langCode) => ({ en: 'AM', es: 'SP' }[langCode]))(req.body.lang)
   let gospel = getGospel()
   if (!gospel.text) {
-    console.log('Gospel not found. Fetching...')
+    log('Gospel not found. Fetching...')
     if (process.env.CAT_SERVER_MODE === 'DEV') {
       gospel = dummyGospel
     } else {
@@ -78,9 +79,9 @@ router.post('/gospel', async (req, res) => {
       const gospelIdx = data.data.readings.length - 1
       gospel = { text: (data.data || {}).readings[gospelIdx].text, title: data.data.readings[gospelIdx].title }
     }
-    console.log('Going to set gospel')
+    log('Going to set gospel')
     setGospel(gospel)
-  } else console.log('Gospel found. Dont have to fetch')
+  } else log('Gospel found. Dont have to fetch')
   res.send(gospel)
 })
 
@@ -93,16 +94,16 @@ async function authorizeApi (req, res, next) {
         const decoded = jwt.verify(token, CAT_JWT.PRIVATE_KEY)
         req.email = decoded.email
         req.profileId = decoded.profileId
-        console.log('authorizeApi: Token verified\n')
+        log('authorizeApi: Token verified\n')
         return next()
       } catch (err) {
-        console.log('authorizeApi: Could not verify this token: ' + token + '\n')
+        log('authorizeApi: Could not verify this token: ' + token + '\n')
         return res.status(401).send({ error: 'Unauthorized' })
       }
     }
-    console.log('authorizeApi: No token\n')
+    log('authorizeApi: No token\n')
   }
-  console.log('authorizeApi: No bearer\n')
+  log('authorizeApi: No bearer\n')
   return res.status(401).send({ error: 'Unauthorized' })
 }
 

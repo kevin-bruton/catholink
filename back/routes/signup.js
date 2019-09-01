@@ -7,13 +7,14 @@ const bcrypt = require('bcrypt-nodejs')
 const {sendEmail} = require('../email')
 const {getLiterals} = require('../email/signupLiterals')
 const {generateCode, standardize, removeSpaces} = require('@helpers/')
+const log = require('@log/')
 
 router.use(cookieParser())
 
 router.post('/init', async (req, res) => {
   const {firstName, surname, email, password} = req.body
   const hashedPassword = bcrypt.hashSync(password)
-  console.log(`Sign up request for user with email: ${req.body.email};\npassword: ${req.body.password}`)
+  log(`Sign up request for user with email: ${req.body.email}; password: ${req.body.password}`)
 
   const userIsRegistered = await userRegistered(email)
   if (userIsRegistered.error) {
@@ -53,21 +54,21 @@ router.post('/init', async (req, res) => {
 router.get('/validate', async (req, res) => {
   const code = req.query.code
   let found
-  console.log('Validation request received with code:', code)
+  log('Validation request received with code:', code)
   try {
     found = await (await db.signUp().find({$and: [{code}, {status: {$not: /registered/}}]})).toArray()
   } catch (err) {
-    console.log('ERROR trying to find code db.signUp().find:', err)
+    log('ERROR trying to find code db.signUp().find:', err)
     return res.status(503).json({error: 'DB failure'})
   }
   if (!found.length) {
-    console.log('User with that code and not registered, not found')
+    log('User with that code and not registered, not found')
     return res.status(200).json({error: 'Not a valid code'})
   }
-  console.log('Valid code')
+  log('Valid code')
   // code found so register user and update signup
   const registered = await registerUser(found[0])
-  console.log('User registered:', registered)
+  log('User registered:', registered)
   return registered.error ? res.status(503).json(registered) : res.status(200).end()
 })
 
@@ -104,7 +105,7 @@ async function registerUser (user) {
       }
     })
   } catch (err) {
-    console.log('ERROR trying in registerUser trying db.signUp().updateOne and db.user.insertOne', err)
+    log('ERROR trying in registerUser trying db.signUp().updateOne and db.user.insertOne', err)
     return {error: 'DB failure'}
   }
   return true
@@ -127,7 +128,7 @@ async function userRegistered (email) {
   try {
     found = await (await db.users().find({email})).toArray()
   } catch (err) {
-    console.log(`ERROR db.users().find ${email}: ${err}`)
+    log(`ERROR db.users().find ${email}: ${err}`)
     return {error: 'Server error'}
   }
   return !!found.length
@@ -138,7 +139,7 @@ async function hasStartedSignUp (email) {
   try {
     found = await (await db.signUp().find({email})).toArray()
   } catch (err) {
-    console.log(`ERROR db.signUp().find ${email}: ${err}`)
+    log(`ERROR db.signUp().find ${email}: ${err}`)
     return {error: 'Server error'}
   }
   return !!found[0]
@@ -147,22 +148,22 @@ async function hasStartedSignUp (email) {
 async function restartSignUp (firstName, surname, email, hashedPassword, code) {
   try {
     const res = await db.signUp().updateOne({email}, {$set: {firstName, surname, hashedPassword, code, status: 'signUpStarted'}})
-    console.log('Updated a user in signup. ModifiedCount:', res.modifiedCount)
+    log('Updated a user in signup. ModifiedCount:', res.modifiedCount)
     return true
   } catch (err) {
-    console.log(`ERROR trying to updateOne in db.signup: ${err}`)
+    log(`ERROR trying to updateOne in db.signup: ${err}`)
     return false
-  } 
+  }
 }
 
 async function startSignUp (firstName, surname, email, hashedPassword, code) {
   try {
     const res = await db.signUp().insertOne({firstName, surname, email, hashedPassword, code, status: 'signUpStarted', numEmailsSent: 0})
-    console.log('Inserted a new user in signup:')
-    console.log('res.insertedCount:', res.insertedCount)
+    log('Inserted a new user in signup:')
+    log('res.insertedCount:', res.insertedCount)
     return true
   } catch (err) {
-    console.log(`ERROR trying to insertOne in db.signup: ${err}`)
+    log(`ERROR trying to insertOne in db.signup: ${err}`)
     return false
   }
 }
@@ -171,15 +172,15 @@ async function recordEmailFailureStatus (email) {
   try {
     await db.signUp().updateOne({email}, {$set: {status: 'emailSendingFailure'}})
   } catch (err) {
-    console.log(`ERROR trying to updateOne in db.signup: ${err}`)
+    log(`ERROR trying to updateOne in db.signup: ${err}`)
   }
 }
 
 async function recordEmailSentStatus (email) {
   try {
-    await db.signUp().updateOne({email}, {$set:{status: 'emailSent'}, $inc:{numEmailsSent:1}})
+    await db.signUp().updateOne({email}, {$set: {status: 'emailSent'}, $inc: {numEmailsSent: 1}})
   } catch (err) {
-    console.log(`ERROR -recordEmailSentStatus- trying to updateOne in db.signup: ${err}`)
+    log(`ERROR -recordEmailSentStatus- trying to updateOne in db.signup: ${err}`)
   }
 }
 
@@ -198,7 +199,7 @@ function getMessage (lang, firstName, code) {
 ${message.greeting} ${firstName}!<br><br>
 &nbsp;&nbsp;&nbsp;&nbsp;${message.line1}<br>
 ${message.line2}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://localhost:5000/signupvalidate?code=${code}">${message.validate}</a><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="${process.env.CAT_DOMAIN}/signupvalidate?code=${code}">${message.validate}</a><br><br>
 ${message.bye}<br>
 ${message.signature}
 `

@@ -1,11 +1,15 @@
-.MessagesPage {
-  margin-top: 20px;
-  margin-right: 40px;
+.Messages .MessagesPage {
+  margin: 10px;
 }
 
 .MessageBox {
   margin: 5px;
   height: 100%;
+}
+
+.title {
+  font-size: 1.5em;
+  margin-top: 10px;
 }
 
 .ConversationsBox {

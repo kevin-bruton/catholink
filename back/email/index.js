@@ -1,4 +1,5 @@
 const {gmailClient} = require('./gmailClient')
+const log = require('@log/')
 let gmail
 
 module.exports = {
@@ -14,7 +15,7 @@ async function sendEmail (to, subject, message) {
   try {
     gmail = gmail || await gmailClient()
   } catch (err) {
-    console.log(`COULDN'T GET GMAIL AUTH CREDENTIALS TO SEND EMAIL:`, err)
+    log(`COULDN'T GET GMAIL AUTH CREDENTIALS TO SEND EMAIL:`, err)
     return {error: 'ERROR_SENDING_MAIL'}
   }
   // You can use UTF-8 encoding for the subject using the method below.
@@ -41,7 +42,8 @@ async function sendEmail (to, subject, message) {
     const res = await gmail.users.messages.send({userId: 'me', requestBody: {raw: encodedMessage}})
     return res.data && res.data.labelIds && res.data.labelIds[0]
   } catch (err) {
-    console.log(`COULDN'T SEND EMAIL:`, err.message)
+    log(`COULDN'T SEND EMAIL:`, err.message)
+    log(err)
     return {error: 'ERROR_SENDING_EMAIL'}
   }
 }
@@ -51,15 +53,15 @@ async function getLabels () {
   gmail.users.labels.list({
     userId: 'me'
   }, (err, res) => {
-    if (err) return console.log('The API returned an error: ' + err)
+    if (err) return log('The API returned an error: ' + err)
     const labels = res.data.labels
     if (labels.length) {
-      console.log('Labels:')
+      log('Labels:')
       labels.forEach((label) => {
-        console.log(`- ${label.name}`)
+        log(`- ${label.name}`)
       })
     } else {
-      console.log('No labels found.')
+      log('No labels found.')
     }
   })
 }

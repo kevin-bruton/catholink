@@ -2,3 +2,16 @@
   margin-left: 1rem;
   margin-right: 1rem;
 }
+
+.editBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.selectFileBox {
+  display: flex;
+  justify-content: center;
+}

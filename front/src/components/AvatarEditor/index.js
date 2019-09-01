@@ -3,6 +3,7 @@ import AvatarEdit from 'react-avatar-edit'
 import {post as postRequest} from '@services/request'
 import { literals } from './literals';
 import styles from './styles.scss'
+const resizeBase64 = require('resize-base64')
  
 export class AvatarEditor extends React.Component {
   constructor(props) {
@@ -14,7 +15,6 @@ export class AvatarEditor extends React.Component {
     }
     this.onCrop = this.onCrop.bind(this)
     this.onClose = this.onClose.bind(this)
-    this.onBeforeFileLoad = this.onBeforeFileLoad.bind(this)
     this.upload = this.upload.bind(this)
   }
 
@@ -25,22 +25,18 @@ export class AvatarEditor extends React.Component {
   }
   
   onClose(preview) {
-    console.log('onClose preview:', preview)
+    // console.log('onClose preview:', preview)
     this.props.closeEvent(preview)
   }
   
   onCrop(preview) {
     this.setState({preview})
   }
- 
-  async onBeforeFileLoad(elem) {
-    if(elem.target.files[0].size > 144000){
-      alert("File is too big!");
-      elem.target.value = "";
-    }
-  }
 
   async upload () {
+    console.log('upload image. Before resize:', this.state.preview.length)
+    const img = resizeBase64(this.state.preview, 128, 128)
+    console.log('After resize:', img.length)
     await postRequest('profile/avatar', {email: this.email, avatar: this.state.preview})
     this.onClose(this.state.preview)
   }
@@ -53,17 +49,17 @@ export class AvatarEditor extends React.Component {
           <div className='box'>
             <h2 className='title is-4'>{literals.title}</h2>
             <div className='columns'>
-              <div id='avatarEdit' className='column'>
+              <div id='avatarEdit' className={'column ' + styles.selectFileBox}>
                 <AvatarEdit
                   width={200}
                   height={200}
                   onCrop={this.onCrop}
                   onClose={this.onClose}
-                  onBeforeFileLoad={this.onBeforeFileLoad}
                   label={literals.chooseFile}
                 />
               </div>
-              <div className='column'>
+              <div className={'column' + (this.state.preview ? ' ' + styles.editBox : '')}>
+                <div>{literals.preview}:</div>
                 {this.state.preview && <img id='avatarPreview' src={this.state.preview} alt="Preview" />}
               </div>
             </div>

@@ -7,6 +7,7 @@ let _dbConnection
 const open = async () => {
   try {
     _mongoConnection = await mongo.connect(_url, { useNewUrlParser: true })
+    console.log(`Connected to mongo at ${_url}`)
   } catch (err) {
     console.log(err.stack)
     console.log('\nCOULD NOT CONNECT TO MONGO... IS IT RUNNING?\n')
@@ -22,6 +23,7 @@ const connection = () => _dbConnection
 // Direct access to collections:
 const signUp = () => _dbConnection.collection('signup')
 const users = () => _dbConnection.collection('users')
+const logger = () => _dbConnection.collection('log')
 const messages = () => _dbConnection.collection('messages')
 
 module.exports = {
@@ -30,5 +32,6 @@ module.exports = {
   connection,
   signUp,
   users,
-  messages
+  messages,
+  log: logger
 }

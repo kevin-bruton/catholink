@@ -16,5 +16,9 @@ export const literals = getLangLiterals({
   chooseFile: {
     en: 'Select a file',
     es: 'Seleccione un archivo'
+  },
+  preview: {
+    en: 'Preview',
+    es: 'Vista previa'
   }
 })
