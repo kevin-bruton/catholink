@@ -21,10 +21,8 @@ export class MessagesIcon extends Component {
   }
 
   render () {
-    return (
-      <div className={styles.messagesIcon}>
-        {this.state.numMessages}
-      </div>
-    )
+    const numMessages = this.state.numMessages
+    const jsx = numMessages ? <div className={styles.messagesIcon}>{numMessages}</div> : ''
+    return (jsx)
   }
 }
