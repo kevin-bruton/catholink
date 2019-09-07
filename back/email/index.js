@@ -9,6 +9,7 @@ module.exports = {
 
 async function sendEmail (to, subject, message) {
   if (process.env.CAT_SERVER_MODE === 'DEV') {
+    log('In DEV server mode. Email is not really sent')
     return 'SENT'
   }
 

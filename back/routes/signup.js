@@ -5,7 +5,8 @@ const db = require('@db/')
 const {profileIdExists} = require('@db/users/search')
 const bcrypt = require('bcrypt-nodejs')
 const {sendEmail} = require('../email')
-const {getLiterals} = require('../email/signupLiterals')
+const getLiterals = require('../email/literals')
+const {getSignUpMessage} = require('../email/messages')
 const {generateCode, standardize, removeSpaces} = require('@helpers/')
 const log = require('@log/')
 
@@ -37,7 +38,7 @@ router.post('/init', async (req, res) => {
       signUpNowStarted = await startSignUp(firstName, surname, email, hashedPassword, code)
     }
     if (signUpNowStarted) {
-      const sentEmail = await sendEmail(email, getSubject(lang), getMessage(lang, firstName, code))
+      const sentEmail = await sendEmail(email, getLiterals(lang).signUpEmail.subject, getSignUpMessage(lang, firstName, code))
       if (sentEmail.error) {
         await recordEmailFailureStatus(email)
         return res.status(503).json({error: 'Email service failure'})
@@ -182,27 +183,6 @@ async function recordEmailSentStatus (email) {
   } catch (err) {
     log(`ERROR -recordEmailSentStatus- trying to updateOne in db.signup: ${err}`)
   }
-}
-
-function getSubject (lang) {
-  let subject
-  switch (lang) {
-    case 'es': subject = 'Bienvenido a Catholink'; break
-    default: subject = 'Welcome to Catholink'; break
-  }
-  return subject
-}
-
-function getMessage (lang, firstName, code) {
-  const message = getLiterals(lang)
-  return `
-${message.greeting} ${firstName}!<br><br>
-&nbsp;&nbsp;&nbsp;&nbsp;${message.line1}<br>
-${message.line2}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="${process.env.CAT_DOMAIN}/signupvalidate?code=${code}">${message.validate}</a><br><br>
-${message.bye}<br>
-${message.signature}
-`
 }
 
 module.exports = router

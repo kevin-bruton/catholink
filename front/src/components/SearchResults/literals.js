@@ -18,7 +18,11 @@ export const literals = getLangLiterals({
     es: `No encontramos ningun resultado`
   },
   viewProfile: {
-    en: `View Profile`,
-    es: `Ver perfil`
+    en: `Profile`,
+    es: `Perfil`
+  },
+  addContact: {
+    en: 'Contact',
+    es: 'Contactar'
   }
 })
