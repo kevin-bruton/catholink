@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import {get as getRequest} from '@services/request'
+import styles from './styles.scss'
 
 import { literals } from './literals'
 
@@ -44,17 +45,18 @@ export class SearchResults extends React.Component {
         <h2 id='pageTitle' className='title is-3 '>{literals.searchResults + (this.state.searchText ? ' "' + this.state.searchText + '"' : '')}</h2>
         <div className='columns'>
           <div className='column is-offset-2 is-8'>
-            <div className='box'>
+            <div className={'box ' + styles.resultsBox}>
               <div className='has-text-centered'>
                 {this.state.searchResults.length
                   ? <table className='table'>
-                    <thead><tr><th>{literals.firstName}</th><th>{literals.surname}</th></tr></thead>
+                    <thead><tr><th>{literals.firstName}</th><th>{literals.surname}</th><th></th><th></th></tr></thead>
                     <tbody>
                       {this.state.searchResults.map((person, index) =>
                         <tr key={index}>
                           <td>{person.firstName}</td>
                           <td>{person.surname}</td>
                           <td><Link to={`/profile/${person.profileId}`}><button className='button is-link is-small'>{literals.viewProfile}</button></Link></td>
+                          {<td><button className='button is-link is-small'>{literals.addContact}</button></td>}
                         </tr>
                       )}
                     </tbody>
