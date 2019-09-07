@@ -9,16 +9,17 @@ const { userSearch, getMyProfile, getAnothersProfile } = require('../db/users/se
 const { updateVisibility, updateProfile, updateAvatar, getMyContacts } = require('../db/users/profile')
 const {getUserMessages} = require('../db/messages')
 const dummyGospel = require('../gospel/dummy')
+const { inviteToBeContact, acceptInviteToBeContact } = require('../controllers/contacts')
 
 router.use(authorizeApi)
 
 router.get('/', (req, res, next) => {
-  log('Root api route')
+  log('API: Root api route')
   res.json({ apiVersion: '1.0' })
 })
 
 router.get('/validate', (req, res) => {
-  log('Validate')
+  log('API: Validate')
   res.status(200).end()
 })
 
@@ -37,7 +38,7 @@ router.post('/profile/update', async (req, res) => {
 })
 
 router.post('/profile/avatar', async (req, res) => {
-  log('Received request to update avatar...')
+  log('API: Received request to update avatar...')
   await updateAvatar(req.profileId, req.body.avatar)
   res.status(200).end()
 })
@@ -71,7 +72,7 @@ router.post('/gospel', async (req, res) => {
   const lang = ((langCode) => ({ en: 'AM', es: 'SP' }[langCode]))(req.body.lang)
   let gospel = getGospel()
   if (!gospel.text) {
-    log('Gospel not found. Fetching...')
+    log('API: Gospel not found. Fetching...')
     if (process.env.CAT_SERVER_MODE === 'DEV') {
       gospel = dummyGospel
     } else {
@@ -79,10 +80,34 @@ router.post('/gospel', async (req, res) => {
       const gospelIdx = data.data.readings.length - 1
       gospel = { text: (data.data || {}).readings[gospelIdx].text, title: data.data.readings[gospelIdx].title }
     }
-    log('Going to set gospel')
+    log('API: Going to set gospel')
     setGospel(gospel)
-  } else log('Gospel found. Dont have to fetch')
+  } else log('API: Gospel found. Dont have to fetch')
   res.send(gospel)
+})
+
+router.post('/contact/invite', async (req, res) => {
+  const { invitee, inviter, message } = req.body
+  log(`\nAPI: Received request to invite ${invitee} as contact of ${inviter}`)
+  const lang = getLangFromReq(req)
+  try {
+    await inviteToBeContact(lang, invitee, inviter, message)
+    res.status(200).end()
+  } catch (err) {
+    res.status(503).json({error: 'Error sending contact invite', message: err})
+  }
+})
+
+router.post('/contact/accept', async (req, res) => {
+  const { invitee, inviter } = req.body
+  log(`\nAPI: Received request to accept ${invitee} as contact of ${inviter}`)
+  const lang = getLangFromReq(req)
+  try {
+    await acceptInviteToBeContact(lang, invitee, inviter)
+    res.status(200).end()
+  } catch (err) {
+    res.status(503).json({error: 'API: Error accepting another user as contact', message: err})
+  }
 })
 
 async function authorizeApi (req, res, next) {
@@ -94,17 +119,25 @@ async function authorizeApi (req, res, next) {
         const decoded = jwt.verify(token, CAT_JWT.PRIVATE_KEY)
         req.email = decoded.email
         req.profileId = decoded.profileId
-        log('authorizeApi: Token verified\n')
+        log('API: authorizeApi: Token verified\n')
         return next()
       } catch (err) {
-        log('authorizeApi: Could not verify this token: ' + token + '\n')
+        log('API: authorizeApi: Could not verify this token: ' + token + '\n')
         return res.status(401).send({ error: 'Unauthorized' })
       }
     }
-    log('authorizeApi: No token\n')
+    log('API: authorizeApi: No token\n')
   }
-  log('authorizeApi: No bearer\n')
+  log('API: authorizeApi: No bearer\n')
   return res.status(401).send({ error: 'Unauthorized' })
+}
+
+function getLangFromReq (req) {
+  return req.cookies
+    ? req.cookies.language
+      ? (req.cookies.language).substring(0, 2)
+      : 'en'
+    : 'en'
 }
 
 module.exports = router

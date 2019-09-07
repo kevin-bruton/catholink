@@ -1,9 +1,3 @@
-const getLangLiterals = (usersLanguage, literals) => {
-  const langLiterals = {}
-  Object.keys(literals).map(literal => (langLiterals[literal] = literals[literal][usersLanguage()]))
-  return langLiterals
-}
-
 const generateCode = (codeLength) => {
   const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789'
   return Array(codeLength).join().split(',').map(() => chars.charAt(Math.floor(Math.random() * chars.length))).join('')
@@ -11,8 +5,8 @@ const generateCode = (codeLength) => {
 
 const standardize = str => {
   const translate = {
-    'á':'a', 'é':'e', 'í':'i', 'ó':'o', 'ú':'u', 'ñ':'n',
-    'Á':'A', 'É':'E', 'Í':'I', 'Ó':'O', 'Ú':'U', 'Ñ':'N'
+    'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u', 'ñ': 'n',
+    'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U', 'Ñ': 'N'
   }
   return str.split('').map(ch => translate[ch]||ch).join('')
 }
@@ -20,7 +14,6 @@ const standardize = str => {
 const removeSpaces = str => str.replace(/\s+/g, '#')
 
 module.exports = {
-  getLangLiterals,
   generateCode,
   standardize,
   removeSpaces
