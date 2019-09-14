@@ -72,5 +72,17 @@ export const literals = getLangLiterals({
   emailNotSent3: {
     en: `Please try again at another time.`,
     es: `Intente otra vez más adelante.`
+  },
+  gender: {
+    en: `Gender`,
+    es: `Sexo`
+  },
+  male: {
+    en: `Male`,
+    es: `Hombre`
+  },
+  female: {
+    en: 'Female',
+    es: `Mujer`
   }
 })

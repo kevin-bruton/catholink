@@ -6,7 +6,9 @@ export {
   post,
   auth,
   signUp,
-  signUpValidate
+  signUpValidate,
+  inviteContact,
+  acceptContact
 }
 
 const backendHost = process.env.REACT_APP_API_MODE === 'VCR'
@@ -17,6 +19,7 @@ const backendHost = process.env.REACT_APP_API_MODE === 'VCR'
 const apiUrl = `${backendHost}/api`
 const authUrl = `${backendHost}/auth`
 const signUpUrl = `${backendHost}/signup`
+const acceptContactUrl = `${backendHost}/accept-contact`
 
 async function get (endpoint) {
   return call('get', `${apiUrl}/${endpoint}`)
@@ -43,6 +46,24 @@ async function signUpValidate (validationId) {
   try {
     const resp = await call('get', `${signUpUrl}/validate?code=${validationId}`)
     return !resp.error
+  } catch (err) {
+    return false
+  }
+}
+
+async function acceptContact (code) {
+  try {
+    const inviter = await call('get', `${acceptContactUrl}/${code}`)
+    return inviter
+  } catch (err) {
+    return false
+  }
+}
+
+async function inviteContact (inviter, invitee, message) {
+  try {
+    await call('post', `${apiUrl}/contact/invite/`, {invitee, inviter, message})
+    return true
   } catch (err) {
     return false
   }

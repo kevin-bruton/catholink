@@ -1,16 +1,19 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import {getStoreValue, storeCategory} from '@store'
 import {get as getRequest} from '@services/request'
 import styles from './styles.scss'
-
 import { literals } from './literals'
+import {InviteContactModal} from '@components'
 
 export class SearchResults extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      currentUser: getStoreValue(storeCategory.USER),
       searchText: null,
-      searchResults: []
+      searchResults: [],
+      showInviteContactModal: false
     }
     this.body = document.querySelector('body')
     this.searchTextChange = this.searchTextChange.bind(this)
@@ -24,6 +27,11 @@ export class SearchResults extends React.Component {
 
   componentWillUnmount () {
     this.body.removeEventListener('search', this.locationChange)
+  }
+
+  contactInvite (invitee) {
+    this.setState({showInviteContactModal: invitee})
+    console.log('contactInvite', invitee)
   }
 
   locationChange (e) {
@@ -42,6 +50,9 @@ export class SearchResults extends React.Component {
   render () {
     return (
       <div id='SearchResultsPage' className='col-md-6 col-md-offset-3'>
+        {this.state.showInviteContactModal &&
+          <InviteContactModal invitee={this.state.showInviteContactModal} inviter={this.state.currentUser.profileId} closeModal={this.contactInvite.bind(this, false)}/>
+        }
         <h2 id='pageTitle' className='title is-3 '>{literals.searchResults + (this.state.searchText ? ' "' + this.state.searchText + '"' : '')}</h2>
         <div className='columns'>
           <div className='column is-offset-2 is-8'>
@@ -56,7 +67,10 @@ export class SearchResults extends React.Component {
                           <td>{person.firstName}</td>
                           <td>{person.surname}</td>
                           <td><Link to={`/profile/${person.profileId}`}><button className='button is-link is-small'>{literals.viewProfile}</button></Link></td>
-                          {<td><button className='button is-link is-small'>{literals.addContact}</button></td>}
+                          {
+                            this.state.currentUser.contacts.includes(person.profileId) ||
+                              <td><button className='button is-link is-small' onClick={this.contactInvite.bind(this, person.profileId)}>{literals.addContact}</button></td>
+                          }
                         </tr>
                       )}
                     </tbody>

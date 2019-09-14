@@ -21,7 +21,7 @@ const listenerType = {
 
 // Initial values for store
 let store = {
-  [storeCategory.MESSAGES]: []
+  [storeCategory.MESSAGES]: {}
 }
 let categoryListeners = {}
 let eventListeners = {}

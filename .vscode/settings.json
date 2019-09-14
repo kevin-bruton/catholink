@@ -22,5 +22,5 @@
       "strings": true,
       "other": true
   },
-  "cucumberautocomplete.gherkinDefinitionPart": "(Given|When|Then|defineStep)\\("
+"cucumberautocomplete.gherkinDefinitionPart": "(Given|When|Then|defineStep)\\("
 }

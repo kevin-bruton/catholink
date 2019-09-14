@@ -1,5 +1,6 @@
 const db = require('@db/')
 const log = require('@log/')
+const {generateCode} = require('@helpers/')
 
 module.exports = {
   updateVisibility,
@@ -8,9 +9,12 @@ module.exports = {
   getMyContacts,
   addInvitationSent,
   addInvitationReceived,
+  storeInvitationCode,
+  getContactInvitationEntry,
   addContact,
   removeInvitationSent,
   removeInvitationReceived,
+  removeInvitationCode,
   removeContact
 }
 
@@ -75,6 +79,39 @@ async function addInvitationReceived (profileId, profileIdReceivedFrom) {
   }
 }
 
+async function storeInvitationCode (inviterProfileId, inviteeProfileId) {
+  const codeLength = 50
+  const code = generateCode(codeLength)
+  try {
+    log(`Trying to store the code of the invitation ${inviterProfileId} has made to ${inviteeProfileId}`)
+    await db.contactInvitations().insertOne({inviterProfileId, inviteeProfileId, code})
+    log('OK\n')
+    return code
+  } catch (err) {
+    log(`ERROR:`)
+    log(err + '\n')
+    throw new Error()
+  }
+}
+
+async function getContactInvitationEntry (code) {
+  let invitations
+  try {
+    log(`Trying to get the contact invitation entry with code ${code}`)
+    invitations = await (await db.contactInvitations().find({code})).toArray()
+    if (!invitations.length) {
+      log(`Invitation with code ${code} not found`)
+      throw new Error()
+    }
+    log('OK\n')
+    return invitations[0]
+  } catch (err) {
+    log(`ERROR:`)
+    log(err + '\n')
+    throw new Error()
+  }
+}
+
 async function addContact (profileId, newContactProfileId) {
   try {
     log(`Trying to add the ${newContactProfileId} as a new contact for ${profileId}`)
@@ -107,6 +144,20 @@ async function removeInvitationReceived (profileId, profileIdToRemove) {
   } catch (err) {
     log(`ERROR trying to remove ${profileIdToRemove} from invitationsReceived for ${profileId}`)
     log(err)
+    throw new Error()
+  }
+}
+
+async function removeInvitationCode (inviterProfileId, inviteeProfileId) {
+  const codeLength = 50
+  const code = generateCode(codeLength)
+  try {
+    log(`Trying to store the code of the invitation ${inviterProfileId} has made to ${inviteeProfileId}`)
+    await db.contactInvitations().insertOne({inviterProfileId, inviteeProfileId, code})
+    log('OK\n')
+  } catch (err) {
+    log(`ERROR:`)
+    log(err + '\n')
     throw new Error()
   }
 }

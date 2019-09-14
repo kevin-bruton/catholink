@@ -29,6 +29,7 @@ const apiRouter = require('./routes/api')
 const frontRouter = require('./routes/front')
 const authRouter = require('./routes/auth')
 const signUpRouter = require('./routes/signup')
+const acceptContactRouter = require('./routes/acceptContact')
 const socket = require('./socket')
 
 if (process.env.CAT_SERVER_MODE === 'DEV') {
@@ -44,6 +45,7 @@ app.use(bodyParser.json())
 
 // routers
 app.use('/signup', signUpRouter)
+app.use('/accept-contact', acceptContactRouter)
 app.use('/auth', authRouter)
 app.use('/api', apiRouter)
 app.use('/', frontRouter)

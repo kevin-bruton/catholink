@@ -6,8 +6,10 @@ import {connectSocket} from '@services/socket'
 export class MessagesIcon extends Component {
   constructor (props) {
     super(props)
+    const messages = getStoreValue(storeCategory.MESSAGES)
+    const messageCount = this.countMessages(messages)
     this.state = {
-      numMessages: getStoreValue(storeCategory.MESSAGES).reduce((acc, cur) => cur.status === 'read' ? acc : acc + 1, 0)
+      numMessages: messageCount
     }
     this.updateNumMessages = this.updateNumMessages.bind(this)
     const currentUser = getStoreValue(storeCategory.USER)
@@ -15,9 +17,14 @@ export class MessagesIcon extends Component {
     subscribeStoreChanges(storeCategory.MESSAGES, 'MessageIcon', this.updateNumMessages)
   }
 
+  countMessages (messages) {
+    const messageCount = Object.keys(messages).reduce((acc, cur) => cur.reduce((acc, cur) => cur.status === 'read' ? acc : acc + 1, 0), 0)
+    console.log('MessageIcon: messageCount=', messageCount)
+    return messageCount
+  }
+
   updateNumMessages (messages) {
-    const numMessages = Object.keys(messages).reduce((acc, cur) => acc + messages[cur].reduce((acc, cur) => cur.status === 'read' ? acc : acc + 1, 0), 0)
-    this.setState({numMessages})
+    this.setState({numMessages: this.countMessages(messages)})
   }
 
   render () {

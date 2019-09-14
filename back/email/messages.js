@@ -18,13 +18,15 @@ ${literals.signature}
 `
 }
 
-function getContactEmail (lang, inviteeName, inviterName) {
+function getContactEmail (lang, inviteeName, inviterName, code) {
   const literals = getLiterals(lang).contactEmail
   return `
-${literals.greeting(inviteeName)}<br><br>
-${literals.line1(inviterName)}<br>
-${literals.line2}<br><br>
-<button>${literals.acceptBtnText}</button>
+<div style="font-size:14px;">
+  ${literals.greeting(inviteeName)}<br><br>
+  ${literals.line1(inviterName)}<br>
+  ${literals.line2}<br><br>
+  <a href="${process.env.CAT_DOMAIN}/contact/accept/${code}"><button style="cursor:pointer;background-color:#3273dc;color:white;padding:0.75em;border-radius:4px;">${literals.acceptBtnText}</button></a>
+</div>
 `
 }
 

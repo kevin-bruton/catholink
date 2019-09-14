@@ -100,7 +100,7 @@ export class Login extends React.Component {
         <h2 id='pageTitle' className={'title is-3 ' + styles.separateTop}>{literals.startHere}</h2>
         <div className='columns'>
           <div className='column is-offset-4 is-4'>
-            <form id='loginForm' name='form' onSubmit={this.handleSubmit} className='box'>
+            <form id='loginForm' name='form' onSubmit={this.handleSubmit} className={'box ' + styles.loginPageBox}>
               <div className='help is-danger'>{(login === loginStatus.FAILED) && literals.incorrectCredentials} </div>
               <div className='field'>
                 <label className={styles.labelAlign + ' label'}>{literals.email}</label>
@@ -124,7 +124,7 @@ export class Login extends React.Component {
                 </div>
               </div>
             </form>
-            <div className={'box ' + styles.separateTop}>
+            <div className={'box ' + styles.loginPageBox}>
               <h2 className='subtitle is 5'>{literals.cathNotMember}</h2>
               <Link to='/SignUp'><button id='signUpBtn' className={'button is-link ' + styles.flexitem}>{literals.signUp}</button></Link>
             </div>

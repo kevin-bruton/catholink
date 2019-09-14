@@ -132,7 +132,10 @@
     ]
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "default-case": 0
+    }
   },
   "devDependencies": {
     "btoa": "^1.2.1",
