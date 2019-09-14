@@ -8,8 +8,8 @@ module.exports = {
 }
 
 async function sendEmail (to, subject, message) {
-  if (process.env.CAT_SERVER_MODE === 'DEV') {
-    log('In DEV server mode. Email is not really sent')
+  if (process.env.CAT_SEND_EMAILS === 'NO') {
+    log('CAT_SEND_EMAILS set to NO. Email is not really sent')
     return 'SENT'
   }
 
@@ -17,7 +17,7 @@ async function sendEmail (to, subject, message) {
     gmail = gmail || await gmailClient()
   } catch (err) {
     log(`COULDN'T GET GMAIL AUTH CREDENTIALS TO SEND EMAIL:`, err)
-    return {error: 'ERROR_SENDING_MAIL'}
+    throw new Error('ERROR_SENDING_MAIL')
   }
   // You can use UTF-8 encoding for the subject using the method below.
   // You can also just use a plain string if you don't need anything fancy.
@@ -45,7 +45,7 @@ async function sendEmail (to, subject, message) {
   } catch (err) {
     log(`COULDN'T SEND EMAIL:`, err.message)
     log(err)
-    return {error: 'ERROR_SENDING_EMAIL'}
+    throw new Error('ERROR_SENDING_EMAIL')
   }
 }
 

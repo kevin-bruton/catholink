@@ -24,6 +24,7 @@ export class SignUp extends React.Component {
     this.state = {
       firstName: '',
       surname: '',
+      gender: '',
       email: '',
       password: '',
       passwordRepeat: '',
@@ -32,6 +33,7 @@ export class SignUp extends React.Component {
       error: {
         firstNameEmpty: false,
         surnameEmpty: false,
+        genderEmpty: false,
         emailEmpty: false,
         passwordEmpty: false,
         passwordRepeatEmpty: false,
@@ -61,22 +63,23 @@ export class SignUp extends React.Component {
   }
 
   inputValidated () {
-    const { firstName, surname, email, password, passwordRepeat, error } = this.state
+    const { firstName, surname, gender, email, password, passwordRepeat, error } = this.state
     error.firstNameEmpty = !firstName
     error.surnameEmpty = !surname
+    error.genderEmpty = !gender
     error.emailEmpty = !email
     error.passwordEmpty = !password
     error.passwordRepeatEmpty = !passwordRepeat
     error.passwordsNotEqual = (password !== passwordRepeat)
     this.setState({error})
-    return (!error.firstNameEmpty && !error.surnameEmpty && !error.emailEmpty && !error.passwordEmpty && !error.passwordRepeatEmpty && !error.passwordsNotEqual)
+    return (!error.firstNameEmpty && !error.surnameEmpty && !error.genderEmpty && !error.emailEmpty && !error.passwordEmpty && !error.passwordRepeatEmpty && !error.passwordsNotEqual)
   }
 
   async signUpRequest () {
-    const {firstName, surname, email, password} = this.state
+    const {firstName, surname, gender, email, password} = this.state
     this.setState({signUpRequest: SIGNUP.REQUESTED}, async () => {
       try {
-        const signedUp = await signUpService({firstName, surname, email, password})
+        const signedUp = await signUpService({firstName, surname, gender, email, password})
         this.setState({signUpRequest: signedUp ? SIGNUP.SUCCESSFUL : SIGNUP.FAILED})
       } catch (err) {
         this.setState({signUpRequest: SIGNUP.FAILED})
@@ -87,8 +90,8 @@ export class SignUp extends React.Component {
   render () {
     const { error } = this.state
     return (
-      <div id='SignUpPage' className='col-md-6 col-md-offset-3'>
-        <h2 id='pageTitle' className={'title is-3 ' + styles.separateTop}>{literals.startHere}</h2>
+      <div id='SignUpPage' className={'col-md-6 col-md-offset-3 ' + styles.signUpBox}>
+        <h2 id='pageTitle' className='title is-3 '>{literals.startHere}</h2>
         <div className='columns'>
           <div className='column is-offset-4 is-4'>
             <form id='signUpForm' name='form' onSubmit={this.handleSubmit} className='box'>
@@ -105,6 +108,19 @@ export class SignUp extends React.Component {
                   <input className={'input' + (error.surnameEmpty ? ' is-danger' : '')} type='text' placeholder={literals.surname} name='surname' onChange={this.handleChange} onBlur={this.handleBlur} />
                 </div>
                 <p id='surnameReqMess' className='help is-danger'>{error.surnameEmpty && literals.surnameRequired}</p>
+              </div>
+              <div className='field' id='gender'>
+                <label className={styles.labelAlign + ' label'}>{literals.gender}</label>
+                <div className="control" onChange={this.handleChange}>
+                  <label className={styles.radioBlock}>
+                    <input type="radio" name="gender" value="male"/>
+                    <span className={styles.radioLabel}>{literals.male}</span>
+                  </label>
+                  <label className={styles.radioBlock}>
+                    <input type="radio" name="gender" value="female"/>
+                    <span className={styles.radioLabel}>{literals.female}</span>
+                  </label>
+                </div>
               </div>
               <div className='field' id='email'>
                 <label className={styles.labelAlign + ' label'}>{literals.email}</label>

@@ -1,15 +1,14 @@
 const jwt = require('jsonwebtoken')
-const express = require('express')
 const log = require('@log/')
 const CAT_JWT = JSON.parse(process.env.CAT_JWT)
-const router = express.Router()
+const router = require('express').Router()
 const { getRequest } = require('../request/')
 const { getGospel, setGospel } = require('../gospel/')
 const { userSearch, getMyProfile, getAnothersProfile } = require('../db/users/search')
 const { updateVisibility, updateProfile, updateAvatar, getMyContacts } = require('../db/users/profile')
 const {getUserMessages} = require('../db/messages')
 const dummyGospel = require('../gospel/dummy')
-const { inviteToBeContact, acceptInviteToBeContact } = require('../controllers/contacts')
+const { inviteToBeContact } = require('../controllers/contacts')
 
 router.use(authorizeApi)
 
@@ -89,24 +88,11 @@ router.post('/gospel', async (req, res) => {
 router.post('/contact/invite', async (req, res) => {
   const { invitee, inviter, message } = req.body
   log(`\nAPI: Received request to invite ${invitee} as contact of ${inviter}`)
-  const lang = getLangFromReq(req)
   try {
-    await inviteToBeContact(lang, invitee, inviter, message)
+    await inviteToBeContact(invitee, inviter, message)
     res.status(200).end()
   } catch (err) {
     res.status(503).json({error: 'Error sending contact invite', message: err})
-  }
-})
-
-router.post('/contact/accept', async (req, res) => {
-  const { invitee, inviter } = req.body
-  log(`\nAPI: Received request to accept ${invitee} as contact of ${inviter}`)
-  const lang = getLangFromReq(req)
-  try {
-    await acceptInviteToBeContact(lang, invitee, inviter)
-    res.status(200).end()
-  } catch (err) {
-    res.status(503).json({error: 'API: Error accepting another user as contact', message: err})
   }
 })
 
@@ -130,14 +116,6 @@ async function authorizeApi (req, res, next) {
   }
   log('API: authorizeApi: No bearer\n')
   return res.status(401).send({ error: 'Unauthorized' })
-}
-
-function getLangFromReq (req) {
-  return req.cookies
-    ? req.cookies.language
-      ? (req.cookies.language).substring(0, 2)
-      : 'en'
-    : 'en'
 }
 
 module.exports = router

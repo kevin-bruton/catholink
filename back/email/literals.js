@@ -13,9 +13,9 @@ module.exports = function getLiterals (lang) {
       contactEmail: {
         subject: inviterName => `${inviterName} quiere contactar contigo`,
         greeting: inviteeName => `Hola ${inviteeName},`,
-        line1: inviterName => `${inviterName} pide que le agregues como contacto.`,
+        line1: inviterName => `${inviterName} pide que le aceptas como contacto.`,
         line2: `¿Deseas aceptarle como contacto?`,
-        acceptBtnText: `Acceptar`
+        acceptBtnText: `Aceptar`
       },
       contactAcceptedEmail: {
         subject: inviteeName => `${inviteeName} es tu nuevo contacto`,
