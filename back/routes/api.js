@@ -92,7 +92,8 @@ router.post('/contact/invite', async (req, res) => {
     await inviteToBeContact(invitee, inviter, message)
     res.status(200).end()
   } catch (err) {
-    res.status(503).json({error: 'Error sending contact invite', message: err})
+    log('ERROR SENDING CONTACT INVITE: ' + err.message)
+    res.status(503).json({error: 'Error sending contact invite', message: err.message})
   }
 })
 

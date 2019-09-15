@@ -1,5 +1,5 @@
 import React from 'react'
-
+import {getStoreValue, setStoreValue, storeCategory} from '@store'
 import {inviteContact as inviteContactService} from '@services/request'
 import { spinner } from '../../assets/spinner'
 import { literals } from './literals'
@@ -26,9 +26,10 @@ export class InviteContactModal extends React.Component {
   async sendContactRequest () {
     try {
       const sendInvitationResult = await inviteContactService(this.props.inviter, this.props.invitee, this.props.message)
-      this.setState({
-        contactInvite: sendInvitationResult ? SEND_INVITE.SUCCESSFUL : SEND_INVITE.FAILED
-      })
+      this.setState({contactInvite: sendInvitationResult ? SEND_INVITE.SUCCESSFUL : SEND_INVITE.FAILED})
+      const invitationsSent = getStoreValue(storeCategory.USER).invitationsSent
+      invitationsSent.push(this.props.invitee)
+      setStoreValue(storeCategory.USER, {...getStoreValue(storeCategory.USER), ...{invitationsSent}})
     } catch (err) {
       this.setState({contactInvite: SEND_INVITE.FAILED})
     }
@@ -53,11 +54,11 @@ export class InviteContactModal extends React.Component {
         {literals.inviteFailed}
       </div>
     const getInviteResult = () => {
-      switch (this.state.contactInvite) {
-        case SEND_INVITE.REQUESTED: return INVITE_REQUESTED
-        case SEND_INVITE.SUCCESSFUL: return INVITE_SUCCESSFUL
-        case SEND_INVITE.FAILED: return INVITE_FAILED
-      }
+      return {
+        [SEND_INVITE.REQUESTED]: INVITE_REQUESTED,
+        [SEND_INVITE.SUCCESSFUL]: INVITE_SUCCESSFUL,
+        [SEND_INVITE.FAILED]: INVITE_FAILED
+      }[this.state.contactInvite]
     }
     return (
       <div id='signUpResultModal'

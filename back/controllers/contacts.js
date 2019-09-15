@@ -6,11 +6,11 @@ const { getContactEmail } = require('../email/messages')
 const {
   addInvitationSent,
   addInvitationReceived,
-  storeInvitationCode,
   addContact,
+  storeInvitationCode,
+  removeInvitationCode,
   removeInvitationSent,
   removeInvitationReceived,
-  removeInvitationCode,
   getContactInvitationEntry
 } = require('../db/users/contact')
 
@@ -24,6 +24,9 @@ async function inviteToBeContact (inviteeProfileId, inviterProfileId, message) {
   const code = await storeInvitationCode(inviterProfileId, inviteeProfileId)
   const inviteeUser = await getUserByProfileId(inviteeProfileId)
   const inviterUser = await getUserByProfileId(inviterProfileId)
+  if (inviterUser.invitationsSent.includes(inviteeProfileId)) {
+    throw new Error('Invitation already sent to this user')
+  }
   const getFullName = user => `${user.firstName} ${user.surname}`
   await sendEmail(
     inviteeUser.email,
@@ -40,6 +43,9 @@ async function acceptInviteToBeContact (code) {
   const inviteeUser = await getUserByProfileId(inviteeProfileId)
   const inviterUser = await getUserByProfileId(inviterProfileId)
   const getFullName = user => `${user.firstName} ${user.surname}`
+  if (inviterUser.contacts.includes(inviteeProfileId) && inviteeUser.contacts.includes(inviterProfileId)) {
+    return {fullname: getFullName(inviterUser), gender: inviterUser.gender, profileId: inviterUser.profileId}
+  }
   await sendEmail(
     inviterUser.email,
     getLiterals(inviteeUser.lang).contactAcceptedEmail.subject,

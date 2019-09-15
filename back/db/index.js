@@ -25,6 +25,7 @@ const signUp = () => _dbConnection.collection('signup')
 const users = () => _dbConnection.collection('users')
 const logger = () => _dbConnection.collection('log')
 const messages = () => _dbConnection.collection('messages')
+const contactInvitations = () => _dbConnection.collection('contactInvitations')
 
 module.exports = {
   open,
@@ -33,5 +34,6 @@ module.exports = {
   signUp,
   users,
   messages,
-  log: logger
+  log: logger,
+  contactInvitations
 }

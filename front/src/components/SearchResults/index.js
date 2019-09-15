@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import {getStoreValue, storeCategory} from '@store'
+import {getStoreValue, storeCategory, subscribeStoreChanges, unsubscribeStoreChanges} from '@store'
 import {get as getRequest} from '@services/request'
 import styles from './styles.scss'
 import { literals } from './literals'
@@ -18,15 +18,22 @@ export class SearchResults extends React.Component {
     this.body = document.querySelector('body')
     this.searchTextChange = this.searchTextChange.bind(this)
     this.locationChange = this.locationChange.bind(this)
+    this.userUpdate = this.userUpdate.bind(this)
   }
 
   componentDidMount () {
     this.body.addEventListener('search', this.locationChange, false)
     this.setState({searchText: window.location.search.split('=')[1]}, this.getSearchResults)
+    subscribeStoreChanges(storeCategory.USER, 'SearchResults', this.userUpdate)
   }
 
   componentWillUnmount () {
     this.body.removeEventListener('search', this.locationChange)
+    unsubscribeStoreChanges('SearchResults', this.userUpdate)
+  }
+
+  userUpdate (newUserData) {
+    this.setState({currentUser: newUserData})
   }
 
   contactInvite (invitee) {
@@ -68,8 +75,10 @@ export class SearchResults extends React.Component {
                           <td>{person.surname}</td>
                           <td><Link to={`/profile/${person.profileId}`}><button className='button is-link is-small'>{literals.viewProfile}</button></Link></td>
                           {
-                            this.state.currentUser.contacts.includes(person.profileId) ||
-                              <td><button className='button is-link is-small' onClick={this.contactInvite.bind(this, person.profileId)}>{literals.addContact}</button></td>
+                            this.state.currentUser.contacts.includes(person.profileId)
+                            || this.state.currentUser.invitationsSent.includes(person.profileId)
+                            || this.state.currentUser.invitationsReceived.includes(person.profileId)
+                            || <td><button className='button is-link is-small' onClick={this.contactInvite.bind(this, person.profileId)}>{literals.addContact}</button></td>
                           }
                         </tr>
                       )}

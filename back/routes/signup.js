@@ -97,6 +97,8 @@ async function registerUser (user) {
       password: user.hashedPassword,
       status: 'active',
       contacts: [],
+      invitationsSent: [],
+      invitationsReceived: [],
       visibility: {
         profile: 'public',
         parish: 'members',
