@@ -21,7 +21,15 @@ router.post('/', async (req, res, next) => {
   if (found.length) {
     if (email === found[0].email && bcrypt.compareSync(clearPassword, found[0].password)) {
       log(' -> Authenticated!\n')
-      const basicUserInfo = {email, firstName: found[0].firstName, surname: found[0].surname, profileId: found[0].profileId, contacts: found[0].contacts}
+      const basicUserInfo = {
+        email,
+        firstName: found[0].firstName,
+        surname: found[0].surname,
+        profileId: found[0].profileId,
+        contacts: found[0].contacts,
+        invitationsReceived: found[0].invitationsReceived,
+        invitationsSent: found[0].invitationsSent
+      }
       return res.json({user: btoa(JSON.stringify({...basicUserInfo, ...{avatar: found[0].avatar}})), token: jwt.sign(basicUserInfo, CAT_JWT.PRIVATE_KEY)})
     }
   }

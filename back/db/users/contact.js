@@ -58,7 +58,7 @@ async function updateAvatar (profileId, avatar) {
 async function addInvitationSent (profileId, sentToProfileId) {
   try {
     log(`Trying to add invitation sent for ${profileId}. Sent to ${sentToProfileId}`)
-    await db.users().updateOne({profileId}, {$push: {invitationsSent: sentToProfileId}})
+    await db.users().updateOne({profileId}, {$addToSet: {invitationsSent: sentToProfileId}})
     log('OK\n')
   } catch (err) {
     log(`ERROR trying to add ${sentToProfileId} to invitationsSent for ${profileId}`)
@@ -70,7 +70,7 @@ async function addInvitationSent (profileId, sentToProfileId) {
 async function addInvitationReceived (profileId, profileIdReceivedFrom) {
   try {
     log(`Trying to add invitation received for ${profileId}. Received from ${profileIdReceivedFrom}`)
-    await db.users().updateOne({profileId}, {$push: {invitationsReceived: profileIdReceivedFrom}})
+    await db.users().updateOne({profileId}, {$addToSet: {invitationsReceived: profileIdReceivedFrom}})
     log('OK\n')
   } catch (err) {
     log(`ERROR trying to add ${profileIdReceivedFrom} to invitationsReceived for ${profileId}`)
@@ -115,7 +115,7 @@ async function getContactInvitationEntry (code) {
 async function addContact (profileId, newContactProfileId) {
   try {
     log(`Trying to add the ${newContactProfileId} as a new contact for ${profileId}`)
-    await db.users().updateOne({profileId}, {$push: {contacts: newContactProfileId}})
+    await db.users().updateOne({profileId}, {$addToSet: {contacts: newContactProfileId}})
     log('OK\n')
   } catch (err) {
     log(`ERROR trying to add ${newContactProfileId} as a contact for ${profileId}`)
@@ -127,7 +127,7 @@ async function addContact (profileId, newContactProfileId) {
 async function removeInvitationSent (profileId, profileIdToRemove) {
   try {
     log(`Trying to remove ${profileIdToRemove} from invitationsSent for ${profileId}`)
-    await db.users().updateOne({profileId}, {$pull: {invitationsSent: profileIdToRemove}})
+    await db.users().updateOne({profileId}, {$pullAll: {invitationsSent: [profileIdToRemove]}})
     log('OK\n')
   } catch (err) {
     log(`ERROR trying to remove ${profileIdToRemove} from invitationsSent for ${profileId}`)
@@ -139,7 +139,7 @@ async function removeInvitationSent (profileId, profileIdToRemove) {
 async function removeInvitationReceived (profileId, profileIdToRemove) {
   try {
     log(`Trying to remove ${profileIdToRemove} from invitationsReceived for ${profileId}`)
-    await db.users().updateOne({profileId}, {$pull: {invitationsReceived: profileIdToRemove}})
+    await db.users().updateOne({profileId}, {$pullAll: {invitationsReceived: [profileIdToRemove]}})
     log('OK\n')
   } catch (err) {
     log(`ERROR trying to remove ${profileIdToRemove} from invitationsReceived for ${profileId}`)
@@ -165,7 +165,7 @@ async function removeInvitationCode (inviterProfileId, inviteeProfileId) {
 async function removeContact (profileId, profileIdToRemove) {
   try {
     log(`Trying to remove ${profileIdToRemove} from contacts for ${profileId}`)
-    await db.users().updateOne({profileId}, {$pull: {contacts: profileIdToRemove}})
+    await db.users().updateOne({profileId}, {$pullAll: {contacts: [profileIdToRemove]}})
     log('OK\n')
   } catch (err) {
     log(`ERROR trying to remove ${profileIdToRemove} from contacts for ${profileId}`)
