@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { getStoreValue, storeCategory, subscribeStoreChanges, sendStoreEvent, eventType } from '@store'
-import { get as getRequest } from '@services/request'
+import { get as getRequest, post as postRequest } from '@services/request'
 import styles from './styles.scss'
 import literals from './literals'
 
@@ -27,7 +27,8 @@ export class Messages extends Component {
   }
 
   async componentDidMount () {
-    const contacts = await getRequest('/profile/contacts')
+    const contactProfileIds = await getRequest('/profile/contacts')
+    const contacts = await postRequest('/contacts-details', contactProfileIds)
     Array.isArray(contacts) && this.setState({ contacts })
   }
 
@@ -102,7 +103,9 @@ export class Messages extends Component {
         Messages with the contact {selectedContact} appear here
         <div className={styles.messagesView}>
           {messages[selectedContact] && messages[selectedContact].map(message =>
-            <div key={message._id} className={`${styles.message} ${message.to === selectedContact ? styles.myMessage : styles.othersMessage}`}>{message.text} <small>{message.status}</small></div>)}
+            <div key={message._id} className={`${styles.message} ${message.to === selectedContact ? styles.myMessage : styles.othersMessage}`}>
+              {message.text}  <small style={{fontSize: '0.5em'}} hidden>{message.status}</small>
+            </div>)}
         </div>
         <form onSubmit={this.sendMsg}>
           <div className={'field has-addons ' + styles.messageTyper}>

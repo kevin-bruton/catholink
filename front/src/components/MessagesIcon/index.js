@@ -9,17 +9,20 @@ export class MessagesIcon extends Component {
     const messages = getStoreValue(storeCategory.MESSAGES)
     const messageCount = this.countMessages(messages)
     this.state = {
-      numMessages: messageCount
+      numMessages: messageCount,
+      currentUser: getStoreValue(storeCategory.USER)
     }
     this.updateNumMessages = this.updateNumMessages.bind(this)
-    const currentUser = getStoreValue(storeCategory.USER)
-    connectSocket(currentUser.profileId)
+    connectSocket(this.state.currentUser.profileId)
     subscribeStoreChanges(storeCategory.MESSAGES, 'MessageIcon', this.updateNumMessages)
   }
 
   countMessages (messages) {
-    const messageCount = Object.keys(messages).reduce((acc, cur) => cur.reduce((acc, cur) => cur.status === 'read' ? acc : acc + 1, 0), 0)
-    console.log('MessageIcon: messageCount=', messageCount)
+    const MSG_READ_STATUS = 3
+    const messageCount = Object.keys(messages).reduce((acc, cur, i) =>
+      acc + messages[cur].reduce((acc, cur) => 
+        cur.status !== MSG_READ_STATUS && cur.to === this.state.currentUser.profileId ? acc + 1: acc, 0), 0)
+    console.log('MessageIcon: messageCount =', messageCount)
     return messageCount
   }
 
