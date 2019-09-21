@@ -15,7 +15,7 @@ module.exports = {
 async function getUserMessages (profileId, limit) {
   const groupedMessages = {}
   try {
-    log(`Trying to get messages for user with profileId ${profileId}, limiting to ${limit} messages per contact`, profileId)
+    log(`Trying to get messages for user with profileId ${profileId}, limiting to ${limit} messages per contact`)
     const messages = await db.messages().find({
       $or: [
         {to: profileId},
@@ -68,7 +68,8 @@ async function saveMessage (message) {
     log('OK\n')
     return {}
   } catch (err) {
-    log(`DB ERROR trying to insert a new message. messageId: ${message._id}`, err)
+    log(`DB ERROR trying to insert a new message. messageId: ${message._id}`)
+    log(err)
     return {error: 'DB failure'}
   }
 }

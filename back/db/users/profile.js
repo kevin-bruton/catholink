@@ -34,7 +34,7 @@ async function updateProfile (profileId, profile) {
 
 async function updateAvatar (profileId, avatar) {
   try {
-    log('Trying to update avatar with profileId', profileId)
+    log('Trying to update avatar with profileId: ' + profileId)
     profileId && avatar && await db.users().updateOne({profileId}, {$set: {avatar: avatar}})
     log('OK\n')
     return {}
@@ -47,11 +47,12 @@ async function updateAvatar (profileId, avatar) {
 
 async function getMyContacts (profileId) {
   try {
-    log('Getting contacts for user with profileId ', profileId)
+    log('Getting contacts for user with profileId ' + profileId)
     const resp = await db.users().find({profileId}).project({_id: 0, contacts: 1}).toArray()
+    console.log(resp)
     return resp[0].contacts
   } catch (err) {
-    log('DB ERROR: trying to get contacts for user with profileId', profileId, ':', err)
+    log('DB ERROR: trying to get contacts for user with profileId ' + profileId + ':' + err)
     return {error: 'DB ERROR'}
   }
 }

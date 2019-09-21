@@ -6,6 +6,7 @@ module.exports = {
   userSearch,
   getUserByEmail,
   getUserByProfileId,
+  getUsersByProfileId,
   profileIdExists,
   getMyProfile,
   getAnothersProfile
@@ -76,6 +77,17 @@ async function getUserByProfileId (profileId) {
     return !!found.length && found[0]
   } catch (err) {
     log('ERROR trying to get user by profileId ' + profileId + ' db.users().find', err)
+    return {error: 'DB failure'}
+  }
+}
+
+async function getUsersByProfileId (profileIds) {
+  try {
+    const found = await (await db.users().find({profileId: {$in: profileIds}}).project({_id: 0, password: 0}).toArray())
+    log('Search by profileId', profileIds, '& found')
+    return found
+  } catch (err) {
+    log('ERROR trying to get users with profileIds ' + profileIds + ' db.users().find', err)
     return {error: 'DB failure'}
   }
 }

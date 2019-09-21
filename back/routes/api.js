@@ -9,6 +9,7 @@ const { updateVisibility, updateProfile, updateAvatar, getMyContacts } = require
 const {getUserMessages} = require('../db/messages')
 const dummyGospel = require('../gospel/dummy')
 const { inviteToBeContact } = require('../controllers/contacts')
+const { getContactsDetails } = require('../controllers/contacts-details')
 
 router.use(authorizeApi)
 
@@ -53,6 +54,12 @@ router.get('/profile/:profileId', async (req, res) => {
     ? await getMyProfile(requestedProfileId)
     : await getAnothersProfile(req.profileId, requestedProfileId)
   res.send(profile)
+})
+
+router.post('/contacts-details', async (req, res) => {
+  const contactsProfileIds = req.body
+  const contactsDetails = await getContactsDetails(contactsProfileIds)
+  res.send(contactsDetails)
 })
 
 router.get('/messages', async (req, res) => {
