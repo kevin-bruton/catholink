@@ -2,7 +2,7 @@ const log = require('@log/')
 const getLiterals = require('../email/literals')
 const { getUserByProfileId } = require('../db/users/search')
 const { sendEmail } = require('../email')
-const { getContactEmail } = require('../email/messages')
+const { getContactEmail, getContactAcceptedEmail } = require('../email/messages')
 const {
   addInvitationSent,
   addInvitationReceived,
@@ -31,7 +31,7 @@ async function inviteToBeContact (inviteeProfileId, inviterProfileId, message) {
   await sendEmail(
     inviteeUser.email,
     getLiterals(inviteeUser.lang).contactEmail.subject(getFullName(inviterUser)),
-    getContactEmail(inviteeUser.lang, getFullName(inviteeUser), getFullName(inviterUser), code)
+    getContactEmail(inviteeUser.lang, getFullName(inviteeUser), getFullName(inviterUser), inviterUser.gender, code)
   )
   await addInvitationSent(inviterProfileId, inviteeProfileId)
   await addInvitationReceived(inviteeProfileId, inviterProfileId)
@@ -43,18 +43,20 @@ async function acceptInviteToBeContact (code) {
   const inviteeUser = await getUserByProfileId(inviteeProfileId)
   const inviterUser = await getUserByProfileId(inviterProfileId)
   const getFullName = user => `${user.firstName} ${user.surname}`
+  const inviteeFullName = getFullName(inviteeUser)
+  const inviterFullName = getFullName(inviterUser)
   if (inviterUser.contacts.includes(inviteeProfileId) && inviteeUser.contacts.includes(inviterProfileId)) {
-    return {fullname: getFullName(inviterUser), gender: inviterUser.gender, profileId: inviterUser.profileId}
+    return {fullname: inviterFullName, gender: inviterUser.gender, profileId: inviterUser.profileId}
   }
   await sendEmail(
     inviterUser.email,
-    getLiterals(inviteeUser.lang).contactAcceptedEmail.subject,
-    getContactEmail(inviterUser.lang, getFullName(inviteeUser), getFullName(inviterUser))
+    getLiterals(inviterUser.lang).contactAcceptedEmail.subject(inviteeFullName),
+    getContactAcceptedEmail(inviterUser.lang, inviteeFullName, inviterFullName, inviteeUser.gender)
   )
   await removeInvitationSent(inviterProfileId, inviteeProfileId)
   await removeInvitationReceived(inviteeProfileId, inviterProfileId)
   await removeInvitationCode(inviterProfileId, inviteeProfileId)
   await addContact(inviteeProfileId, inviterProfileId)
   await addContact(inviterProfileId, inviteeProfileId)
-  return {fullname: getFullName(inviterUser), gender: inviterUser.gender, profileId: inviterUser.profileId}
+  return {fullname: inviterFullName, gender: inviterUser.gender, profileId: inviterUser.profileId}
 }
