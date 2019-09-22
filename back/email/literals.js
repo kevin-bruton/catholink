@@ -19,9 +19,9 @@ module.exports = function getLiterals (lang) {
       },
       contactAcceptedEmail: {
         subject: inviteeName => `${inviteeName} es tu nuevo contacto`,
-        geeting: inviterName => `Hola ${inviterName},`,
+        greeting: inviterName => `Hola ${inviterName},`,
         line1: inviteeName => `${inviteeName} ha aceptado tu invitación para ser contactos.`,
-        line2: `Puedes ver los los detalles de su perfil que tiene reservado para sus contactos y mandarle mensajes.`,
+        line2: () => `Puedes ver los los detalles de su perfil que tiene reservado para sus contactos y mandarle mensajes.`,
         bye: `¡Disfruta!`,
         signature: `El equipo de Catholink`
       }
@@ -39,15 +39,15 @@ module.exports = function getLiterals (lang) {
       contactEmail: {
         subject: inviterName => `${inviterName} wants to add you as a contact`,
         greeting: inviteeName => `Hello ${inviteeName},`,
-        line1: inviterName => `${inviterName} is asking you to accept him/her as a contact.`,
+        line1: (inviterName, inviterGender) => `${inviterName} is asking you to accept ${inviterGender === 'male' ? 'him' : 'her'} as a contact.`,
         line2: `Would you like to do so?`,
         acceptBtnText: `Accept`
       },
       contactAcceptedEmail: {
         subject: inviteeName => `${inviteeName} is your new contact`,
-        geeting: inviterName => `Hello ${inviterName},`,
-        line1: inviteeName => `${inviteeName} has accepted your invitation to be contacts.`,
-        line2: `You can see the details of his/her profile which are reserved only for contacts and send him/her messages.`,
+        greeting: inviterName => `Hello ${inviterName},`,
+        line1: inviteeName => `${inviteeName} has accepted your invitation to be mutual contacts.`,
+        line2: inviteeGender => `You can see the details of ${inviteeGender === 'male' ? 'his' : 'her'} profile which are reserved only for contacts and send him/her messages.`,
         bye: `¡Enjoy!`,
         signature: `The Catholink Team`
       }
