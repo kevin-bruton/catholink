@@ -1,9 +1,11 @@
 const getLiterals = require('./literals')
+const btoa = require('btoa')
 
 module.exports = {
   getSignUpMessage,
   getContactEmail,
-  getContactAcceptedEmail
+  getContactAcceptedEmail,
+  getResetPasswordLinkEmail
 }
 
 function getSignUpMessage (lang, firstName, code) {
@@ -37,6 +39,22 @@ function getContactAcceptedEmail (lang, inviteeName, inviterName, inviteeGender)
       ${literals.greeting(inviterName)}<br><br>
       ${literals.line1(inviteeName)}<br>
       ${literals.line2(inviteeGender)}<br><br>
+      ${literals.bye}<br><br>
+      ${literals.signature}
+    </div>
+  `
+}
+
+function getResetPasswordLinkEmail (lang, firstName, email, code) {
+  const literals = getLiterals(lang).resetPasswordLinkEmail
+  const key = btoa(`{"code": "${code}", "email": "${email}"}`)
+  return `
+    <div style="font-size: 14px;">
+      ${literals.greeting(firstName)}<br><br>
+      ${literals.line1}<br>
+      ${literals.line2}<br><br>
+      ${literals.line3}<br>
+      <a href="${process.env.CAT_DOMAIN}/forgot-password?key=${key}">${literals.linkText}</a><br><br>
       ${literals.bye}<br><br>
       ${literals.signature}
     </div>

@@ -36,5 +36,9 @@ export const literals = getLangLiterals({
   signUp: {
     en: 'Join',
     es: 'Únete'
+  },
+  forgotPassword: {
+    en: 'Forgot your password?',
+    es: '¿No te acuerdas de tu contraseña?'
   }
 })

@@ -10,37 +10,52 @@ const {getUserMessages} = require('../db/messages')
 const dummyGospel = require('../gospel/dummy')
 const { inviteToBeContact } = require('../controllers/contacts')
 const { getContactsDetails } = require('../controllers/contacts-details')
+const { setNewPasswordWithOldOne } = require('../controllers/password')
 
 router.use(authorizeApi)
 
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
   log('API: Root api route')
   res.json({ apiVersion: '1.0' })
 })
 
 router.get('/validate', (req, res) => {
   log('API: Validate')
-  res.status(200).end()
+  res.sendStatus(200)
 })
 
 router.get('/user', (req, res) => {
   res.send()
 })
 
+router.post('/password/set-new', async (req, res) => {
+  const {oldPassword, newPassword} = req.body
+  const profileId = req.profileId
+  log(`\nAPI: Received request to reset password. Old: ${oldPassword}; New pwd: ${newPassword}`)
+  try {
+    await setNewPasswordWithOldOne(profileId, oldPassword, newPassword)
+    res.sendStatus(200)
+  } catch (err) {
+    log('Error resetting new password with old one:')
+    log(err)
+    res.status(503).json({error: 'Error setting password with old one'})
+  }
+})
+
 router.post('/visibility/update', async (req, res) => {
   await updateVisibility(req.profileId, req.body.visibility)
-  res.status(200).end()
+  res.sendStatus(200)
 })
 
 router.post('/profile/update', async (req, res) => {
   await updateProfile(req.profileId, req.body.profile)
-  res.status(200).end()
+  res.sendStatus(200)
 })
 
 router.post('/profile/avatar', async (req, res) => {
   log('API: Received request to update avatar...')
   await updateAvatar(req.profileId, req.body.avatar)
-  res.status(200).end()
+  res.sendStatus(200)
 })
 
 router.get('/profile/contacts', async (req, res) => {
@@ -97,7 +112,7 @@ router.post('/contact/invite', async (req, res) => {
   log(`\nAPI: Received request to invite ${invitee} as contact of ${inviter}`)
   try {
     await inviteToBeContact(invitee, inviter, message)
-    res.status(200).end()
+    res.sendStatus(200)
   } catch (err) {
     log('ERROR SENDING CONTACT INVITE: ' + err.message)
     res.status(503).json({error: 'Error sending contact invite', message: err.message})

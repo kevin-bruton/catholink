@@ -9,7 +9,8 @@ module.exports = {
   getUsersByProfileId,
   profileIdExists,
   getMyProfile,
-  getAnothersProfile
+  getAnothersProfile,
+  getUserPwdByProfileId
 }
 
 async function getUserByName (searchText) {
@@ -62,19 +63,31 @@ async function userSearch (search) {
 
 async function getUserByEmail (email) {
   try {
-    const found = await (await db.users().find({email}).project({_id: 0, password: 0}))
-    return !!found.length && found[0]
+    const found = await db.users().findOne({email}, {projection: {_id: 0, password: 0}})
+    return !!found && found
   } catch (err) {
-    log('ERROR trying to get user by email db.users().find', err)
+    log('ERROR trying to get user by email db.users().find')
+    log(err)
+    return {error: 'DB failure'}
+  }
+}
+
+async function getUserPwdByProfileId (profileId) {
+  try {
+    const found = await db.users().findOne({profileId}, {projection: {password: 1}})
+    log('Search by profileId', profileId, '& found')
+    return !!found && found.password
+  } catch (err) {
+    log('ERROR trying to get user password by profileId ' + profileId + ' db.users().find', err)
     return {error: 'DB failure'}
   }
 }
 
 async function getUserByProfileId (profileId) {
   try {
-    const found = await (await db.users().find({profileId}).project({_id: 0, password: 0}).toArray())
+    const found = await db.users().findOne({profileId}, {projection: {_id: 0, password: 0}})
     log('Search by profileId', profileId, '& found')
-    return !!found.length && found[0]
+    return !!found && found
   } catch (err) {
     log('ERROR trying to get user by profileId ' + profileId + ' db.users().find', err)
     return {error: 'DB failure'}
@@ -83,7 +96,7 @@ async function getUserByProfileId (profileId) {
 
 async function getUsersByProfileId (profileIds) {
   try {
-    const found = await (await db.users().find({profileId: {$in: profileIds}}).project({_id: 0, password: 0}).toArray())
+    const found = await db.users().find({profileId: {$in: profileIds}}, {projection: {_id: 0, password: 0}})
     log('Search by profileId', profileIds, '& found')
     return found
   } catch (err) {
@@ -141,7 +154,7 @@ async function getAnothersProfile (requestersProfileId, requestedProfileId) {
 
 async function profileIdExists (profileId) {
   try {
-    const found = await (await db.users().findOne({profileId}))
+    const found = await db.users().findOne({profileId})
     return Boolean(found)
   } catch (err) {
     return false

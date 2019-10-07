@@ -8,7 +8,9 @@ export {
   signUp,
   signUpValidate,
   inviteContact,
-  acceptContact
+  acceptContact,
+  requestSendForgotEmail,
+  requestValidatePwdResetCode
 }
 
 const backendHost = process.env.REACT_APP_API_MODE === 'VCR'
@@ -66,6 +68,24 @@ async function inviteContact (inviter, invitee, message) {
     return true
   } catch (err) {
     return false
+  }
+}
+
+async function requestSendForgotEmail (email) {
+  try {
+    await call('post', `${backendHost}/password/forgot/`, {email})
+    return true
+  } catch (err) {
+    return false
+  }
+}
+
+async function requestValidatePwdResetCode (email, code, newPassword) {
+  try {
+    await call('post', `${backendHost}/password/reset/`, {email, code, newPassword})
+    return true
+  } catch (err) { 
+    throw new Error(err.response.data.error)
   }
 }
 
