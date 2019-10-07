@@ -8,8 +8,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node server",
-    "start-dev": "cross-env CAT_SERVER_MODE=DEV nodemon server",
-    "start-dev-noemail": "cross-env CAT_SERVER_MODE=DEV CAT_SEND_EMAILS=NO nodemon server",
+    "start-dev": "cross-env CAT_SERVER_MODE=DEV node server",
+    "start-dev-noemail": "cross-env CAT_SERVER_MODE=DEV CAT_SEND_EMAILS=NO node server",
     "start-db": "mongod --dbpath=./db-data",
     "test": "cross-env CAT_SERVER_MODE=DEV jest",
     "tester": "jest -t=api",
