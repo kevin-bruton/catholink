@@ -61,7 +61,7 @@ function subscribeStoreEvents (type, name, listener) {
  * @param {*} name - The unique name of the listener we no longer want to use
  */
 function unsubscribeStoreChanges (type, name) {
-  delete categoryListeners[type][name]
+  categoryListeners && categoryListeners[type] && categoryListeners[type][name] && delete categoryListeners[type][name]
 }
 
 /**

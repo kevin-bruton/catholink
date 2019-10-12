@@ -5,6 +5,7 @@ import { Home, Login, Messages, Header, /* NavMenu, WidgetPanel, PublicityPanel,
 import { PrivateRoute } from './PrivateRoute'
 import { SignUpValidate } from '../SignUpValidate'
 import { AcceptContact } from '../AcceptContact'
+import { ForgotPassword } from '../ForgotPassword'
 
 export class CathApp extends Component {
   render () {
@@ -21,6 +22,7 @@ export class CathApp extends Component {
               <PrivateRoute path='/profile/:profileId' component={Profile} />
               <Route path='/login' component={Login} />
               <Route path='/signup' component={SignUp} />
+              <Route path='/forgot-password' component={ForgotPassword}  />
               <Route path='/signupvalidate' component={SignUpValidate} />
               <Route path='/contact/accept' component={AcceptContact} />
             </Switch>

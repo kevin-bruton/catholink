@@ -123,6 +123,9 @@ export class Login extends React.Component {
                   </button>
                 </div>
               </div>
+              <div>
+                <a href="/forgot-password">{literals.forgotPassword}</a>
+              </div>
             </form>
             <div className={'box ' + styles.loginPageBox}>
               <h2 className='subtitle is 5'>{literals.cathNotMember}</h2>
