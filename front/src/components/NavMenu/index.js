@@ -69,8 +69,9 @@ export class NavMenu extends React.Component {
         {navMenuHeader}
         {userInfoHeader}
         <ul className={styles.linkItems}>
-          <li onClick={this.toggleOpenMenu}><NavLink activeClassName='is-active' exact to='/'>{literals.home}</NavLink></li>
+          <li onClick={this.toggleOpenMenu}><NavLink activeClassName='is-active' exact to='/'>{literals.news}</NavLink></li>
           <li onClick={this.toggleOpenMenu}><NavLink activeClassName='is-active' to='/messages'>{literals.messages}</NavLink></li>
+          <li onClick={this.toggleOpenMenu}><NavLink activeClassName='is-active' exact to='/spiritual'>{literals.spiritual}</NavLink></li>
           <li onClick={this.toggleOpenMenu}><Link id='ViewMyProfileMenuOpt' to={`/profile/${this.state.user.profileId}`}>{literals.viewProfile}</Link></li>
           <li onClick={this.toogleOpenMenu}><Link id='LogoutMenuOpt' to='/login'>{literals.logout}</Link></li>
         </ul>

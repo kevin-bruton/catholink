@@ -1,11 +1,20 @@
 import React, { Component } from 'react'
 import styles from './styles.scss'
 import { Route, Switch, withRouter } from 'react-router-dom'
-import { Home, Login, Messages, Header, /* NavMenu, WidgetPanel, PublicityPanel,  */SignUp, SearchResults, Profile } from '@components'
 import { PrivateRoute } from './PrivateRoute'
-import { SignUpValidate } from '../SignUpValidate'
-import { AcceptContact } from '../AcceptContact'
-import { ForgotPassword } from '../ForgotPassword'
+import {
+  News,
+  SpiritualLife,
+  Login,
+  Messages,
+  Header, /* NavMenu, WidgetPanel, PublicityPanel,  */
+  SignUp,
+  SearchResults,
+  Profile,
+  SignUpValidate,
+  AcceptContact,
+  ForgotPassword
+} from '@components'
 
 export class CathApp extends Component {
   render () {
@@ -15,8 +24,9 @@ export class CathApp extends Component {
         <div className='columns'>
           <div className='column'>
             <Switch>
-              <PrivateRoute exact path='/' component={Home} />
-              <PrivateRoute path='/home' component={Home} />
+              <PrivateRoute exact path='/' component={News} />
+              <PrivateRoute path='/spiritual' component={SpiritualLife} />
+              <PrivateRoute path='/news' component={News} />
               <PrivateRoute path='/messages' component={Messages} />
               <PrivateRoute path='/searchresults' component={SearchResults} />
               <PrivateRoute path='/profile/:profileId' component={Profile} />

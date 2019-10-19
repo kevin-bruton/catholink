@@ -4,7 +4,7 @@ import { usersLanguage } from '@helpers/usersLanguage'
 import { literals } from './literals'
 import {getStoreValue, setStoreValue, storeCategory} from '@store'
 
-export class Home extends React.Component {
+export class SpiritualLife extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -33,8 +33,9 @@ export class Home extends React.Component {
   }
   render () {
     return (
-      <div id='HomePage'>
-        <h1>Home Page</h1>
+      <div id='SpiritualLifePage'>
+        <h1>{literals.pageHeading}</h1>
+        <h1>{literals.gospelHeading}</h1>
         <h1 id='date'>{this.state.day}</h1>
         <h1 id='gospelTitle'>{this.state.gospel && this.state.gospel.title}</h1>
         <small id='gospelText'>{this.state.gospel && this.state.gospel.text}</small>
