@@ -1,8 +1,13 @@
+/**
+ * THIS COMPONENT IS INCOMPLETE
+ * IT WAS INITIALLY CREATED TO IMPLEMENT
+ * THE CHANGE PASSWORD OPTION FOR AN AUTHENTICATED USER
+ */
 import React from 'react'
-import { Link } from 'react-router-dom'
+/* import { Link } from 'react-router-dom' */
 import styles from './styles.scss'
 
-import {changePassword, validate} from '@services/request'
+/* import {changePassword, validate} from '@services/request' */
 import {validateSession} from '@services/session'
 import { spinner } from '../../assets/spinner'
 import { literals } from './literals'
@@ -46,7 +51,7 @@ export class ChangePassword extends React.Component {
       <span id='contactAcceptRequested'>
         <h1 className='is-size-3'>{literals.accepting}</h1>
         <img alt='' src={spinner} />
-      </span>
+      </span>/* 
     const SUCCESSFUL_ACCEPT_CONTACT =
       this.state.inviter ? (<span id='contactAcceptValidated'>
         <h1 className='is-size-3'>{literals.newContactHeading(this.state.inviter.fullname)}</h1>
@@ -62,7 +67,7 @@ export class ChangePassword extends React.Component {
         <h1 className='is-size-3'>{literals.failedHeading}</h1>
         <p>{literals.failedLine1}</p>
         <p>{literals.failedLine2}</p>
-      </span>
+      </span> */
     return (
       <div id='AcceptContactPage' className='col-md-6 col-md-offset-3'>
         <h2 id='pageTitle' className={'title is-3 ' + styles.separateTop}>{literals.startHere}</h2>
@@ -71,14 +76,14 @@ export class ChangePassword extends React.Component {
             <div className='box'>
               <div className='has-text-centered'>
                 {{
-                  [status.PAGE_LOADING]: PAGE_LOADING_VIEW,
+                  [status.PAGE_LOADING]: PAGE_LOADING_VIEW/* ,
                   [status.AUTHENTICATED_RESET]: AUTHENTICATED_FORM,
                   [status.CODE_RESET]: CODE_FORM,
                   [status.VERIFY_EMAIL]: SEND_EMAIL_FORM,
                   [status.VERIFY_EMAIL_SENT]: SENT_EMAIL_VIEW,
                   [status.CHANGE_REQUESTED]: CHANGE_REQUESTED_VIEW,
                   [status.CHANGE_FAILED]: CHANGE_FAILED_VIEW,
-                  [status.CHANGE_SUCCESSFUL]: CHANGE_SUCCESSFUL_VIEW
+                  [status.CHANGE_SUCCESSFUL]: CHANGE_SUCCESSFUL_VIEW */
                 }[this.state.pageStatus]}
               </div>
             </div>
