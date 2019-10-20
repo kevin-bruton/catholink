@@ -3,6 +3,7 @@ import { post } from '@request'
 import { usersLanguage } from '@helpers/usersLanguage'
 import { literals } from './literals'
 import {getStoreValue, setStoreValue, storeCategory} from '@store'
+import sharedStyles from '@sharedStyles'
 
 export class SpiritualLife extends React.Component {
   constructor (props) {
@@ -34,7 +35,7 @@ export class SpiritualLife extends React.Component {
   render () {
     return (
       <div id='SpiritualLifePage'>
-        <h1>{literals.pageHeading}</h1>
+        <h1 className={sharedStyles.pageHeading}>{literals.pageHeading}</h1>
         <h1>{literals.gospelHeading}</h1>
         <h1 id='date'>{this.state.day}</h1>
         <h1 id='gospelTitle'>{this.state.gospel && this.state.gospel.title}</h1>

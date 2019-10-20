@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import styles from './styles.scss'
+import sharedStyles from '@sharedStyles'
 
 import {signUp as signUpService} from '@services/request'
 import { spinner } from '../../assets/spinner'
@@ -91,7 +92,7 @@ export class SignUp extends React.Component {
     const { error } = this.state
     return (
       <div id='SignUpPage' className={'col-md-6 col-md-offset-3 ' + styles.signUpBox}>
-        <h2 id='pageTitle' className='title is-3 '>{literals.startHere}</h2>
+        <h2 id='pageTitle' className={sharedStyles.pageHeading}>{literals.startHere}</h2>
         <div className='columns'>
           <div className='column is-offset-4 is-4'>
             <form id='signUpForm' name='form' onSubmit={this.handleSubmit} className='box'>

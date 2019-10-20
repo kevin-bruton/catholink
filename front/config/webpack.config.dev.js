@@ -96,7 +96,8 @@ module.exports = {
       '@services': path.resolve(__dirname, '..', 'src/services'),
       '@request': path.resolve(__dirname, '..', 'src/services/request'),
       '@store': path.resolve(__dirname, '..', 'src/store'),
-      '@assets': path.resolve(__dirname, '..', 'src/assets')
+      '@assets': path.resolve(__dirname, '..', 'src/assets'),
+      '@sharedStyles': path.resolve(__dirname, '..', 'src/sharedStyles/shared.scss')
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).

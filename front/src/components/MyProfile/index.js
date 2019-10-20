@@ -1,5 +1,6 @@
 import {get as getRequest, post as postRequest} from '@services/request'
 import styles from './styles.scss'
+import sharedStyles from '@sharedStyles'
 import React from 'react'
 import {getStoreValue, storeCategory} from '@store'
 import {AvatarEditor} from '@components/AvatarEditor'
@@ -132,7 +133,7 @@ export class MyProfile extends React.Component {
       </div>
     return (
       <div id='MyProfile'>
-        <h2 className='title is-4'>{literals.myProfile}</h2>
+        <h2 className={sharedStyles.pageHeading}>{literals.myProfile}</h2>
         {AVATAR}
         <div className='tabs is-centered'>
           <ul>
