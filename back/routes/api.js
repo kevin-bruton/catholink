@@ -11,7 +11,7 @@ const dummyGospel = require('../gospel/dummy')
 const { inviteToBeContact } = require('../controllers/contacts')
 const { getContactsDetails } = require('../controllers/contacts-details')
 const { setNewPasswordWithOldOne } = require('../controllers/password')
-const { postNews } = require('../controllers/postNews')
+const { postNews, getNews } = require('../controllers/news')
 
 router.use(authorizeApi)
 
@@ -28,6 +28,12 @@ router.get('/validate', (req, res) => {
 router.post('/post', async (req, res) => {
   log(`\nRequest to add new post`)
   const result = await postNews(req.body)
+  res.json(result)
+})
+
+router.get('/news', async (req, res) => {
+  log(`\nRequest to get news`)
+  const result = await getNews(req.profileId, req.query.page || 1)
   res.json(result)
 })
 
