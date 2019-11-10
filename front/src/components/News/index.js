@@ -4,6 +4,7 @@ import { literals } from './literals'
 import {getStoreValue, storeCategory} from '@store'
 import styles from './styles.scss'
 import sharedStyles from '@sharedStyles'
+import Quill from 'quill'
 
 export class News extends React.Component {
   constructor (props) {
@@ -20,37 +21,39 @@ export class News extends React.Component {
   async componentDidMount () {
   }
 
-  async publish () {
+  async publish (e) {
     const {profileId, firstName, surname, contacts} = this.state.currentUser
     const post = {
       "author": {profileId, firstName, surname},
       "audience": contacts,
-      "content": "This is my post",
+      "content": e.target.parentNode.parentElement.querySelector('#textEditor > .ql-editor').innerHTML,
       "timestamp": Math.round((new Date()).getTime() /1000)
     }
     console.log('this is what we are going to post:', post)
-    await postRequest('/post', post)
+    const resp = await postRequest('/post', post)
+    console.log('resp', resp)
+    resp.success && this.toggleShowPostModal()
   }
 
   toggleShowPostModal () {
     this.setState({showPostModal: !this.state.showPostModal}, () => {
-      console.log('init tiny', this.state.showPostModal)
       if (this.state.showPostModal) {
-        // eslint-disable-next-line no-undef
-        tinymce.init({
-          selector: 'textarea#tinymce',
-          height: 500,
-          menubar: false,
-          plugins: [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste code help wordcount'
-          ],
-          toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-          content_css: [
-            '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-            '//www.tiny.cloud/css/codepen.min.css'
-          ]
+        new Quill('#textEditor', {
+          bounds: '#textEditor',
+          modules: {
+            'toolbar': [
+              [{ 'font': []  }, { 'size': [] }],
+              [ 'bold', 'italic', 'underline', 'strike' ],
+              [{ 'color': [] }, { 'background': [] }],
+              [{ 'script': 'super' }, { 'script': 'sub' }],
+              [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block' ],
+              [{ 'list': 'ordered' }, { 'list': 'bullet'}, { 'indent': '-1' }, { 'indent': '+1' }],
+              [ {'direction': 'rtl'}, { 'align': [] }],
+              [ 'link', 'image', 'video', 'formula' ],
+              [ 'clean' ]
+            ],
+          },
+          theme: 'snow'
         });
       }
     })
@@ -65,13 +68,14 @@ export class News extends React.Component {
     const POST_MODAL =
       <div className="modal is-active">
         <div className="modal-background"></div>
-        <div className="modal-card">
+        <div className={'modal-card ' + styles.postModalBox}>
           <header className="modal-card-head">
             <p className="modal-card-title">{literals.postModalHeading}</p>
             <button className="delete" aria-label="close" onClick={this.toggleShowPostModal}></button>
           </header>
           <section className="modal-card-body">
-            <textarea id='tinymce' autoFocus /* className={styles.postInput}  */onInput={this.adjustAddPostTextareaSize}></textarea>
+            <div id="textEditor" className={styles.textEditor}>
+            </div>
           </section>
           <footer className="modal-card-foot">
             <button className="button is-link" onClick={this.publish}>{literals.postModalPublish}</button>
@@ -81,9 +85,11 @@ export class News extends React.Component {
       </div>
     const ADD_POST_BOX =
       <div id='AddPostBox' className={styles.addPostBox}>
-        <div className='tile is-ancestor'><div className='tile is-vertical'>
-          <button className="button is-link" onClick={this.toggleShowPostModal}>{literals.post}</button>
-        </div></div>
+        <div className='tile is-ancestor'>
+          <div className='tile is-vertical is-child'>
+            <button className="button is-link" onClick={this.toggleShowPostModal}>{literals.post}</button>
+          </div>
+        </div>
       </div>
     return (
       <div id='NewsPage'>
