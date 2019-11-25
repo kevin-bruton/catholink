@@ -18,3 +18,28 @@
 .postModalBox {
   max-width: 90%;
 }
+
+.newsContainer {
+  display: flex;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.newsBox {
+  width: 95%;
+}
+
+.newsItem {
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+  color: #4a4a4a;
+  display: block;
+  padding: 1.25rem;
+  margin: 10px 0;
+}
+
+.postDate {
+  font-size: 0.8em;
+  border: 1px solid #9e9e9e;
+}

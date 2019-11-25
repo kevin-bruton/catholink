@@ -24,7 +24,7 @@ async function getNewsDB (profileId, page) {
   try {
     log('Getting news for user with profileId ' + profileId)
     const resp = await db.news().find({$or: [{audience: profileId}, {'author.profileId': profileId}]})
-      .project({_id: 0, audience: 0})
+      .project({audience: 0})
       .sort({timestamp: -1})
       .skip(25 * (page - 1))
       .limit(25)
