@@ -13,8 +13,9 @@ const log = require('@log/')
 router.use(cookieParser())
 
 router.post('/init', async (req, res) => {
-  const {firstName, surname, gender, email, password} = req.body
+  const {firstName, surname, gender, locale, email, password} = req.body
   const hashedPassword = bcrypt.hashSync(password)
+  res.cookie('locale', locale)
   log(`Sign up request for user with email: ${req.body.email}; password: ${req.body.password}`)
 
   const userIsRegistered = await userRegistered(email)
@@ -24,7 +25,7 @@ router.post('/init', async (req, res) => {
   if (userIsRegistered) {
     return res.status(409).json({error: 'User is already registered'})
   } else { // The user isn't registered already: proceed to sign up process
-    const lang = getLangFromReq(req)
+    const lang = locale.substring(0, 2)
     const startedSignUp = await hasStartedSignUp(email)
     if (startedSignUp.error) {
       return res.status(503).json(startedSignUp.error)
@@ -33,9 +34,9 @@ router.post('/init', async (req, res) => {
     const code = generateCode(codeLength)
     let signUpNowStarted
     if (startedSignUp) { // Sign up process started previously
-      signUpNowStarted = await restartSignUp(firstName, surname, gender, email, hashedPassword, code, lang)
+      signUpNowStarted = await restartSignUp(firstName, surname, gender, locale, email, hashedPassword, code)
     } else {
-      signUpNowStarted = await startSignUp(firstName, surname, gender, email, hashedPassword, code, lang)
+      signUpNowStarted = await startSignUp(firstName, surname, gender, locale, email, hashedPassword, code)
     }
     if (signUpNowStarted) {
       const sentEmail = await sendEmail(email, getLiterals(lang).signUpEmail.subject, getSignUpMessage(lang, firstName, code))

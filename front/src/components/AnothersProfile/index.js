@@ -1,5 +1,6 @@
 import {get as getRequest} from '@services/request'
 import styles from './styles.scss'
+import sharedStyles from '@sharedStyles'
 import React from 'react'
 
 import { literals } from './literals'
@@ -34,7 +35,7 @@ export class AnothersProfile extends React.Component {
     const fullname = this.state.userProfile && `${this.state.userProfile.firstName} ${this.state.userProfile.surname}`
     return (
       <div id='AnothersProfile'>
-        <h2 className='title is-4'>{literals.profileOf(fullname)}</h2>
+        <h2 className={sharedStyles.pageHeading}>{literals.profileOf(fullname)}</h2>
         <div id='showAvatar'>
           <div className={'box ' + styles.limitWidth}>
             {this.state.userProfile && (this.state.userProfile.avatar ? <img src={this.state.userProfile.avatar} alt='avatar' /> : <i className='fas fa-user fa-4x' alt='users foto' />)}

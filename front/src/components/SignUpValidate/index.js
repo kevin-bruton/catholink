@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import styles from './styles.scss'
+import sharedStyles from '@sharedStyles'
 
 import {signUpValidate as validateService} from '@services/request'
 import { spinner } from '../../assets/spinner'
@@ -58,7 +58,7 @@ export class SignUpValidate extends React.Component {
     }
     return (
       <div id='SignUpValidatePage' className='col-md-6 col-md-offset-3'>
-        <h2 id='pageTitle' className={'title is-3 ' + styles.separateTop}>{literals.startHere}</h2>
+        <h2 id='pageTitle' className={sharedStyles.pageHeading}>{literals.startHere}</h2>
         <div className='columns'>
           <div className='column is-offset-2 is-8'>
             <div className='box'>

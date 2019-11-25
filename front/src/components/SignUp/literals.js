@@ -84,5 +84,9 @@ export const literals = getLangLiterals({
   female: {
     en: 'Female',
     es: `Mujer`
+  },
+  langPref: {
+    en: 'Language preferece',
+    es: 'Preferencia de idioma'
   }
 })

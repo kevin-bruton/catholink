@@ -96,7 +96,7 @@ async function getUserByProfileId (profileId) {
 
 async function getUsersByProfileId (profileIds) {
   try {
-    const found = await db.users().find({profileId: {$in: profileIds}}, {projection: {_id: 0, password: 0}})
+    const found = await (await db.users().find({profileId: {$in: profileIds}}, {projection: {_id: 0, password: 0}})).toArray()
     log('Search by profileId', profileIds, '& found')
     return found
   } catch (err) {

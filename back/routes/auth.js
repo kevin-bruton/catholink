@@ -7,7 +7,7 @@ const btoa = require('btoa')
 const log = require('@log/')
 const CAT_JWT = JSON.parse(process.env.CAT_JWT)
 
-router.post('/', async (req, res, next) => {
+router.post('/', async (req, res) => {
   const clearPassword = req.body.password
   const email = req.body.email
   log(`Authenticating user with email: ${req.body.email}; password: ${req.body.password}`)
@@ -27,9 +27,11 @@ router.post('/', async (req, res, next) => {
         surname: found[0].surname,
         profileId: found[0].profileId,
         contacts: found[0].contacts,
+        locale: found[0].locale,
         invitationsReceived: found[0].invitationsReceived,
         invitationsSent: found[0].invitationsSent
       }
+      res.cookie('locale', basicUserInfo.locale)
       return res.json({user: btoa(JSON.stringify({...basicUserInfo, ...{avatar: found[0].avatar}})), token: jwt.sign(basicUserInfo, CAT_JWT.PRIVATE_KEY)})
     }
   }

@@ -10,7 +10,7 @@ frontRouter.use(cookieParser())
 frontRouter.use(requestLanguage({
   languages: ['en', 'en-AU', 'en-UK', 'en-US', 'es', 'es-ES'],
   cookie: {
-    name: 'language',
+    name: 'locale',
     options: { maxAge: 24 * 3600 * 1000 },
     url: '/languages/{language}'
   }

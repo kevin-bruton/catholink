@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import {getStoreValue, storeCategory, subscribeStoreChanges, unsubscribeStoreChanges} from '@store'
 import {get as getRequest} from '@services/request'
 import styles from './styles.scss'
+import sharedStyles from '@sharedStyles'
 import { literals } from './literals'
 import {InviteContactModal} from '@components'
 
@@ -60,7 +61,7 @@ export class SearchResults extends React.Component {
         {this.state.showInviteContactModal &&
           <InviteContactModal invitee={this.state.showInviteContactModal} inviter={this.state.currentUser.profileId} closeModal={this.contactInvite.bind(this, false)}/>
         }
-        <h2 id='pageTitle' className='title is-3 '>{literals.searchResults + (this.state.searchText ? ' "' + this.state.searchText + '"' : '')}</h2>
+        <h2 id='pageTitle' className={sharedStyles.pageHeading}>{literals.searchResults + (this.state.searchText ? ' "' + this.state.searchText + '"' : '')}</h2>
         <div className='columns'>
           <div className='column is-offset-2 is-8'>
             <div className={'box ' + styles.resultsBox}>

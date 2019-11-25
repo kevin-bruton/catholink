@@ -1,6 +1,7 @@
 import React from 'react'
 import { Redirect, Link } from 'react-router-dom'
 import styles from './styles.scss'
+import sharedStyles from '@sharedStyles'
 
 import * as session from '@services/session'
 import {disconnectSocket} from '@services/socket'
@@ -97,7 +98,7 @@ export class Login extends React.Component {
     }
     return (
       <div id='LoginPage' className='col-md-6 col-md-offset-3'>
-        <h2 id='pageTitle' className={'title is-3 ' + styles.separateTop}>{literals.startHere}</h2>
+        <h2 id='pageTitle' className={sharedStyles.pageHeading}>{literals.startHere}</h2>
         <div className='columns'>
           <div className='column is-offset-4 is-4'>
             <form id='loginForm' name='form' onSubmit={this.handleSubmit} className={'box ' + styles.loginPageBox}>

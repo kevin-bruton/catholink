@@ -1,9 +1,13 @@
 import { getLangLiterals } from '@helpers/get-lang-literals'
 
 export const literals = getLangLiterals({
-  home: {
-    en: 'Home',
-    es: 'Inicio'
+  news: {
+    en: 'News',
+    es: 'Noticias'
+  },
+  spiritual: {
+    en: 'Spiritual Life',
+    es: 'Vida espiritual'
   },
   messages: {
     en: 'Messages',

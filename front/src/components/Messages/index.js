@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { getStoreValue, storeCategory, subscribeStoreChanges, sendStoreEvent, eventType } from '@store'
 import { get as getRequest, post as postRequest } from '@services/request'
 import styles from './styles.scss'
+import sharedStyles from '@sharedStyles'
 import literals from './literals'
 
 export class Messages extends Component {
@@ -125,7 +126,7 @@ export class Messages extends Component {
       </div>
     return (
       <div id='Messages' className={styles.Messages}>
-        <div className={styles.title}>
+        <div className={sharedStyles.pageHeading}>
           {literals.title}
         </div>
         <div className={'columns is-variable is-5 ' + styles.MessagesPage}>

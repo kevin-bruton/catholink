@@ -22,6 +22,7 @@ const log = require('./log')
   }
 })()
 
+const fs = require('fs')
 const app = require('express')()
 const bodyParser = require('body-parser')
 const db = require('./db')
@@ -39,10 +40,20 @@ if (process.env.CAT_SERVER_MODE === 'DEV') {
   app.use(cors())
 }
 
-const http = socket(app)
+const protocol = (process.env.CAT_SSL_PRIV_KEY && process.env.CAT_SSL_CERT && process.env.CAT_SSL_CA) ? 'https' : 'http'
+let credentials
+if (protocol === 'https') {
+  credentials = {
+    key: fs.readFileSync(process.env.CAT_SSL_PRIV_KEY, 'utf8'),
+    cert: fs.readFileSync(process.env.CAT_SSL_CERT, 'utf8'),
+    ca: fs.readFileSync(process.env.CAT_SSL_CA, 'utf8')
+  }
+}
+const server = (protocol === 'http') ? require('http').createServer(app) : require('https').createServer(credentials, app)
+socket(server)
 
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '1mb'}))
 
 // routers
 app.use('/signup', signUpRouter)
@@ -52,25 +63,25 @@ app.use('/auth', authRouter)
 app.use('/api', apiRouter)
 app.use('/', frontRouter)
 
-;(async () => {
+;(async (server) => {
   await db.open()
   log('DB connection open')
   const PORT = process.env.PORT || 5000
 
-  const server = http.listen(PORT, () => log(`Server is running on PORT ${PORT}...`))
+  const listeningServer = server.listen(PORT, () => log(`Server is running on PORT ${PORT}...`))
 
   process.on('SIGINT', function () {
     log('DB connection closed')
     db.close()
-    server.close()
+    listeningServer.close()
   })
   process.once('SIGUSR2', function () {
     db.close()
     log('DB connection closed')
-    server.close(function () {
+    listeningServer.close(function () {
       process.kill(process.pid, 'SIGUSR2')
     })
   })
 
   process.title = 'catholink'
-})()
+})(server)
