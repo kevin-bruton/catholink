@@ -7,8 +7,7 @@ const messageStatus = {
   READ: 3
 }
 
-module.exports = function (app) {
-  const http = require('http').Server(app)
+module.exports = function (http) {
   const server = require('socket.io')(http)
   const {updateStatus, saveMessage} = require('@db/messages')
 
@@ -59,7 +58,6 @@ module.exports = function (app) {
       connections[profileId] && connections[profileId][socket.id] && (delete connections[profileId][socket.id])
     })
   })
-  return http
 }
 
 function sendMessageUpdateToSender (message, connections) {
