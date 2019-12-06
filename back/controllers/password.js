@@ -17,6 +17,7 @@ async function sendResetPasswordEmail (email) {
   const user = await getUserByEmail(email)
   const code = generateCode(50)
   const timestamp = (new Date()).getTime()
+  user.lang = user.locale.substring(0, 2)
   await saveResetPasswordByEmailCode(user.profileId, code, timestamp)
   await sendEmail(
     email,

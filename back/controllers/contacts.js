@@ -28,6 +28,7 @@ async function inviteToBeContact (inviteeProfileId, inviterProfileId, message) {
     throw new Error('Invitation already sent to this user')
   }
   const getFullName = user => `${user.firstName} ${user.surname}`
+  inviteeUser.lang = inviteeUser.substring(0, 2)
   await sendEmail(
     inviteeUser.email,
     getLiterals(inviteeUser.lang).contactEmail.subject(getFullName(inviterUser)),
@@ -42,6 +43,7 @@ async function acceptInviteToBeContact (code) {
   log('inviterProfileId: ' + inviterProfileId + '; inviteeProfileId: ' + inviteeProfileId)
   const inviteeUser = await getUserByProfileId(inviteeProfileId)
   const inviterUser = await getUserByProfileId(inviterProfileId)
+  inviteeUser.lang = inviteeUser.locale.substring(0, 2)
   const getFullName = user => `${user.firstName} ${user.surname}`
   const inviteeFullName = getFullName(inviteeUser)
   const inviterFullName = getFullName(inviterUser)
