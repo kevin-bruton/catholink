@@ -85,3 +85,10 @@ app.use('/', frontRouter)
 
   process.title = 'catholink'
 })(server)
+
+// http to https redirect:
+const redirectServer = require('express').createServer()
+redirectServer.get('*', (req, res) => {
+  res.redirect('https://' + req.headers.host + req.url)
+})
+redirectServer.listen(8080)
