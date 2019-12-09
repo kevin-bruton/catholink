@@ -57,3 +57,6 @@ It should contain the Google token which can be refreshed by the application whe
 ENVIRONMENTS:
 - DEV: Mongo local
 - PRO(rasp): Mongo Cloud
+
+docker build -t cat_back .
+docker run --rm -d --name cat_back -e CAT_JWT -e CAT_MONGO -e CAT_GOOGLE_CREDENTIALS -e CAT_GOOGLE_TOKEN -e CAT_DOMAIN -e CAT_ENV -p 5000:500/tcp cat_back:latest
