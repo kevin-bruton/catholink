@@ -17,7 +17,7 @@ const backendHost = process.env.REACT_APP_API_MODE === 'VCR'
   ? 'http://localhost:5500'
   : process.env.REACT_APP_API_MODE === 'DEV'
     ? 'http://localhost:5000'
-    : window.location.origin
+    : window.location.origin + ':5000'
 const apiUrl = `${backendHost}/api`
 const authUrl = `${backendHost}/auth`
 const signUpUrl = `${backendHost}/signup`
