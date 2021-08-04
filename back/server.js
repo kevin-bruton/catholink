@@ -22,7 +22,6 @@ const log = require('./log')
   }
 })()
 
-const fs = require('fs')
 const app = require('express')()
 const bodyParser = require('body-parser')
 const db = require('./db')

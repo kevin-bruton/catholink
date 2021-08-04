@@ -56,8 +56,7 @@ export class Login extends React.Component {
     e && e.preventDefault()
 
     if (this.inputValidated()) {
-      this.setState({ login: loginStatus.REQUESTED })
-      this.loginRequest()
+      this.setState({ login: loginStatus.REQUESTED }, this.loginRequest)
     }
   }
 

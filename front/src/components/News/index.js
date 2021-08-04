@@ -84,7 +84,10 @@ export class News extends React.Component {
         <div className={'box ' + styles.newsBox}>
           {this.state.news.map(newsItem =>
             <div id="newsItem" key={newsItem._id} className={styles.newsItem}>
-              <div className={styles.postDate}>{(new Date(newsItem.timestamp)).toLocaleDateString(this.state.currentUser.locale, this.dateOptions)}</div>
+              <div className={styles.postDateBox}>
+                {this.state.currentUser.locale}
+                <div className={styles.postDate}>{(new Date(newsItem.timestamp)).toLocaleDateString(this.state.currentUser.locale, this.dateOptions)}</div>
+              </div>
               <div dangerouslySetInnerHTML={{__html: newsItem.content}}></div>
             </div>
           )}
